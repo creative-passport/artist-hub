@@ -15,7 +15,7 @@ export const Ping = () => {
         setPing(false);
         setLoading(false);
       });
-  });
+  }, []);
   return (
     <div>{loading ? 'Loading' : ping ? 'Ping success' : 'Ping failed'}</div>
   );

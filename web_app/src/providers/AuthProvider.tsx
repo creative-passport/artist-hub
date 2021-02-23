@@ -1,9 +1,16 @@
 import React, { useEffect } from 'react';
 import axios from 'axios';
 
+interface OidcOptions {
+  providerName: string;
+  helpText?: string;
+}
+
 interface Auth {
   loading: boolean;
   signedIn: boolean;
+  mode?: 'oidc' | 'local';
+  oidc?: OidcOptions;
   csrfToken?: string;
 }
 
@@ -15,9 +22,11 @@ const AuthDispatchContext = React.createContext<
 type AuthAction =
   | { type: 'login' }
   | { type: 'logout' }
+  | { type: 'useLocalAuth' }
+  | { type: 'useOidcAuth'; payload: OidcOptions }
   | { type: 'csrfToken'; payload: string };
 
-function authReducer(state: Auth, action: AuthAction) {
+function authReducer(state: Auth, action: AuthAction): Auth {
   switch (action.type) {
     case 'login': {
       return { ...state, signedIn: true, loading: false };
@@ -27,6 +36,12 @@ function authReducer(state: Auth, action: AuthAction) {
     }
     case 'csrfToken': {
       return { ...state, csrfToken: action.payload };
+    }
+    case 'useLocalAuth': {
+      return { ...state, mode: 'local' };
+    }
+    case 'useOidcAuth': {
+      return { ...state, mode: 'oidc', oidc: action.payload };
     }
   }
 }
@@ -72,7 +87,17 @@ export function AuthProvider({
         if (!done) {
           document.cookie = `XSRF-TOKEN=${data.csrfToken}`; // Axios uses this cookie
           dispatch({ type: 'csrfToken', payload: data.csrfToken });
-          dispatch({ type: data.signedIn ? 'login' : 'logout' });
+          dispatch({
+            type: data.signedIn ? 'login' : 'logout',
+          });
+          if (data.mode === 'oidc') {
+            dispatch({
+              type: 'useOidcAuth',
+              payload: data.oidc,
+            });
+          } else {
+            dispatch({ type: 'useLocalAuth' });
+          }
         }
       });
       return () => {

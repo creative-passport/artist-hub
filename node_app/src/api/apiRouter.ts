@@ -1,11 +1,5 @@
 import express, { Request, Response } from 'express';
-
-const requireAuth = (req: Request, res: Response, next: Function) => {
-  if (!req.isAuthenticated()) {
-    return res.status(401).end();
-  }
-  next();
-};
+import { requireAuth } from '../auth/auth';
 
 export const apiRouter = express.Router();
 apiRouter.use(requireAuth);
