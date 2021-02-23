@@ -6,7 +6,7 @@ export function Home() {
   const { signedIn, csrfToken } = useAuthState();
   return (
     <div>
-      <h1>Welcome to the Creative Passport Artist Fan Pages</h1>
+      <h1>Welcome to the Artist Hub</h1>
       {signedIn ? (
         <>
           <p>Signed in</p>

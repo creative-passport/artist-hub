@@ -1,0 +1,14 @@
+{
+  "folders": [
+		{
+			"path": "node_app"
+		},
+		{
+			"path": "web_app"
+		},
+		{
+			"path": "."
+		}
+	],
+  "settings": {}
+}
