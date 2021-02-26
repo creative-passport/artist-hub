@@ -40,7 +40,7 @@ To run the node app in development mode you should install the latest LTS versio
 
 ### Web app
 
-To run the node app in development mode you should install the latest LTS version of [Node.js](https://nodejs.org/en/) and then run the following commands:
+To run the web app in development mode you should install the latest LTS version of [Node.js](https://nodejs.org/en/) and then run the following commands:
 
 1. `cd web_app`
 2. `npm install`
