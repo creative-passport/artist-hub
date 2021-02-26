@@ -62,7 +62,7 @@ const config: Config = (() => {
       optional = !!envDesc.optional;
     }
     const val = process.env[env];
-    if (!val && !optional) {
+    if (!optional && (!val || val === '')) {
       throw new Error(`Environment variable ${env} must be defined.`);
     }
     c[key] = val;
