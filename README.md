@@ -16,6 +16,7 @@ You must first create a `node_app/.env` file. To get started copy the sample fro
 cp node_app/.env.example node_app/.env
 ```
 
+You should then customise the environment variables in the `.env` file to configure authentication and set the cookie secret before you can start a server.
 
 ## Authentication
 
@@ -23,7 +24,7 @@ Supported authentication methods are currently `oidc` (OpenID Connect) and `loca
 
 If you want to use OpenID Connect you can either use a hosted service such (e.g [Auth0](https://auth0.com/)) or run your own server (e.g. [Ory Hydra](https://www.ory.sh/hydra/)).
 
-## Docker
+## Start server (using Docker)
 
 The easiest way to get started is to use [Docker](https://docs.docker.com/get-docker/).
 
