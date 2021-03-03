@@ -16,7 +16,7 @@ const oidcOptions: EnvMap = {
   oidcDiscoveryUrl: 'OIDC_DISCOVERY_URL',
   oidcClientId: 'OIDC_CLIENT_ID',
   oidcSecret: 'OIDC_SECRET',
-  oicdProviderName: 'OIDC_PROVIDER_NAME',
+  oidcProviderName: 'OIDC_PROVIDER_NAME',
   oidcHelpText: { env: 'OIDC_HELP_TEXT', optional: true },
 };
 
@@ -29,7 +29,7 @@ type Config = {
       oidcDiscoveryUrl: string;
       oidcClientId: string;
       oidcSecret: string;
-      oicdProviderName: string;
+      oidcProviderName: string;
       oidcHelpText?: string;
     }
   | {

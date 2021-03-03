@@ -1,8 +1,8 @@
 # Getting Started with Artist Hub
 
-## Imporant notice
+## Important notice
 
-Artist Hub is a brand new project which is very early in development and **at the current stage is not ready to be used**. You can watch this repository to see the development process but if you try to use it now you will find most of the funcationality is not available.
+Artist Hub is a brand new project which is very early in development and **at the current stage is not ready to be used**. You can watch this repository to see the development process but if you try to use it now you will find most of the functionality is not available.
 
 ## Current Progress
 

@@ -10,5 +10,18 @@
 			"path": "."
 		}
 	],
-  "settings": {}
+	"settings": {
+		"cSpell.language": "en-GB",
+		"cSpell.words": [
+			"XSRF",
+			"bcrypt",
+			"browserslist",
+			"csrf",
+			"fontsource",
+			"oidc",
+			"openid",
+			"roboto",
+			"tokenset"
+		]
+	}
 }

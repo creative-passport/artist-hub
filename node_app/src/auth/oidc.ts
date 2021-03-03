@@ -54,7 +54,7 @@ export class OIDCAuthenticator {
     return new OIDCAuthenticator(
       app,
       client,
-      config.oicdProviderName,
+      config.oidcProviderName,
       config.oidcHelpText
     );
   }
