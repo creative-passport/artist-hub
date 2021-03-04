@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt';
 import passport from 'passport';
 import config from '../config';
 import { User } from '../models/User';
-import { isUser } from './auth';
 
 export class LocalAuthenticator {
   private constructor(app: Express) {
@@ -21,13 +20,6 @@ export class LocalAuthenticator {
   public static async create(app: Express): Promise<LocalAuthenticator> {
     return new LocalAuthenticator(app);
   }
-
-  requireAuth = (req: Request, res: Response, next: Function) => {
-    if (req.isAuthenticated() && isUser(req.user)) {
-      return next();
-    }
-    return res.status(401).end();
-  };
 }
 
 const localSetupPassport = (
@@ -43,11 +35,13 @@ const localSetupPassport = (
         (await bcrypt.compare(password, passwordHash))
       ) {
         const user = await User.query()
-          .insertAndFetch({
+          .insert({
             sub: username,
           })
           .onConflict('sub')
-          .merge();
+          .merge()
+          .returning('*')
+          .first();
 
         return done(null, user);
       }

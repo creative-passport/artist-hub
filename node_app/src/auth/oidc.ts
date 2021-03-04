@@ -42,13 +42,6 @@ export class OIDCAuthenticator {
       config.oidcHelpText
     );
   }
-
-  requireAuth = (req: Request, res: Response, next: Function) => {
-    if (req.isAuthenticated() && isUser(req.user)) {
-      return next();
-    }
-    return res.status(401).end();
-  };
 }
 
 const oidcSetupPassport = (
@@ -70,7 +63,7 @@ const oidcSetupPassport = (
       async function (tokenset: TokenSet, userinfo: {}, done: Function) {
         if (tokenset.claims()) {
           const user = await User.query()
-            .insertAndFetch({
+            .insert({
               sub: tokenset.claims().sub,
               idToken: tokenset.id_token,
               accessToken: tokenset.access_token,
@@ -80,7 +73,9 @@ const oidcSetupPassport = (
               updatedAt: new Date(),
             })
             .onConflict('sub')
-            .merge();
+            .merge()
+            .returning('*')
+            .first();
 
           return done(null, user);
         } else {
