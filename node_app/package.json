@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon -e ts -x ts-node src/index.ts",
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "knex": "ts-node -r dotenv/config $(npm bin)/knex --knexfile src/knexfile.ts"
   },
   "license": "UNLICENSED",
   "dependencies": {
@@ -18,9 +19,12 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+    "knex": "^0.95.1",
+    "objection": "^2.2.14",
     "openid-client": "^4.4.0",
     "passport": "^0.4.1",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "pg": "^8.5.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",

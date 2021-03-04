@@ -7,6 +7,13 @@ import { apiRouter } from './api/apiRouter';
 import { setupPassport } from './auth/auth';
 import config from './config';
 import { csrfProtection } from './csrf';
+import Knex from 'knex';
+import knexConfig from './knexfile';
+import { Model } from 'objection';
+
+// Initialize knex.
+const knex = Knex(knexConfig.development);
+Model.knex(knex);
 
 (async () => {
   const app = express();

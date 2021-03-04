@@ -1,25 +1,10 @@
 import { Router, Express, Request, Response } from 'express';
-import { Client, TokenSet, Strategy as OpenIDStrategy } from 'openid-client';
 import { Strategy as LocalStrategy } from 'passport-local';
 import bcrypt from 'bcrypt';
 import passport from 'passport';
 import config from '../config';
-
-interface SerializedUser {
-  username: string;
-}
-
-interface LocalUser extends Express.User {
-  username: string;
-}
-
-interface SerializedUser {
-  username: string;
-}
-
-function isLocalUser(user: Express.User): user is LocalUser {
-  return (user as LocalUser).username !== undefined;
-}
+import { User } from '../models/User';
+import { isUser } from './auth';
 
 export class LocalAuthenticator {
   private constructor(app: Express) {
@@ -38,7 +23,7 @@ export class LocalAuthenticator {
   }
 
   requireAuth = (req: Request, res: Response, next: Function) => {
-    if (req.isAuthenticated() && isLocalUser(req.user)) {
+    if (req.isAuthenticated() && isUser(req.user)) {
       return next();
     }
     return res.status(401).end();
@@ -57,33 +42,22 @@ const localSetupPassport = (
         username === adminUsername &&
         (await bcrypt.compare(password, passwordHash))
       ) {
-        return done(null, { username });
+        const user = await User.query()
+          .insertAndFetch({
+            sub: username,
+          })
+          .onConflict('sub')
+          .merge();
+
+        return done(null, user);
       }
       return done(null, false);
     })
   );
-
   app.use(passport.initialize());
   app.use(passport.session());
 
   const router = Router();
-
-  passport.serializeUser(function (user, done) {
-    if (isLocalUser(user)) {
-      done(null, {
-        username: user.username,
-      } as SerializedUser);
-    } else {
-      done(new Error('Not an valid user'));
-    }
-  });
-
-  passport.deserializeUser(function (id: SerializedUser, done) {
-    const user = {
-      username: id.username,
-    };
-    done(null, user);
-  });
 
   router.post(
     '/login',
