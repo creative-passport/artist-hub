@@ -2,20 +2,14 @@ import express, { Request, Response } from 'express';
 import { requireAuth } from '../auth/auth';
 import { User } from '../models/User';
 import { errorHandler } from './errorHandler';
+import bodyParser from 'body-parser';
 
 export const apiRouter = express.Router();
-apiRouter.use(requireAuth);
+apiRouter.use(requireAuth, bodyParser.json());
 
 // Test API endpoint
 apiRouter.get('/ping', (req, res) => {
   res.send({ success: true });
-});
-
-// Get artist pages
-apiRouter.get('/artistPages', async (req, res) => {
-  const user = req.user as User;
-  const artistPages = await user.$relatedQuery('artistPages').orderBy('name');
-  res.send(artistPages);
 });
 
 const asyncWrapper = (
@@ -27,6 +21,19 @@ const asyncWrapper = (
     return errorHandler(err, res);
   }
 };
+
+// Get artist pages
+apiRouter.get(
+  '/artistPages',
+  asyncWrapper(async (req, res) => {
+    const user = req.user as User;
+    const artistPages = await user
+      .$relatedQuery('artistPages')
+      .orderBy('name')
+      .allowNotFound();
+    res.send(artistPages);
+  })
+);
 
 // Get artist page
 apiRouter.get(
@@ -49,6 +56,7 @@ apiRouter.post(
   '/artistPages',
   asyncWrapper(async (req, res) => {
     const user = req.user as User;
+    console.log('new page', req.body);
     const artistPage = await user
       .$relatedQuery('artistPages')
       .insert({ name: req.body.name })
