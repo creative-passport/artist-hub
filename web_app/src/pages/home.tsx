@@ -8,7 +8,7 @@ export function Home() {
       <Typography component="h1" variant="h2">
         Artist Hub
       </Typography>
-      <Link component={RouterLink} to="/artistpages">
+      <Link component={RouterLink} to="/admin/artistpages">
         Manage artist pages
       </Link>
     </div>

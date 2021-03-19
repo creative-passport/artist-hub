@@ -5,9 +5,12 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import { useDeleteArtistPage, useReadArtistPage } from '../../hooks/useApi';
+import {
+  useAdminDeleteArtistPage,
+  useAdminReadArtistPage,
+} from '../../../hooks/useAdminArtistPages';
 import { Link as RouterLink, useHistory, useParams } from 'react-router-dom';
-import { useDialog } from '../../providers/DialogProvider';
+import { useDialog } from '../../../providers/DialogProvider';
 import { useState } from 'react';
 import AddActivityPubDialog from './AddActivityPubDialog';
 
@@ -20,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
 export function ArtistPageShow() {
   const classes = useStyles();
   const { artistId } = useParams<{ artistId: string }>();
-  const { isLoading, data } = useReadArtistPage(artistId);
-  const deletePage = useDeleteArtistPage();
+  const { isLoading, data } = useAdminReadArtistPage(artistId);
+  const deletePage = useAdminDeleteArtistPage();
   const history = useHistory();
   const showDialog = useDialog();
   const [addDataSource, setAddDataSource] = useState(false);
@@ -34,7 +37,7 @@ export function ArtistPageShow() {
         onConfirm: () =>
           deletePage
             .mutateAsync(artistId)
-            .then(() => history.push('/artistpages')),
+            .then(() => history.push('/admin/artistpages')),
         confirmButton: 'Delete',
       }
     );
@@ -48,7 +51,7 @@ export function ArtistPageShow() {
         <Link component={RouterLink} color="inherit" to="/">
           Artist Hub
         </Link>
-        <Link component={RouterLink} color="inherit" to="/artistpages">
+        <Link component={RouterLink} color="inherit" to="/admin/artistpages">
           Artist Pages
         </Link>
         <Typography color="textPrimary">{data.title}</Typography>

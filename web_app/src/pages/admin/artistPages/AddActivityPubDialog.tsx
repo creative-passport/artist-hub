@@ -73,7 +73,7 @@ export default function AddActivityPubDialog({
     setError(undefined);
     e.preventDefault();
     axios
-      .post('/api/activitypub/lookup', {
+      .post('/api/admin/activitypub/lookup', {
         url: state.dataSource,
       })
       .then((result) => {

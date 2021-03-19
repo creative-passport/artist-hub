@@ -1,5 +1,8 @@
 import { Button, makeStyles, Typography } from '@material-ui/core';
-import { useArtistPages, useCreateArtistPage } from '../../hooks/useApi';
+import {
+  useAdminArtistPages,
+  useAdminCreateArtistPage,
+} from '../../../hooks/useAdminArtistPages';
 import AddIcon from '@material-ui/icons/Add';
 import { useState } from 'react';
 import NewArtistPageDialog from './NewArtistPageDialog';
@@ -15,9 +18,9 @@ const useStyles = makeStyles((theme) => ({
 
 export function ArtistPageIndex() {
   const classes = useStyles();
-  const { isLoading, data = [] } = useArtistPages();
+  const { isLoading, data = [] } = useAdminArtistPages();
   const [newArtistOpen, setNewArtistOpen] = useState(false);
-  const createPage = useCreateArtistPage();
+  const createPage = useAdminCreateArtistPage();
   const history = useHistory();
 
   const handleCancel = () => setNewArtistOpen(false);
@@ -30,7 +33,7 @@ export function ArtistPageIndex() {
       .mutateAsync(newArtistPage)
       .then((data) => {
         setNewArtistOpen(false);
-        history.push(`/artistpages/${data.id}`);
+        history.push(`/admin/artistpages/${data.id}`);
       })
       .catch((e: AxiosError) => {
         setError(e.response?.data.message);
@@ -63,7 +66,7 @@ export function ArtistPageIndex() {
         : data.length > 0
         ? data?.map((p) => (
             <div key={p.id}>
-              <Link component={RouterLink} to={`/artistpages/${p.id}`}>
+              <Link component={RouterLink} to={`/admin/artistpages/${p.id}`}>
                 {p.title}
               </Link>
             </div>
