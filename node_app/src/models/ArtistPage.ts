@@ -4,7 +4,10 @@ import { User } from './User';
 
 export class ArtistPage extends BaseModel {
   id!: string;
-  name!: string;
+  title!: string;
+  username!: string;
+  publicKey!: string;
+  privateKey!: string;
 
   user?: User;
 

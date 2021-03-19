@@ -1,6 +1,7 @@
 interface ArtistPage {
   id: string;
-  name: string;
+  title: string;
+  username: string;
 
   createdAt: Date;
   updatedAt: Date;

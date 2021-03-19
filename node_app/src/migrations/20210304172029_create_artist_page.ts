@@ -3,7 +3,11 @@ import { Knex } from 'knex';
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable('artistPages', (table) => {
     table.bigIncrements('id').primary();
-    table.string('name').notNullable().unique();
+    table.string('title').notNullable();
+    table.string('username').unique().notNullable();
+    table.text('publicKey').notNullable();
+    table.text('privateKey').notNullable();
+
     table
       .bigInteger('userId')
       .notNullable()

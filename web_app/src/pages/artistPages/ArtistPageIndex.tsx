@@ -4,7 +4,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { useState } from 'react';
 import NewArtistPageDialog from './NewArtistPageDialog';
 import { Link } from '@material-ui/core';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
 const useStyles = makeStyles((theme) => ({
@@ -18,6 +18,7 @@ export function ArtistPageIndex() {
   const { isLoading, data = [] } = useArtistPages();
   const [newArtistOpen, setNewArtistOpen] = useState(false);
   const createPage = useCreateArtistPage();
+  const history = useHistory();
 
   const handleCancel = () => setNewArtistOpen(false);
 
@@ -25,12 +26,11 @@ export function ArtistPageIndex() {
     newArtistPage: Partial<ArtistPage>,
     setError: (message: string) => void
   ) => {
-    console.log('Create artist', newArtistPage);
     createPage
       .mutateAsync(newArtistPage)
       .then((data) => {
         setNewArtistOpen(false);
-        console.log('new page', data);
+        history.push(`/artistpages/${data.id}`);
       })
       .catch((e: AxiosError) => {
         setError(e.response?.data.message);
@@ -64,7 +64,7 @@ export function ArtistPageIndex() {
         ? data?.map((p) => (
             <div key={p.id}>
               <Link component={RouterLink} to={`/artistpages/${p.id}`}>
-                {p.name}
+                {p.title}
               </Link>
             </div>
           ))

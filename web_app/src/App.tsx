@@ -9,6 +9,7 @@ import { PublicHome } from './pages/public-home';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ArtistPageIndex } from './pages/artistPages/ArtistPageIndex';
 import { ArtistPageShow } from './pages/artistPages/ArtistPageShow';
+import DialogProvider from './providers/DialogProvider';
 
 const queryClient = new QueryClient();
 
@@ -18,25 +19,27 @@ function App() {
       <CssBaseline />
       <Router>
         <QueryClientProvider client={queryClient}>
-          <AuthProvider>
-            <Layout>
-              <Switch>
-                <PrivateRoute
-                  path="/"
-                  exact
-                  renderPublic={() => <PublicHome />}
-                >
-                  <Home />
-                </PrivateRoute>
-                <PrivateRoute path="/artistpages/:artistId">
-                  <ArtistPageShow />
-                </PrivateRoute>
-                <PrivateRoute path="/artistpages">
-                  <ArtistPageIndex />
-                </PrivateRoute>
-              </Switch>
-            </Layout>
-          </AuthProvider>
+          <DialogProvider>
+            <AuthProvider>
+              <Layout>
+                <Switch>
+                  <PrivateRoute
+                    path="/"
+                    exact
+                    renderPublic={() => <PublicHome />}
+                  >
+                    <Home />
+                  </PrivateRoute>
+                  <PrivateRoute path="/artistpages/:artistId">
+                    <ArtistPageShow />
+                  </PrivateRoute>
+                  <PrivateRoute path="/artistpages">
+                    <ArtistPageIndex />
+                  </PrivateRoute>
+                </Switch>
+              </Layout>
+            </AuthProvider>
+          </DialogProvider>
         </QueryClientProvider>
       </Router>
     </>
