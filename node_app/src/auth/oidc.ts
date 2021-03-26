@@ -6,6 +6,7 @@ import {
   Issuer,
 } from 'openid-client';
 import passport from 'passport';
+import { csrfProtection } from '../csrf';
 import config from '../config';
 import { User } from '../models/User';
 import { isUser } from './auth';
@@ -115,7 +116,7 @@ const oidcSetupPassport = (
     res.redirect('/');
   });
 
-  router.get('/', (req, res) => {
+  router.get('/', csrfProtection, (req, res) => {
     res.send({
       mode: 'oidc',
       oidc: {

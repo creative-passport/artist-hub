@@ -1,21 +1,24 @@
 import { Model } from 'objection';
 import { APActor } from './APActor';
 import { BaseModel } from './BaseModel';
-import { User } from './User';
 
-export class ArtistPage extends BaseModel {
+type FollowState = 'pending' | 'accepted';
+
+export class APFollow extends BaseModel {
   id!: string;
-  title!: string;
-  username!: string;
+  uri!: string;
+  state!: FollowState;
+  actorId!: string;
+  targetActorId!: string;
 
-  user?: User;
-  apActor!: APActor;
+  actorFollower!: APActor;
+  actorFollowing!: APActor;
 
   createdAt!: Date;
   updatedAt!: Date;
 
   static get tableName() {
-    return 'artistPages';
+    return 'apFollows';
   }
 
   $beforeUpdate() {
@@ -23,21 +26,21 @@ export class ArtistPage extends BaseModel {
   }
 
   static relationMappings = () => ({
-    user: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: User,
-
-      join: {
-        from: 'artistPages.userId',
-        to: 'users.id',
-      },
-    },
-    apActor: {
+    actorFollower: {
       relation: Model.BelongsToOneRelation,
       modelClass: APActor,
 
       join: {
-        from: 'artistPages.apActorId',
+        from: 'apFollows.actorId',
+        to: 'apActors.id',
+      },
+    },
+    actorFollowing: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: APActor,
+
+      join: {
+        from: 'apFollows.targetActorId',
         to: 'apActors.id',
       },
     },
