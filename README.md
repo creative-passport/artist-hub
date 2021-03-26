@@ -28,10 +28,18 @@ If you want to use OpenID Connect you can either use a hosted service such (e.g 
 
 The easiest way to get started is to use [Docker](https://docs.docker.com/get-docker/).
 
-Simply run:
+On the first run or when updating run:
 ```
-docker-compose up --build
+docker-compose build
+docker-compose run --rm node npm run knex -- migrate:latest
 ```
+
+The start the server with:
+```
+docker-compose up
+```
+
+
 
 This will start the server running on port 3000.
 

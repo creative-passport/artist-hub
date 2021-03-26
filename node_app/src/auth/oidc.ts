@@ -7,24 +7,8 @@ import {
 } from 'openid-client';
 import passport from 'passport';
 import config from '../config';
-
-interface OIDCUser extends Express.User {
-  sub: string;
-  tokenset: TokenSet;
-}
-
-interface SerializedUser {
-  sub: string;
-  id_token?: string;
-  access_token?: string;
-  refresh_token?: string;
-  token_type?: string;
-  expires_at?: number;
-}
-
-function isOIDCUser(user: Express.User): user is OIDCUser {
-  return (user as OIDCUser).sub !== undefined;
-}
+import { User } from '../models/User';
+import { isUser } from './auth';
 
 export class OIDCAuthenticator {
   client: Client;
@@ -58,17 +42,6 @@ export class OIDCAuthenticator {
       config.oidcHelpText
     );
   }
-
-  requireAuth = (req: Request, res: Response, next: Function) => {
-    if (
-      req.isAuthenticated() &&
-      isOIDCUser(req.user) &&
-      req.user.tokenset.claims()
-    ) {
-      return next();
-    }
-    return res.status(401).end();
-  };
 }
 
 const oidcSetupPassport = (
@@ -87,48 +60,34 @@ const oidcSetupPassport = (
           redirect_uri: `${config.baseUrl}/auth/return`,
         },
       },
-      function (tokenset: TokenSet, userinfo: {}, done: Function) {
-        return done(null, {
-          sub: tokenset.claims().sub,
-          tokenset: tokenset,
-        });
+      async function (tokenset: TokenSet, userinfo: {}, done: Function) {
+        if (tokenset.claims()) {
+          const user = await User.query()
+            .insert({
+              sub: tokenset.claims().sub,
+              idToken: tokenset.id_token,
+              accessToken: tokenset.access_token,
+              refreshToken: tokenset.refresh_token,
+              tokenType: tokenset.token_type,
+              expiresAt: tokenset.expires_at,
+              updatedAt: new Date(),
+            })
+            .onConflict('sub')
+            .merge()
+            .returning('*')
+            .first();
+
+          return done(null, user);
+        } else {
+          return done(new Error('No OIDC id token claims.'));
+        }
       }
     )
   );
-
   app.use(passport.initialize());
   app.use(passport.session());
 
   const router = Router();
-
-  passport.serializeUser(function (user, done) {
-    if (isOIDCUser(user)) {
-      done(null, {
-        sub: user.sub,
-        id_token: user.tokenset.id_token,
-        access_token: user.tokenset.access_token,
-        refresh_token: user.tokenset.refresh_token,
-        token_type: user.tokenset.token_type,
-        expires_at: user.tokenset.expires_at,
-      } as SerializedUser);
-    } else {
-      done(new Error('Not an OIDC user'));
-    }
-  });
-
-  passport.deserializeUser(function (id: SerializedUser, done) {
-    const user = {
-      sub: id.sub,
-      tokenset: new TokenSet({
-        id_token: id.id_token,
-        access_token: id.access_token,
-        refresh_token: id.refresh_token,
-        token_type: id.token_type,
-        expires_at: id.expires_at,
-      }),
-    };
-    done(null, user);
-  });
 
   router.post('/login', passport.authenticate('oidc'));
   router.get(
@@ -140,7 +99,7 @@ const oidcSetupPassport = (
   );
 
   router.post('/logout', (req, res) => {
-    if (req.isAuthenticated() && isOIDCUser(req.user)) {
+    if (req.isAuthenticated() && isUser(req.user)) {
       const logoutUrl = client.endSessionUrl({
         id_token_hint: req.user.tokenset,
       });

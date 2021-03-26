@@ -5,8 +5,12 @@ services:
     image: creativepassport/artist-hub-node
     restart: always
     env_file: ./node_app/.env
+    environment:
+      PG_CONNECTION_STRING: postgresql://artisthub:password@db:5432/artisthub
     ports:
       - "4000:4000"
+    depends_on:
+      - db
   web:
     build: ./web_app
     image: creativepassport/artist-hub-web
@@ -15,3 +19,17 @@ services:
       API_HOST: node:4000
     ports:
       - "127.0.0.1:3000:80"
+    depends_on:
+      - node
+  db:
+    image: postgres:12.6
+    restart: always
+    volumes:
+      - artisthub-postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: artisthub
+      POSTGRES_DB: artisthub
+
+volumes:
+  artisthub-postgres:

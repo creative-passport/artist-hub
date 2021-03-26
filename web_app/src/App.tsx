@@ -1,28 +1,61 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { CssBaseline } from '@material-ui/core';
-import { AdminIndex } from './pages/admin/AdminIndex';
 import { Home } from './pages/home';
 import { AuthProvider } from './providers/AuthProvider';
 import { Layout } from './components/Layout';
+import { PrivateRoute } from './components/PrivateRoute';
+import { PublicHome } from './pages/public-home';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ArtistPageIndex } from './pages/admin/artistPages/ArtistPageIndex';
+import { ArtistPageShow } from './pages/admin/artistPages/ArtistPageShow';
+import { ArtistPage } from './pages/artistPage/ArtistPage';
+import DialogProvider from './providers/DialogProvider';
+import { NotFound } from './pages/NotFound';
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
     <>
       <CssBaseline />
       <Router>
-        <AuthProvider>
-          <Layout>
+        <QueryClientProvider client={queryClient}>
+          <DialogProvider>
             <Switch>
-              <Route path="/admin">
-                <AdminIndex />
+              <Route path="/p/:username">
+                <ArtistPage />
               </Route>
-              <Route path="/" exact>
-                <Home />
+              <Route>
+                <AuthProvider>
+                  <Layout>
+                    <Switch>
+                      <PrivateRoute
+                        path="/"
+                        exact
+                        renderPublic={() => <PublicHome />}
+                      >
+                        <Home />
+                      </PrivateRoute>
+                      <PrivateRoute path="/admin/artistpages/:artistId">
+                        <ArtistPageShow />
+                      </PrivateRoute>
+                      <PrivateRoute path="/admin/artistpages">
+                        <ArtistPageIndex />
+                      </PrivateRoute>
+                      <Route path="/p/:username">
+                        <ArtistPage />
+                      </Route>
+                      <Route>
+                        <NotFound />
+                      </Route>
+                    </Switch>
+                  </Layout>
+                </AuthProvider>
               </Route>
             </Switch>
-          </Layout>
-        </AuthProvider>
+          </DialogProvider>
+        </QueryClientProvider>
       </Router>
     </>
   );

@@ -18,6 +18,7 @@
 			"browserslist",
 			"csrf",
 			"fontsource",
+			"knexfile",
 			"oidc",
 			"openid",
 			"roboto",

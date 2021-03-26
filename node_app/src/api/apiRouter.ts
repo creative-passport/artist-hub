@@ -1,10 +1,10 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import { requireAuth } from '../auth/auth';
+import { adminApiRouter } from './adminApi';
+import { publicApiRouter } from './publicApi';
 
 export const apiRouter = express.Router();
-apiRouter.use(requireAuth);
+apiRouter.use(express.json());
 
-// Test API endpoint
-apiRouter.get('/ping', (req, res) => {
-  res.send({ success: true });
-});
+apiRouter.use('/admin', requireAuth, adminApiRouter);
+apiRouter.use(publicApiRouter);
