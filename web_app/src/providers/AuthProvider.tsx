@@ -85,7 +85,7 @@ export function AuthProvider({
       // Call server to check authentication status
       axios.get('/auth').then(({ data }) => {
         if (!done) {
-          document.cookie = `XSRF-TOKEN=${data.csrfToken}`; // Axios uses this cookie
+          document.cookie = `XSRF-TOKEN=${data.csrfToken}; path=/`; // Axios uses this cookie
           dispatch({ type: 'csrfToken', payload: data.csrfToken });
           dispatch({
             type: data.signedIn ? 'login' : 'logout',

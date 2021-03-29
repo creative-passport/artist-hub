@@ -1,12 +1,10 @@
 import { Knex } from 'knex';
 
 export async function up(knex: Knex): Promise<void> {
-  return knex.schema.createTable('artistPages', (table) => {
+  await knex.schema.createTable('artistPages', (table) => {
     table.bigIncrements('id').primary();
     table.string('title').notNullable();
     table.string('username').unique().notNullable();
-    table.text('publicKey').notNullable();
-    table.text('privateKey').notNullable();
 
     table
       .bigInteger('userId')
@@ -20,5 +18,5 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-  return knex.schema.dropTableIfExists('artistPages');
+  await knex.schema.dropTableIfExists('artistPages');
 }

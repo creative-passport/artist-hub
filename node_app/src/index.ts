@@ -9,7 +9,8 @@ import { csrfProtection } from './csrf';
 import Knex from 'knex';
 import knexConfig from './knexfile';
 import { Model } from 'objection';
-import { activityPubRouter } from './activitypub/actor';
+import { activityPubRouter } from './controllers/activitypub/actor';
+import { webfingerHandler } from './webfinger';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
@@ -36,12 +37,16 @@ Model.knex(knex);
 
   app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
-  app.use(csrfProtection);
 
   await setupPassport(app);
 
-  app.use('/api', apiRouter);
+  app.use('/api', csrfProtection, apiRouter);
   app.use('/p', activityPubRouter);
+  app.get(
+    '/.well-known/webfinger',
+    express.json({ type: ['application/jrd+json', 'application/json'] }),
+    webfingerHandler
+  );
 
   app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);

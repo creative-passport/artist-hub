@@ -37,6 +37,7 @@ interface AddActivityPubState {
 
 interface NewArtistDialogProps {
   open: boolean;
+  artistId: string;
   onSuccess: () => void;
   onCancel: () => void;
 }
@@ -52,6 +53,7 @@ export default function AddActivityPubDialog({
   open,
   onSuccess,
   onCancel,
+  artistId,
 }: NewArtistDialogProps) {
   const classes = useStyles();
   const [state, setState] = useState<AddActivityPubState>({ dataSource: '' });
@@ -95,8 +97,14 @@ export default function AddActivityPubDialog({
       return;
     }
     console.log(`Follow ${profile.id}`);
-    onSuccess();
-    clearForm();
+    axios
+      .post(`/api/admin/artistpages/${artistId}/activitypub/follow`, {
+        id: profile.id,
+      })
+      .then(() => {
+        onSuccess();
+        clearForm();
+      });
   };
 
   let hostname = '';

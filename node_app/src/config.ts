@@ -1,3 +1,5 @@
+import { URL } from 'url';
+
 type EnvDescriptor = string | { env: string; optional?: boolean };
 type EnvMap = { [key: string]: EnvDescriptor };
 
@@ -22,6 +24,7 @@ const oidcOptions: EnvMap = {
 
 type Config = {
   baseUrl: string;
+  domain: string;
   cookieSecret: string;
 } & (
   | {
@@ -67,6 +70,8 @@ const config: Config = (() => {
     }
     c[key] = val;
   }
+  const url = new URL(c.baseUrl as string);
+  c.domain = url.hostname;
   return c as Config;
 })();
 

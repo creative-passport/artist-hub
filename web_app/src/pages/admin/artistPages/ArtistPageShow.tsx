@@ -76,6 +76,7 @@ export function ArtistPageShow() {
       </Button>
       <Typography>e.g. Mastodon, Pixelfed, PeerTube, etc</Typography>
       <AddActivityPubDialog
+        artistId={artistId}
         open={addDataSource}
         onSuccess={() => setAddDataSource(false)}
         onCancel={() => setAddDataSource(false)}
