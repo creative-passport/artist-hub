@@ -128,8 +128,6 @@ We will use ActivityPub to showcase updates and subscriptions from the above pla
 
 ### API Endpoints
 
-[API Endpoints](https://www.notion.so/5362736241c84c2391c3147d22dcd7e9)
-
 | Endpoint                                       | Description                                                    |
 | ---------------------------------------------- | -------------------------------------------------------------- |
 | '/artistpages'                                 | GET → See a list of artist pages for an (authenticated) artist |
