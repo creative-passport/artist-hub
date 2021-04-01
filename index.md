@@ -109,23 +109,22 @@ Types of users:
 
 <img src="images/No_detection.png"
      alt="Admin dashboard add new artist page"
-     style="float: left; margin-right: 10px; margin-down: 10px;" />
+     style="float: left; margin-right: 10px; margin-bottom: 10px;" />
 
 
 <img src="images/Page_management.png"
      alt="Admin dashboard manage pages"
-     style="float: left; margin-right: 10px; margin-down: 10px;" />
+     style="float: left; margin-right: 10px; margin-bottom: 10px;" />
 
 <img src="images/Pages_created.png"
      alt="Admin dashboard artist page created"
-     style="float: left; margin-right: 10px; margin-down: 10px;" />
+     style="float: left; margin-right: 10px; margin-bottom: 10px;" />
 
 <img src="images/Public_page.png"
      alt="Public page"
-     style="float: left; margin-right: 10px; margin-down: 20px;" />
+     style="float: left; margin-right: 10px; margin-bottom: 50px;" />
 
 
-##
 ## Accessibility considerations
 
 - The Artist Hub will be built using responsive design and the Material UI Library. As such standards to maintain basic web accessibility will be integrated into the platform
