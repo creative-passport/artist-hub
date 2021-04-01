@@ -4,9 +4,9 @@
 
 ## Summary
 
-- Music Makers have a number of ways to interact with their fans digitally however these are mostly through different social media platforms where they have to compete with millions of others for attention. It also means those platforms decide what content will show in various feeds instead of the musicians themselves*
-- The Creative Passport Artist Hub is an open space that allows music makers (or other creatives if they wish to self-host) to create a custom page for their fans highlighting their best work, giving them control of what their fans see with links to both open-source and conventional platforms.*
-- Fans will be able to subscribe to music maker accounts via the open-source platforms and share their experience back with the music maker (Using ActivityPub’s federation functions). This reduces the amount of work music makers need to do every time they introduce new content, while creating an overview of who they are as professionals and giving their subscribers freedom to consume the content on their platform of choice.*
+- Music Makers have a number of ways to interact with their fans digitally however these are mostly through different social media platforms where they have to compete with millions of others for attention. It also means those platforms decide what content will show in various feeds instead of the musicians themselves
+- The Creative Passport Artist Hub is an open space that allows music makers (or other creatives if they wish to self-host) to create a custom page for their fans highlighting their best work, giving them control of what their fans see with links to both open-source and conventional platforms.
+- Fans will be able to subscribe to music maker accounts via the open-source platforms and share their experience back with the music maker (Using ActivityPub’s federation functions). This reduces the amount of work music makers need to do every time they introduce new content, while creating an overview of who they are as professionals and giving their subscribers freedom to consume the content on their platform of choice.
 
 ## Terminology
 
