@@ -128,6 +128,7 @@ We will use ActivityPub to showcase updates and subscriptions from the above pla
 
 ### API Endpoints
 
+| ---------------------------------------------- | -------------------------------------------------------------- |
 | Endpoint                                       | Description                                                    |
 | ---------------------------------------------- | -------------------------------------------------------------- |
 | '/artistpages'                                 | GET → See a list of artist pages for an (authenticated) artist |
@@ -141,6 +142,8 @@ We will use ActivityPub to showcase updates and subscriptions from the above pla
 | '/activitypub/follow'                          | POST → follow an ActivityPub source                            |
 | '/artistpages/:artistPageId/activitypub/follow |                                                                |
 | ---------------------------------------------- | -------------------------------------------------------------- |
+| '/artistpages/:username'                       | GET → Get an artist page by its name                           |
+
 
 ## User Interface:
 
