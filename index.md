@@ -107,22 +107,22 @@ Types of users:
 
 ## UI/UX Wireframes
 
-- <img src="images/No_detection.png"
+<img src="images/No_detection.png"
      alt="Admin dashboard add new artist page"
-     style="float: left; margin-right: 10px;" />
+     style="float: left; margin-right: 10px; margin-down: 10px;" />
 
 
-- <img src="images/Page_management.png"
+<img src="images/Page_management.png"
      alt="Admin dashboard manage pages"
-     style="float: left; margin-right: 10px;" />
+     style="float: left; margin-right: 10px; margin-down: 10px;" />
 
-- <img src="images/Pages_created.png"
+<img src="images/Pages_created.png"
      alt="Admin dashboard artist page created"
-     style="float: left; margin-right: 10px;" />
+     style="float: left; margin-right: 10px; margin-down: 10px;" />
 
-- <img src="images/Public_page.png"
+<img src="images/Public_page.png"
      alt="Public page"
-     style="float: left; margin-right: 10px;" />
+     style="float: left; margin-right: 10px; margin-down: 20px;" />
 
 ## Accessibility considerations
 
