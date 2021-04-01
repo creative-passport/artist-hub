@@ -79,47 +79,50 @@ We will use ActivityPub to showcase updates and subscriptions from the above pla
 
 [Data Models](https://www.notion.so/dfd4433985d4423cbb1c07eb1413cbc5)
 
-| Model       | Types       | Attributes    |
-| ----------- | ----------- | ------------- |
-| User        | LocalUser, OIDCUserr        | id → string
-                                              sub → string
-                                              idToken →  string
-                                              accessToken → string
-                                              refreshToken → string
-                                              tokenType → string
-                                              expiresAt →  number
-                                              artistPages →  ArtistPage[]
-                                              createdAt →  Date
-                                              updatedAt →  Date         |
-| Page        | ArtistPage                  | id →  string
-                                              title →  string
-                                              username → string
-                                              user → User
-                                              apActor → APActor
-                                              createdAt →  Date
-                                              updatedAt →  Date         |
-| APActor      |                            | id → string
-                                              uri → string
-                                              username → string
-                                              domain → string
-                                              actorType → string
-                                              publicKey → string
-                                              privateKey → string
-                                              inboxUrl → string
-                                              outboxUrl → string
-                                              sharedInboxUrl → string
-                                              followersUrl → string
-                                              followingUrl → string
-                                              artistPage → ArtistPage
-                                              createdAt → Date
-                                              updatedAt → Date         |
-| APFollow     | FollowState:pending, FollowState:accepted       | id → string
-                                                                    state → FollowState
-                                                                    actorFollower → APActor
-                                                                    actorFollowing → APActor
-                                                                    createdAt → Date
-                                                                    updatedAt → Date         |
-
+| Model       | Types                  | Attributes                  |
+| ----------- | ---------------------- | --------------------------- |
+| User        | LocalUser, OIDCUserr   | id → string                 |
+|             |                        | sub → string                |
+|             |                        | idToken →  string           |
+|             |                        | accessToken → string        |
+|             |                        |  refreshToken → string      |
+|             |                        |  tokenType → string         |
+|             |                        |  expiresAt →  number        |
+|             |                        |  artistPages → ArtistPage[] |
+|             |                        |  createdAt →  Date          |
+|             |                        |  updatedAt →  Date          |
+| ----------- | ---------------------- | --------------------------- |
+| Page        | ArtistPage             | id →  string                |
+|             |                        | title →  string             |
+|             |                        | username → string           |
+|             |                        | user → User                 |
+|             |                        | apActor → APActor           |
+|             |                        | createdAt →  Date           |
+|             |                        | updatedAt →  Date           |
+| ----------- | ---------------------- | --------------------------- |
+| APActor     |                        | id → string                 |
+|             |                        | uri → string                |
+|             |                        | username → string           |
+|             |                        | domain → string             |
+|             |                        | actorType → string          |
+|             |                        | publicKey → string          |
+|             |                        | privateKey → string         |
+|             |                        | inboxUrl → string           |
+|             |                        | outboxUrl → string          |
+|             |                        | sharedInboxUrl → string     |
+|             |                        | followersUrl → string       |
+|             |                        | followingUrl → string       |
+|             |                        | artistPage → ArtistPage     |
+|             |                        | createdAt → Date            |
+|             |                        | updatedAt → Date            |
+| ----------- | ---------------------- | --------------------------- |
+| APFollow    | FollowState:pending,   | id → string                 |
+|             |  FollowState:accepted  | state → FollowState         |
+|             |                        | actorFollower → APActor     |
+|             |                        | actorFollowing → APActor    |
+|             |                        | createdAt → Date            |
+|             |                        | updatedAt → Date            |
+| ----------- | ---------------------- | --------------------------- |
 
 ## API
 
