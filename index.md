@@ -124,6 +124,8 @@ Types of users:
      alt="Public page"
      style="float: left; margin-right: 10px; margin-down: 20px;" />
 
+
+##
 ## Accessibility considerations
 
 - The Artist Hub will be built using responsive design and the Material UI Library. As such standards to maintain basic web accessibility will be integrated into the platform
