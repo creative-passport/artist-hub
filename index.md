@@ -77,8 +77,6 @@ We will use ActivityPub to showcase updates and subscriptions from the above pla
 
 ## Data Models
 
-[Data Models](https://www.notion.so/dfd4433985d4423cbb1c07eb1413cbc5)
-
 | Model       | Types                  | Attributes                  |
 | ----------- | ---------------------- | --------------------------- |
 | User        | LocalUser, OIDCUserr   | id → string                 |
@@ -131,6 +129,20 @@ We will use ActivityPub to showcase updates and subscriptions from the above pla
 ### API Endpoints
 
 [API Endpoints](https://www.notion.so/5362736241c84c2391c3147d22dcd7e9)
+
+| Endpoint                                       | Description                                                    |
+| ---------------------------------------------- | -------------------------------------------------------------- |
+| '/artistpages'                                 | GET → See a list of artist pages for an (authenticated) artist |
+|                                                | POST → Create a new artist page                                |
+| ---------------------------------------------- | -------------------------------------------------------------- |
+| '/artistpages/:artistPageId'                   | GET → Get an artist page by id                                 |
+|                                                | PUT → Update an artist page                                    |
+|                                                | DELETE → Delete an artist page                                 |
+| ---------------------------------------------- | -------------------------------------------------------------- |
+| '/activitypub/lookup'                          | POST → find an ActivityPub source                              |
+| '/activitypub/follow'                          | POST → follow an ActivityPub source                            |
+| '/artistpages/:artistPageId/activitypub/follow |                                                                |
+| ---------------------------------------------- | -------------------------------------------------------------- |
 
 ## User Interface:
 
