@@ -90,7 +90,7 @@ const oidcSetupPassport = (
 
   const router = Router();
 
-  router.post('/login', passport.authenticate('oidc'));
+  router.post('/login', csrfProtection, passport.authenticate('oidc'));
   router.get(
     '/return',
     passport.authenticate('oidc', {
@@ -99,7 +99,7 @@ const oidcSetupPassport = (
     })
   );
 
-  router.post('/logout', (req, res) => {
+  router.post('/logout', csrfProtection, (req, res) => {
     if (req.isAuthenticated() && isUser(req.user)) {
       const logoutUrl = client.endSessionUrl({
         id_token_hint: req.user.tokenset,

@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import passport from 'passport';
 import config from '../config';
 import { User } from '../models/User';
+import { csrfProtection } from '../csrf';
 
 export class LocalAuthenticator {
   private constructor(app: Express) {
@@ -55,18 +56,19 @@ const localSetupPassport = (
 
   router.post(
     '/login',
+    csrfProtection,
     passport.authenticate('local', {
       successRedirect: '/',
       failureRedirect: '/',
     })
   );
 
-  router.post('/logout', (req, res) => {
+  router.post('/logout', csrfProtection, (req, res) => {
     req.session = null;
     res.redirect('/');
   });
 
-  router.get('/', (req, res) => {
+  router.get('/', csrfProtection, (req, res) => {
     res.send({
       mode: 'local',
       signedIn: req.isAuthenticated(),

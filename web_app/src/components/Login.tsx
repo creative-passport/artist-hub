@@ -22,10 +22,10 @@ export const Login = () => {
       <form action="/auth/login" method="POST" className={classes.localForm}>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div>
-          <TextField id="username" label="Username" name="username" />
+          <TextField id="username" label="Username" name="username" autoComplete="username" />
         </div>
         <div>
-          <TextField id="password" label="Password" name="password" />
+          <TextField id="password" label="Password" name="password" type="password" autoComplete="current-password" />
         </div>
         <Button
           variant="contained"
