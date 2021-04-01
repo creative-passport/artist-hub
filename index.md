@@ -107,11 +107,22 @@ Types of users:
 
 ## UI/UX Wireframes
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e5eddcfc-fa8b-4ce7-82a5-c3045f1f1842/Screenshot_2021-03-31_at_15.17.37.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e5eddcfc-fa8b-4ce7-82a5-c3045f1f1842/Screenshot_2021-03-31_at_15.17.37.png)
+- <img src="images/No_detection.png"
+     alt="Admin dashboard add new artist page"
+     style="float: left; margin-right: 10px;" />
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/86c3f1b7-effa-4939-a19b-66e770676f5d/Screenshot_2021-03-31_at_15.20.18.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/86c3f1b7-effa-4939-a19b-66e770676f5d/Screenshot_2021-03-31_at_15.20.18.png)
 
-![https://s3-us-west-2.amazonaws.com/secure.notion-static.com/062324e3-fa33-49b2-a998-21b28433605f/Screenshot_2021-03-31_at_15.28.10.png](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/062324e3-fa33-49b2-a998-21b28433605f/Screenshot_2021-03-31_at_15.28.10.png)
+- <img src="images/Page_management.png"
+     alt="Admin dashboard manage pages"
+     style="float: left; margin-right: 10px;" />
+
+- <img src="images/Pages_created.png"
+     alt="Admin dashboard artist page created"
+     style="float: left; margin-right: 10px;" />
+
+- <img src="images/Public_page.png"
+     alt="Public page"
+     style="float: left; margin-right: 10px;" />
 
 ## Accessibility considerations
 
