@@ -117,14 +117,15 @@ To run the web app in development mode you should install the latest LTS version
 
 You can now open the Artist Hub by visiting <http://localhost:3000> in your browser.
 
-## Copyright
+## Copyright and License information
 
 Copyright (c) 2021 Creative Passport MTÜ. All rights reserved.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+(at your option) any later version. For accurate information, please check 
+individual files. 
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
