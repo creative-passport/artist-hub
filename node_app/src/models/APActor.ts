@@ -3,6 +3,9 @@ import { APFollow } from './APFollow';
 import { ArtistPage } from './ArtistPage';
 import { BaseModel } from './BaseModel';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 export class APActor extends BaseModel {
   id!: string;
   uri!: string;

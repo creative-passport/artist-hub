@@ -10,6 +10,9 @@ import { Link } from '@material-ui/core';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { AxiosError } from 'axios';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 const useStyles = makeStyles((theme) => ({
   button: {
     marginBottom: theme.spacing(2),

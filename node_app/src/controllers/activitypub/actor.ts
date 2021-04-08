@@ -4,6 +4,9 @@ import { asyncWrapper } from '../../asyncWrapper';
 import { ArtistPage } from '../../models/ArtistPage';
 import { acceptFollow, rejectFollow } from '../../activitypub/follow';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 export interface Actor {
   '@context': string[];
 

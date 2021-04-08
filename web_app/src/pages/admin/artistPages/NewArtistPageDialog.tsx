@@ -12,6 +12,9 @@ import {
 } from '@material-ui/core';
 import React, { useState } from 'react';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 const useStyles = makeStyles((theme) => ({
   error: {
     color: 'red',

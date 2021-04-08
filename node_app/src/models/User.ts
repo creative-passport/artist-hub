@@ -3,6 +3,9 @@ import { ArtistPage } from './ArtistPage';
 import { TokenSet } from 'openid-client';
 import { BaseModel } from './BaseModel';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 export class User extends BaseModel {
   id!: string;
   sub!: string;

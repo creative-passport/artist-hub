@@ -4,6 +4,9 @@ import { APFollow } from '../models/APFollow';
 import { v4 as uuidv4 } from 'uuid';
 import { NotFoundError } from 'objection';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 export async function createFollow(actor: APActor, target: APActor) {
   const uri = `${config.baseUrl}/activity/${uuidv4()}`;
   await APFollow.query().insert({

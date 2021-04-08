@@ -11,6 +11,9 @@ import config from '../config';
 import { User } from '../models/User';
 import { isUser } from './auth';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 export class OIDCAuthenticator {
   client: Client;
   providerName: string;

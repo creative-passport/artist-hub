@@ -1,6 +1,9 @@
 import { makeStyles } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(4),

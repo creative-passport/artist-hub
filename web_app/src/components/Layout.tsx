@@ -9,6 +9,9 @@ import { PropsWithChildren } from 'react';
 import { useAuthState } from '../providers/AuthProvider';
 import { Logout } from './Logout';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,

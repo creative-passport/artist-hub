@@ -5,6 +5,9 @@ import { OIDCAuthenticator } from './oidc';
 import passport from 'passport';
 import { User } from '../models/User';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 abstract class Authenticator {
   static create(app: Express): Promise<Authenticator> {
     throw new Error('Creator not defined');

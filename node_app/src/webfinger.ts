@@ -2,6 +2,9 @@ import { asyncWrapper } from './asyncWrapper';
 import config from './config';
 import { ArtistPage } from './models/ArtistPage';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 function createWebfinger(username: string) {
   return {
     subject: `acct:${username}@${config.domain}`,

@@ -6,6 +6,9 @@ import {
   Page,
 } from 'objection';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 // A custom query builder that will always throw an error if nothing is found
 // unless explicitly disabled with allowNotFound
 

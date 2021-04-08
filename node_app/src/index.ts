@@ -12,6 +12,9 @@ import { Model } from 'objection';
 import { activityPubRouter } from './controllers/activitypub/actor';
 import { webfingerHandler } from './webfinger';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 // Initialize knex.

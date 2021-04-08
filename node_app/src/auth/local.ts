@@ -6,6 +6,9 @@ import config from '../config';
 import { User } from '../models/User';
 import { csrfProtection } from '../csrf';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 export class LocalAuthenticator {
   private constructor(app: Express) {
     if (

@@ -13,6 +13,8 @@ import { ArtistPage } from './pages/artistPage/ArtistPage';
 import DialogProvider from './providers/DialogProvider';
 import { NotFound } from './pages/NotFound';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
 const queryClient = new QueryClient();
 
 function App() {

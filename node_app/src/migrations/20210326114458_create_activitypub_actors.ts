@@ -1,5 +1,8 @@
 import { Knex } from 'knex';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('apActors', (table) => {
     table.bigIncrements('id').primary();

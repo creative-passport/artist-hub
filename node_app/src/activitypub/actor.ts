@@ -2,6 +2,9 @@ import axios from 'axios';
 import { URL } from 'url';
 import { APActor } from '../models/APActor';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 const contentType =
   'application/ld+json; profile="https://www.w3.org/ns/activitystreams"';
 

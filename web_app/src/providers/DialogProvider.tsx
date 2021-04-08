@@ -8,6 +8,9 @@ import {
 } from '@material-ui/core';
 import React, { PropsWithChildren, useCallback, useReducer } from 'react';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 export const DialogDispatchContext = React.createContext<
   React.Dispatch<Action> | undefined
 >(undefined);

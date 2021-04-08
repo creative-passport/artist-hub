@@ -1,5 +1,7 @@
 import { useQueryClient } from 'react-query';
 import { useApiQuery, useApiPost, useApiPut, useApiDelete } from './useApi';
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
 
 // Admin Artist Pages
 

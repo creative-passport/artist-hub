@@ -2,6 +2,9 @@ import { Model } from 'objection';
 import { APActor } from './APActor';
 import { BaseModel } from './BaseModel';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 type FollowState = 'pending' | 'accepted';
 
 export class APFollow extends BaseModel {

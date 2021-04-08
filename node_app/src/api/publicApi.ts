@@ -2,6 +2,9 @@ import express from 'express';
 import { asyncWrapper } from '../asyncWrapper';
 import { ArtistPage } from '../models/ArtistPage';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 export const publicApiRouter = express.Router();
 
 const allowedFields: Array<keyof ArtistPage> = ['title', 'username'];

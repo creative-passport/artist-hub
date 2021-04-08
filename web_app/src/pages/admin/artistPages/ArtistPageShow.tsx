@@ -14,6 +14,9 @@ import { useDialog } from '../../../providers/DialogProvider';
 import { useState } from 'react';
 import AddActivityPubDialog from './AddActivityPubDialog';
 
+// SPDX-FileCopyrightText:  2021 Creative Passport MTÜ
+// SPDX-License-Identifier: AGPL-3.0-or-later
+
 const useStyles = makeStyles((theme) => ({
   h3: {
     marginTop: theme.spacing(2),
