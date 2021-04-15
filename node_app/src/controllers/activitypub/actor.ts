@@ -3,6 +3,7 @@ import config from '../../config';
 import { asyncWrapper } from '../../asyncWrapper';
 import { ArtistPage } from '../../models/ArtistPage';
 import { acceptFollow, rejectFollow } from '../../activitypub/follow';
+import { getActor } from '../../activitypub/actor';
 
 export interface Actor {
   '@context': string[];
@@ -83,7 +84,7 @@ activityPubRouter.post(
     if (artistPage) {
       console.log(`Received message for page ${req.params.username}`);
       console.log(req.headers);
-      console.log(req.body);
+      console.log(JSON.stringify(req.body, undefined, 2));
 
       switch (req.body.type) {
         case 'Accept': {
@@ -107,6 +108,37 @@ activityPubRouter.post(
             );
           }
           break;
+        }
+        case 'Create': {
+          if (
+            req.body.object &&
+            req.body.object.type === 'Note' &&
+            typeof req.body.object.id === 'string'
+          ) {
+            const actor = await getActor(req.body.actor);
+
+            // Find or create note
+            const note = await actor
+              .$relatedQuery('objects')
+              .insert({
+                uri: req.body.object.id,
+                objectType: 'Note',
+                url:
+                  typeof req.body.object.url === 'string'
+                    ? req.body.object.url
+                    : undefined,
+                content:
+                  typeof req.body.object.content === 'string'
+                    ? req.body.object.content
+                    : undefined,
+              })
+              .returning('*')
+              .first();
+            await note
+              .$relatedQuery('deliveredActors')
+              .relate(artistPage.apActor);
+            break;
+          }
         }
         default:
           console.log('Unsupported message');

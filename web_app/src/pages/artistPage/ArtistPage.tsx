@@ -1,6 +1,7 @@
 import { Typography } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { useArtistPage } from '../../hooks/useArtistPage';
+import { FeedItem } from './FeedItem';
 
 export function ArtistPage() {
   const { username } = useParams<{ username: string }>();
@@ -13,7 +14,9 @@ export function ArtistPage() {
       <Typography component="h2" variant="h3">
         {data.title}
       </Typography>
-      <p>TODO - Show data sources here.</p>
+      {data.feed.map((f) => (
+        <FeedItem key={f.id} feedItem={f} />
+      ))}
     </div>
   );
 }

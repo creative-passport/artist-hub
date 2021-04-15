@@ -9,6 +9,7 @@ import NewArtistPageDialog from './NewArtistPageDialog';
 import { Link } from '@material-ui/core';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { AxiosError } from 'axios';
+import { ArtistPage } from '../../../types/api-types';
 
 const useStyles = makeStyles((theme) => ({
   button: {
