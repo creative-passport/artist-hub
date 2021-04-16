@@ -1,5 +1,6 @@
 import { Model } from 'objection';
 import { APActor } from './APActor';
+import { APAttachment } from './APAttachment';
 import { BaseModel } from './BaseModel';
 
 export class APObject extends BaseModel {
@@ -11,6 +12,7 @@ export class APObject extends BaseModel {
   content?: string;
 
   actor?: APActor;
+  attachments?: APAttachment[];
 
   createdAt!: Date;
   updatedAt!: Date;
@@ -43,6 +45,15 @@ export class APObject extends BaseModel {
       join: {
         from: 'apObjects.actorId',
         to: 'apActors.id',
+      },
+    },
+    attachments: {
+      relation: Model.HasManyRelation,
+      modelClass: APAttachment,
+
+      join: {
+        from: 'apObjects.id',
+        to: 'apAttachments.apObjectId',
       },
     },
   });

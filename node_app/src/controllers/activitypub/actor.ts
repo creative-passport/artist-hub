@@ -4,6 +4,9 @@ import { asyncWrapper } from '../../asyncWrapper';
 import { ArtistPage } from '../../models/ArtistPage';
 import { acceptFollow, rejectFollow } from '../../activitypub/follow';
 import { getActor } from '../../activitypub/actor';
+import { PartialModelObject, UniqueViolationError } from 'objection';
+import { APObject } from '../../models/APObject';
+import { APAttachment } from '../../models/APAttachment';
 
 export interface Actor {
   '@context': string[];
@@ -43,6 +46,11 @@ const activityPubMimeTypes = [
   'application/activity+json',
 ];
 
+const imageMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
+const videoMimeTypes = ['video/mp4'];
+
+const supportedMimeTypes = [...imageMimeTypes, ...videoMimeTypes];
+
 export const activityPubRouter = express.Router();
 activityPubRouter.use(
   express.json({
@@ -71,6 +79,9 @@ activityPubRouter.get(
     }
   })
 );
+
+const asArray = <T extends unknown>(value: T[] | T) =>
+  Array.isArray(value) ? value : [value];
 
 activityPubRouter.post(
   '/:username/inbox',
@@ -116,27 +127,72 @@ activityPubRouter.post(
             typeof req.body.object.id === 'string'
           ) {
             const actor = await getActor(req.body.actor);
+            const object = req.body.object;
 
-            // Find or create note
-            const note = await actor
-              .$relatedQuery('objects')
-              .insert({
-                uri: req.body.object.id,
-                objectType: 'Note',
-                url:
-                  typeof req.body.object.url === 'string'
-                    ? req.body.object.url
-                    : undefined,
-                content:
-                  typeof req.body.object.content === 'string'
-                    ? req.body.object.content
-                    : undefined,
-              })
-              .returning('*')
-              .first();
-            await note
-              .$relatedQuery('deliveredActors')
-              .relate(artistPage.apActor);
+            let note: APObject | undefined = undefined;
+            try {
+              // Find or create note
+              note = await actor
+                .$relatedQuery('objects')
+                .insert({
+                  uri: object.id,
+                  objectType: 'Note',
+                  url: typeof object.url === 'string' ? object.url : undefined,
+                  content:
+                    typeof object.content === 'string'
+                      ? object.content
+                      : undefined,
+                })
+                .returning('*')
+                .first();
+
+              if (object.attachment) {
+                let newAttachments: PartialModelObject<APAttachment>[] = [];
+                for (const a of asArray(object.attachment)) {
+                  if (newAttachments.length >= 4) {
+                    break;
+                  }
+
+                  const newAttachment: PartialModelObject<APAttachment> = {
+                    url: a.url,
+                    type: a.type,
+                    description: a.name,
+                    mediaType: a.mediaType,
+                    blurhash: a.blurhash,
+                    thumbnailUrl: thumbnailUrlFromAttachment(a),
+                  };
+                  if (!supportedMimeTypes.includes(newAttachment.mediaType)) {
+                    continue;
+                  }
+                  newAttachments.push(newAttachment);
+                }
+                if (newAttachments.length > 0) {
+                  await note
+                    .$relatedQuery('attachments')
+                    .insert(newAttachments);
+                }
+              }
+            } catch (err) {
+              if (err instanceof UniqueViolationError) {
+                note = await actor.$relatedQuery('objects').findOne({
+                  uri: object.id,
+                });
+              } else {
+                throw err;
+              }
+            }
+
+            try {
+              await note
+                .$relatedQuery('deliveredActors')
+                .relate(artistPage.apActor);
+            } catch (err) {
+              if (err instanceof UniqueViolationError) {
+                // Already delivered
+              } else {
+                throw err;
+              }
+            }
             break;
           }
         }
@@ -153,3 +209,11 @@ activityPubRouter.post(
     }
   })
 );
+
+function thumbnailUrlFromAttachment(attachment: any): any {
+  if (typeof attachment.icon === 'object' && attachment.icon !== null) {
+    return attachment.icon.url;
+  } else {
+    return attachment.icon;
+  }
+}

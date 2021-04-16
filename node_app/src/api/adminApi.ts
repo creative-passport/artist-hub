@@ -27,8 +27,7 @@ adminApiRouter.get(
     const user = req.user as User;
     const artistPages = await user
       .$relatedQuery('artistPages')
-      .orderBy('title')
-      .allowNotFound();
+      .orderBy('title');
     res.send(artistPages);
   })
 );

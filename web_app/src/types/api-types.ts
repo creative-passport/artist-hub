@@ -16,4 +16,14 @@ export interface FeedItem {
   domain: string;
   url: string;
   content: string;
+  attachments: Attachment[];
+}
+
+export interface Attachment {
+  id: string;
+  url: string;
+  thumbnailUrl?: string;
+  description?: string;
+  mediaType: string;
+  blurhash?: string;
 }

@@ -6,7 +6,7 @@ const contentType =
   'application/ld+json; profile="https://www.w3.org/ns/activitystreams"';
 
 export async function getActor(uri: string) {
-  let actor = await APActor.query().findOne({ uri: uri }).allowNotFound();
+  let actor = await APActor.query().findOne({ uri: uri });
   if (!actor) {
     actor = await getRemoteActor(uri);
   }
