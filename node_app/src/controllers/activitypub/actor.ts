@@ -129,6 +129,15 @@ activityPubRouter.post(
             const actor = await getActor(req.body.actor);
             const object = req.body.object;
 
+            const following = await artistPage.apActor
+              .$relatedQuery('following')
+              .withGraphJoined('actorFollowing')
+              .findOne({ state: 'accepted', 'actorFollowing.uri': actor.uri });
+            if (!following) {
+              // The user isn't following the account
+              break;
+            }
+
             let note: APObject | undefined = undefined;
             try {
               // Find or create note

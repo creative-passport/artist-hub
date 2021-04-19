@@ -18,12 +18,15 @@ Artist Hub is a brand new project which is very early in development and **at th
   - [x] Generate public/private keys
   - [x] Webfinger
   - [x] Actor JSON-LD
+    - [ ] Avatars
+    - [ ] URL
   - [x] Send Follow request
   - [x] Inbox
+    - [ ] Shared Inbox
     - [x] Accept
     - [x] Reject
-    - [ ] Note
-      - [ ] Attachment
+    - [x] Note
+      - [x] Attachment
   - [x] Sign POST requests 
   - [ ] Verify signatures 
 - [x] Public Artist Page
