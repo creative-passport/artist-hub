@@ -22,16 +22,21 @@ Artist Hub is a brand new project which is very early in development and **at th
     - [ ] URL
   - [x] Send Follow request
   - [x] Inbox
-    - [ ] Shared Inbox
+    - [x] Shared Inbox
     - [x] Accept
     - [x] Reject
     - [x] Note
       - [x] Attachment
   - [x] Sign POST requests 
   - [ ] Verify signatures 
+  - [ ] Validation
 - [x] Public Artist Page
   - [x] Initial Placeholder
-  - [ ] Show ActivityPub data
+  - [x] Show ActivityPub data
+- [ ] Improve UI/UX
+  - [ ] Admin
+  - [ ] Homepage
+  - [ ] Artist Public page
 
 ## Configuration
 
