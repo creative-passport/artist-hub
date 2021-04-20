@@ -19,6 +19,9 @@ export async function create(json: any, deliverActor?: APActor) {
     typeof json.object.id === 'string'
   ) {
     const actor = await getActor(json.actor);
+    if (!actor) {
+      return;
+    }
     const object = json.object;
 
     if (deliverActor) {

@@ -7,6 +7,7 @@ import { BaseModel } from './BaseModel';
 export class APActor extends BaseModel {
   id!: string;
   uri!: string;
+  url?: string;
   username!: string;
   domain?: string;
   actorType!: string;

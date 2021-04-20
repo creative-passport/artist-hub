@@ -51,7 +51,7 @@ const getArtistPage = asyncWrapper(async (req, res) => {
       feed:
         artistPage.apActor.deliveredObjects?.map((o) => ({
           id: o.id,
-          accountUrl: o.actor?.uri,
+          accountUrl: o.actor && (o.actor.url || o.actor.uri),
           username: o.actor?.username,
           domain: o.actor?.domain,
           url: o.url || o.uri,

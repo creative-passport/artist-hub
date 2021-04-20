@@ -184,6 +184,10 @@ const followActivityPub = asyncWrapper(async (req, res) => {
   });
 
   const target = await getActor(id);
+  if (!target) {
+    return;
+  }
+
   const follow = await createFollow(artistPage.apActor, target);
 
   const date = new Date().toUTCString();

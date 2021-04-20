@@ -19,7 +19,8 @@ Artist Hub is a brand new project which is very early in development and **at th
   - [x] Webfinger
   - [x] Actor JSON-LD
     - [ ] Avatars
-    - [ ] URL
+    - [x] URL
+    - [ ] Refresh actor data
   - [x] Send Follow request
   - [x] Inbox
     - [x] Shared Inbox
