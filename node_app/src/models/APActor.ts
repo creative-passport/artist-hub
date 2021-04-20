@@ -22,12 +22,21 @@ export class APActor extends BaseModel {
   objects?: APObject[];
   deliveredObjects?: APObject[];
 
+  followers?: APFollow[];
+
   createdAt!: Date;
   updatedAt!: Date;
 
   static get tableName() {
     return 'apActors';
   }
+
+  acceptedFollowers = async (): Promise<APActor[]> => {
+    const apFollows = await this.$relatedQuery('followers')
+      .withGraphJoined('actorFollower')
+      .where({ state: 'accepted' });
+    return apFollows.map((f) => f.actorFollower);
+  };
 
   $beforeUpdate() {
     this.updatedAt = new Date();

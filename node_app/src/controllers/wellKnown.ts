@@ -1,6 +1,17 @@
 import { asyncWrapper } from './asyncWrapper';
-import config from './config';
-import { ArtistPage } from './models/ArtistPage';
+import config from '../config';
+import { ArtistPage } from '../models/ArtistPage';
+import express, { Router } from 'express';
+
+export function getWellKnownRoutes(): Router {
+  const router = express.Router();
+  router.get(
+    '/webfinger',
+    express.json({ type: ['application/jrd+json', 'application/json'] }),
+    getWebfinger
+  );
+  return router;
+}
 
 function createWebfinger(username: string) {
   return {
@@ -21,7 +32,7 @@ function createWebfinger(username: string) {
   };
 }
 
-export const webfingerHandler = asyncWrapper(async (req, res) => {
+const getWebfinger = asyncWrapper(async (req, res) => {
   console.log('webfinger request');
   const resource = req.query.resource;
   if (
