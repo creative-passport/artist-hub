@@ -24,6 +24,9 @@ export class APActor extends BaseModel {
   deliveredObjects?: APObject[];
 
   followers?: APFollow[];
+  following?: APFollow;
+
+  followingActors?: APFollowActor[];
 
   createdAt!: Date;
   updatedAt!: Date;
@@ -51,6 +54,20 @@ export class APActor extends BaseModel {
       join: {
         from: 'apActors.id',
         to: 'artistPages.apActorId',
+      },
+    },
+    followingActors: {
+      relation: Model.ManyToManyRelation,
+      modelClass: APActor,
+
+      join: {
+        from: 'apActors.id',
+        to: 'apActors.id',
+        through: {
+          from: 'apFollows.actorId',
+          to: 'apFollows.targetActorId',
+          extra: { followState: 'state', followUri: 'uri' },
+        },
       },
     },
     following: {
@@ -93,4 +110,9 @@ export class APActor extends BaseModel {
       },
     },
   });
+}
+
+export class APFollowActor extends APActor {
+  followState!: string;
+  followUri!: string;
 }

@@ -3,10 +3,21 @@ export interface ArtistPage {
   title: string;
   username: string;
 
+  following: Follow[];
+
   feed: FeedItem[];
 
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface Follow {
+  id: string;
+  followState: string;
+  followUri: string;
+  url: string;
+  username: string;
+  domain: string;
 }
 
 export interface FeedItem {
