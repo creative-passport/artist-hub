@@ -12,8 +12,8 @@ Artist Hub is a brand new project which is very early in development and **at th
   - [x] Create Artist page
   - [x] Delete Artist page
   - [x] Follow ActivityPub data source
-  - [ ] Show followed data sources
-  - [ ] Delete followed data source
+  - [x] Show followed data sources
+  - [x] Delete followed data source
 - [x] ActivityPub
   - [x] Generate public/private keys
   - [x] Webfinger
