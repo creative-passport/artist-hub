@@ -3,6 +3,8 @@ import config from '../../config';
 import { asyncWrapper } from '../asyncWrapper';
 import { ArtistPage } from '../../models/ArtistPage';
 import { inbox } from '../../activitypub/inbox';
+import { verifiedActorFromSignature } from '../../activitypub/verifySignature';
+import { RequestWithRawBody } from '../../types';
 import Debug from 'debug';
 const debug = Debug('artisthub:actor');
 
@@ -77,7 +79,11 @@ const postInbox = asyncWrapper(async (req, res) => {
   if (artistPage) {
     debug(`postInbox for page ${req.params.username}`);
     debug('postInbox headers', req.headers);
-    await inbox(req.body, artistPage.apActor);
+    const verifiedActor = await verifiedActorFromSignature(
+      req as RequestWithRawBody
+    );
+
+    await inbox(verifiedActor, req.body, artistPage.apActor);
 
     res.sendStatus(202);
   } else {

@@ -6,11 +6,11 @@ import { asyncWrapper } from '../asyncWrapper';
 import crypto from 'crypto';
 import { promisify } from 'util';
 import config from '../../config';
-import { URL } from 'url';
 import { createFollow } from '../../activitypub/follow';
 import { getActor } from '../../activitypub/actor';
 import { createUndo } from '../../activitypub/undo';
 import { APFollow } from '../../models/APFollow';
+import { signedPost } from '../../activitypub/request';
 import Debug from 'debug';
 const debug = Debug('artisthub:adminapi');
 
@@ -211,48 +211,12 @@ const followActivityPub = asyncWrapper(async (req, res) => {
 
   const follow = await createFollow(artistPage.apActor, target);
 
-  const date = new Date().toUTCString();
-  const url = new URL(result.data.inbox);
-
-  const body = JSON.stringify(follow);
-  const bodyHash = crypto.createHash('sha256').update(body).digest('base64');
-  debug('*** DATE ***', date);
-  debug('*** HOST ****', url.host);
-  const headers = {
-    Date: date,
-    Host: url.host,
-    Digest: `sha-256=${bodyHash}`,
-  };
-  const headersWithTarget = {
-    '(request-target)': `post ${url.pathname}`,
-    ...headers,
-  };
-  const headerString = Object.entries(headersWithTarget)
-    .map(([k, v]) => `${k.toLowerCase()}: ${v}`)
-    .join('\n');
-  debug(headerString);
-  const signer = crypto.createSign('sha256');
-  signer.update(headerString);
-  signer.end();
-  const signature = signer
-    .sign(artistPage.apActor.privateKey)
-    .toString('base64');
-  const sigKeyId = `${config.baseUrl}/p/${artistPage.username}#main-key`;
-  const sigHeaders = `(request-target) ${Object.keys(headers)
-    .join(' ')
-    .toLowerCase()}`;
-
-  const signatureHeader = `keyId="${sigKeyId}",headers="${sigHeaders}",signature="${signature}"`;
-  debug(signatureHeader);
-  debug(body);
-
   try {
-    const r = await axios.post(result.data.inbox, body, {
-      headers: {
-        Signature: signatureHeader,
-        ...headers,
-      },
-    });
+    const r = await signedPost(
+      result.data.inbox,
+      JSON.stringify(follow),
+      artistPage.apActor
+    );
     debug('Follow success', r.headers, r.status, r.data);
   } catch (e) {
     debug(e);
@@ -276,50 +240,10 @@ const unfollowActivityPub = asyncWrapper(async (req, res) => {
     .withGraphFetched('actorFollowing');
 
   const inbox = follow.actorFollowing.inboxUrl;
-  const date = new Date().toUTCString();
-  const url = new URL(inbox);
-
   const undo = await createUndo(artistPage.apActor, follow);
 
-  const body = JSON.stringify(undo);
-  const bodyHash = crypto.createHash('sha256').update(body).digest('base64');
-  debug('*** DATE ***', date);
-  debug('*** HOST ****', url.host);
-  const headers = {
-    Date: date,
-    Host: url.host,
-    Digest: `sha-256=${bodyHash}`,
-  };
-  const headersWithTarget = {
-    '(request-target)': `post ${url.pathname}`,
-    ...headers,
-  };
-  const headerString = Object.entries(headersWithTarget)
-    .map(([k, v]) => `${k.toLowerCase()}: ${v}`)
-    .join('\n');
-  debug(headerString);
-  const signer = crypto.createSign('sha256');
-  signer.update(headerString);
-  signer.end();
-  const signature = signer
-    .sign(artistPage.apActor.privateKey)
-    .toString('base64');
-  const sigKeyId = `${config.baseUrl}/p/${artistPage.username}#main-key`;
-  const sigHeaders = `(request-target) ${Object.keys(headers)
-    .join(' ')
-    .toLowerCase()}`;
-
-  const signatureHeader = `keyId="${sigKeyId}",headers="${sigHeaders}",signature="${signature}"`;
-  debug(signatureHeader);
-  debug(body);
-
   try {
-    const r = await axios.post(inbox, body, {
-      headers: {
-        Signature: signatureHeader,
-        ...headers,
-      },
-    });
+    const r = await signedPost(inbox, JSON.stringify(undo), artistPage.apActor);
     debug('Unfollow success', r.headers, r.status, r.data);
   } catch (e) {
     debug(e);

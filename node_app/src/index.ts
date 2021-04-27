@@ -24,6 +24,7 @@ Model.knex(knex);
   const port = 4000;
 
   app.use(morgan('combined'));
+  app.set('trust proxy', true);
 
   app.use(
     cookieSession({
