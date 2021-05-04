@@ -2,6 +2,8 @@ import { asyncWrapper } from './asyncWrapper';
 import config from '../config';
 import { ArtistPage } from '../models/ArtistPage';
 import express, { Router } from 'express';
+import Debug from 'debug';
+const debug = Debug('artisthub:wellknown');
 
 export function getWellKnownRoutes(): Router {
   const router = express.Router();
@@ -33,7 +35,7 @@ function createWebfinger(username: string) {
 }
 
 const getWebfinger = asyncWrapper(async (req, res) => {
-  console.log('webfinger request');
+  debug('webfinger request');
   const resource = req.query.resource;
   if (
     !resource ||
@@ -54,7 +56,7 @@ const getWebfinger = asyncWrapper(async (req, res) => {
   });
   if (artistPage) {
     const webfinger = createWebfinger(artistPage.username);
-    console.log(webfinger);
+    debug(webfinger);
     res.type('application/jrd+json');
     res.send(webfinger);
   } else {

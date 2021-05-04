@@ -3,6 +3,8 @@ import config from '../../config';
 import { asyncWrapper } from '../asyncWrapper';
 import { ArtistPage } from '../../models/ArtistPage';
 import { inbox } from '../../activitypub/inbox';
+import Debug from 'debug';
+const debug = Debug('artisthub:actor');
 
 export interface Actor {
   '@context': string[];
@@ -58,7 +60,7 @@ const artist = asyncWrapper(async (req, res) => {
       artistPage.username,
       artistPage.apActor.publicKey
     );
-    console.log(actor);
+    debug('getArtist - actor', actor);
     res.type('application/activity+json');
     res.send(createActor(artistPage.username, artistPage.apActor.publicKey));
   } else {
@@ -67,22 +69,19 @@ const artist = asyncWrapper(async (req, res) => {
 });
 
 const postInbox = asyncWrapper(async (req, res) => {
-  console.log(`Received message for user ${req.params.username}`);
   const artistPage = await ArtistPage.query()
     .findOne({
       username: req.params.username,
     })
     .withGraphFetched('apActor');
   if (artistPage) {
-    console.log(`Received message for page ${req.params.username}`);
-    console.log('Headers', req.headers);
+    debug(`postInbox for page ${req.params.username}`);
+    debug('postInbox headers', req.headers);
     await inbox(req.body, artistPage.apActor);
 
     res.sendStatus(202);
   } else {
-    console.log(
-      `Received message for non-existant page ${req.params.username}`
-    );
+    debug(`postInbox, message for non-existant page ${req.params.username}`);
     res.sendStatus(404);
   }
 });

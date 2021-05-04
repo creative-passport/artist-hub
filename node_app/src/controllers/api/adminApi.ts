@@ -9,6 +9,8 @@ import config from '../../config';
 import { URL } from 'url';
 import { createFollow } from '../../activitypub/follow';
 import { getActor } from '../../activitypub/actor';
+import Debug from 'debug';
+const debug = Debug('artisthub:adminapi');
 
 const generateKeyPair = promisify(crypto.generateKeyPair);
 
@@ -120,7 +122,7 @@ const activityPubMimeTypes = [
 
 const lookupActivityPub = asyncWrapper(async (req, res) => {
   if (!req.body || typeof req.body.url !== 'string') {
-    console.log(req);
+    debug('Invalid request body', req);
     res.sendStatus(500);
     return;
   }
@@ -164,9 +166,9 @@ const lookupActivityPub = asyncWrapper(async (req, res) => {
 });
 
 const followActivityPub = asyncWrapper(async (req, res) => {
-  console.log('Follow');
+  debug('Follow');
   if (!req.body || typeof req.body.id !== 'string') {
-    console.log(req);
+    debug('Invalid request body', req);
     res.sendStatus(500);
     return;
   }
@@ -195,8 +197,8 @@ const followActivityPub = asyncWrapper(async (req, res) => {
 
   const body = JSON.stringify(follow);
   const bodyHash = crypto.createHash('sha256').update(body).digest('base64');
-  console.log('*** DATE ***', date);
-  console.log('*** HOST ****', url.host);
+  debug('*** DATE ***', date);
+  debug('*** HOST ****', url.host);
   const headers = {
     Date: date,
     Host: url.host,
@@ -209,7 +211,7 @@ const followActivityPub = asyncWrapper(async (req, res) => {
   const headerString = Object.entries(headersWithTarget)
     .map(([k, v]) => `${k.toLowerCase()}: ${v}`)
     .join('\n');
-  console.log(headerString);
+  debug(headerString);
   const signer = crypto.createSign('sha256');
   signer.update(headerString);
   signer.end();
@@ -222,8 +224,8 @@ const followActivityPub = asyncWrapper(async (req, res) => {
     .toLowerCase()}`;
 
   const signatureHeader = `keyId="${sigKeyId}",headers="${sigHeaders}",signature="${signature}"`;
-  console.log(signatureHeader);
-  console.log(body);
+  debug(signatureHeader);
+  debug(body);
 
   try {
     const r = await axios.post(result.data.inbox, body, {
@@ -232,9 +234,9 @@ const followActivityPub = asyncWrapper(async (req, res) => {
         ...headers,
       },
     });
-    console.log('Success???', r.headers, r.status, r.data);
+    debug('Follow success', r.headers, r.status, r.data);
   } catch (e) {
-    console.log(e);
+    debug(e);
     throw e;
   }
 

@@ -115,6 +115,8 @@ Then run the following commands:
 4. `npm run knex -- migrate:latest`
 5. `npm start`
 
+The node app uses [debug](https://github.com/visionmedia/debug) for debug logging. To enable all debug logging start the node app with `DEBUG=artisthub:* npm start`.
+
 ### Web app
 
 To run the web app in development mode you should install the latest LTS version of [Node.js](https://nodejs.org/en/) and then run the following commands:

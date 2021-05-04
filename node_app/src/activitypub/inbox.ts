@@ -1,9 +1,11 @@
 import { APActor } from '../models/APActor';
 import { acceptFollow, rejectFollow } from './follow';
 import { create } from './create';
+import Debug from 'debug';
+const debug = Debug('artisthub:inbox');
 
 export async function inbox(json: any, deliverActor?: APActor) {
-  console.log('Inbox JSON', JSON.stringify(json, undefined, 2));
+  debug('Inbox JSON', JSON.stringify(json, undefined, 2));
   const object = json.object;
 
   switch (json.type) {
@@ -27,6 +29,6 @@ export async function inbox(json: any, deliverActor?: APActor) {
       await create(json, deliverActor);
       break;
     default:
-      console.log('Unsupported message');
+      debug('Unsupported message');
   }
 }

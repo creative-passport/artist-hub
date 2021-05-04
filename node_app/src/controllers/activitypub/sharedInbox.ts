@@ -9,7 +9,6 @@ export function getSharedInboxRoutes() {
 }
 
 const sharedInbox = asyncWrapper(async (req, res) => {
-  console.log('Shared Inbox');
   await inbox(req.body);
   res.send(200);
 });

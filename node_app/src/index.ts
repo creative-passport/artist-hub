@@ -4,6 +4,7 @@ import cookieSession from 'cookie-session';
 import cookieParser from 'cookie-parser';
 import { setupPassport } from './auth/auth';
 import config from './config';
+import morgan from 'morgan';
 import Knex from 'knex';
 import knexConfig from './knexfile';
 import { Model } from 'objection';
@@ -21,6 +22,8 @@ Model.knex(knex);
   }
   const app = express();
   const port = 4000;
+
+  app.use(morgan('combined'));
 
   app.use(
     cookieSession({
