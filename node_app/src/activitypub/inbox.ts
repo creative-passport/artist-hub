@@ -4,8 +4,20 @@ import { create } from './create';
 import Debug from 'debug';
 const debug = Debug('artisthub:inbox');
 
-export async function inbox(json: any, deliverActor?: APActor) {
+export async function inbox(
+  verifiedActor: APActor,
+  json: any,
+  deliverActor?: APActor
+) {
   debug('Inbox JSON', JSON.stringify(json, undefined, 2));
+
+  const actorId = typeof json.actor === 'string' ? json.actor : json.actor.id;
+  if (verifiedActor.uri !== actorId) {
+    throw new Error(
+      `Verified actor doesn't match actor id ${verifiedActor.id} !== ${actorId}`
+    );
+  }
+
   const object = json.object;
 
   switch (json.type) {

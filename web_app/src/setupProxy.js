@@ -8,6 +8,11 @@ const activityPubMimeTypes = [
 const middlewareOptions = {
   target: 'http://localhost:4000',
   changeOrigin: true,
+  onProxyReq: (proxyReq, req, res) => {
+    proxyReq.setHeader('X-Forwarded-For', req.ip);
+    proxyReq.setHeader('X-Forwarded-Proto', req.protocol);
+    proxyReq.setHeader('X-Forwarded-Host', req.hostname);
+  },
 };
 
 const filter = function (_pathname, req) {

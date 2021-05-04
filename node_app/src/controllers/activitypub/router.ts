@@ -1,6 +1,7 @@
-import express, { Router } from 'express';
+import express, { Router, Request } from 'express';
 import { getActorRoutes } from './actor';
 import { getSharedInboxRoutes } from './sharedInbox';
+import { RequestWithRawBody } from '../../types';
 
 const activityPubMimeTypes = [
   'application/ld+json"',
@@ -12,6 +13,9 @@ export function getActivityPubRoutes(): Router {
   router.use(
     express.json({
       type: activityPubMimeTypes,
+      verify: (req, res, buf, encoding) => {
+        (req as RequestWithRawBody).rawBody = buf;
+      },
     })
   );
 
