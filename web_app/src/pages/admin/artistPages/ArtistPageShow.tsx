@@ -13,10 +13,17 @@ import { Link as RouterLink, useHistory, useParams } from 'react-router-dom';
 import { useDialog } from '../../../providers/DialogProvider';
 import { useState } from 'react';
 import AddActivityPubDialog from './AddActivityPubDialog';
+import { FollowItem } from './FollowItem';
 
 const useStyles = makeStyles((theme) => ({
   h3: {
     marginTop: theme.spacing(2),
+  },
+  dataSource: {
+    margin: theme.spacing(2),
+  },
+  dataSourceLink: {
+    marginRight: theme.spacing(1),
   },
 }));
 
@@ -69,8 +76,11 @@ export function ArtistPageShow() {
         Delete page
       </Button>
       <Typography component="h3" variant="h4" className={classes.h3}>
-        Link social networks
+        Linked social networks
       </Typography>
+      {data.following.map((f) => (
+        <FollowItem artistPageId={artistId} follow={f} key={f.id} />
+      ))}
       <Button variant="contained" onClick={() => setAddDataSource(true)}>
         Add ActivityPub data source
       </Button>

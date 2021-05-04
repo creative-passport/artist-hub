@@ -6,19 +6,35 @@ import { NotFoundError } from 'objection';
 
 export async function createFollow(actor: APActor, target: APActor) {
   const uri = `${config.baseUrl}/activity/${uuidv4()}`;
-  await APFollow.query().insert({
-    uri,
-    state: `pending`,
-    actorId: actor.id,
-    targetActorId: target.id,
-  });
+  const follow = await APFollow.query()
+    .insert({
+      uri,
+      state: `pending`,
+      actorId: actor.id,
+      targetActorId: target.id,
+    })
+    .returning('*')
+    .first();
+  follow.actorFollower = actor;
+  follow.actorFollowing = target;
 
   return {
     '@context': 'https://www.w3.org/ns/activitystreams',
+    ...(await followJson(follow)),
+  };
+}
+
+export async function followJson(follow: APFollow) {
+  const actor =
+    follow.actorFollower || (await follow.$relatedQuery('actorFollower'));
+  const object =
+    follow.actorFollowing || (await follow.$relatedQuery('actorFollowing'));
+
+  return {
     type: 'Follow',
-    id: uri,
+    id: follow.uri,
     actor: actor.uri,
-    object: target.uri,
+    object: object.uri,
   };
 }
 
