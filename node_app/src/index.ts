@@ -2,15 +2,13 @@ import 'dotenv/config';
 import express from 'express';
 import cookieSession from 'cookie-session';
 import cookieParser from 'cookie-parser';
-import { apiRouter } from './api/apiRouter';
 import { setupPassport } from './auth/auth';
 import config from './config';
-import { csrfProtection } from './csrf';
+import morgan from 'morgan';
 import Knex from 'knex';
 import knexConfig from './knexfile';
 import { Model } from 'objection';
-import { activityPubRouter } from './controllers/activitypub/actor';
-import { webfingerHandler } from './webfinger';
+import { getRoutes } from './controllers';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
@@ -24,6 +22,8 @@ Model.knex(knex);
   }
   const app = express();
   const port = 4000;
+
+  app.use(morgan('combined'));
 
   app.use(
     cookieSession({
@@ -40,13 +40,7 @@ Model.knex(knex);
 
   await setupPassport(app);
 
-  app.use('/api', csrfProtection, apiRouter);
-  app.use('/p', activityPubRouter);
-  app.get(
-    '/.well-known/webfinger',
-    express.json({ type: ['application/jrd+json', 'application/json'] }),
-    webfingerHandler
-  );
+  app.use(getRoutes());
 
   app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`);

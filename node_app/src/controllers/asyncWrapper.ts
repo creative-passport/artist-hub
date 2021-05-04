@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { errorHandler } from './api/errorHandler';
+import { errorHandler } from './errorHandler';
 
 export const asyncWrapper = (
   fn: (req: Request, res: Response) => Promise<void>
@@ -7,6 +7,7 @@ export const asyncWrapper = (
   try {
     await fn(req, res);
   } catch (err) {
+    console.error(err);
     return errorHandler(err, res);
   }
 };

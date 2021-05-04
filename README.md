@@ -18,17 +18,26 @@ Artist Hub is a brand new project which is very early in development and **at th
   - [x] Generate public/private keys
   - [x] Webfinger
   - [x] Actor JSON-LD
+    - [ ] Avatars
+    - [x] URL
+    - [ ] Refresh actor data
   - [x] Send Follow request
   - [x] Inbox
+    - [x] Shared Inbox
     - [x] Accept
     - [x] Reject
-    - [ ] Note
-      - [ ] Attachment
+    - [x] Note
+      - [x] Attachment
   - [x] Sign POST requests 
   - [ ] Verify signatures 
+  - [ ] Validation
 - [x] Public Artist Page
   - [x] Initial Placeholder
-  - [ ] Show ActivityPub data
+  - [x] Show ActivityPub data
+- [ ] Improve UI/UX
+  - [ ] Admin
+  - [ ] Homepage
+  - [ ] Artist Public page
 
 ## Configuration
 
@@ -105,6 +114,8 @@ Then run the following commands:
 3. `npm build`
 4. `npm run knex -- migrate:latest`
 5. `npm start`
+
+The node app uses [debug](https://github.com/visionmedia/debug) for debug logging. To enable all debug logging start the node app with `DEBUG=artisthub:* npm start`.
 
 ### Web app
 

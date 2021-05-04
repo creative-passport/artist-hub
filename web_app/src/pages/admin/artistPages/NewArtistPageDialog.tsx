@@ -11,6 +11,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import React, { useState } from 'react';
+import { ArtistPage } from '../../../types/api-types';
 
 const useStyles = makeStyles((theme) => ({
   error: {

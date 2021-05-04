@@ -1,8 +1,10 @@
 import express from 'express';
 import config from '../../config';
-import { asyncWrapper } from '../../asyncWrapper';
+import { asyncWrapper } from '../asyncWrapper';
 import { ArtistPage } from '../../models/ArtistPage';
-import { acceptFollow, rejectFollow } from '../../activitypub/follow';
+import { inbox } from '../../activitypub/inbox';
+import Debug from 'debug';
+const debug = Debug('artisthub:actor');
 
 export interface Actor {
   '@context': string[];
@@ -17,6 +19,15 @@ export interface Actor {
     owner: string;
     publicKeyPem: string;
   };
+
+  sharedInbox: string;
+}
+
+export function getActorRoutes() {
+  const router = express.Router({ mergeParams: true });
+  router.get('/', artist);
+  router.post('/inbox', postInbox);
+  return router;
 }
 
 export function createActor(username: string, publicKey: string): Actor {
@@ -34,90 +45,43 @@ export function createActor(username: string, publicKey: string): Actor {
       owner: `${config.baseUrl}/p/${username}`,
       publicKeyPem: publicKey,
     },
+    sharedInbox: `${config.baseUrl}/sharedInbox`,
   };
 }
 
-const activityPubMimeTypes = [
-  'application/ld+json"',
-  'application/activity+json',
-];
+const artist = asyncWrapper(async (req, res) => {
+  const artistPage = await ArtistPage.query()
+    .findOne({
+      username: req.params.username,
+    })
+    .withGraphFetched('apActor');
+  if (artistPage) {
+    const actor = createActor(
+      artistPage.username,
+      artistPage.apActor.publicKey
+    );
+    debug('getArtist - actor', actor);
+    res.type('application/activity+json');
+    res.send(createActor(artistPage.username, artistPage.apActor.publicKey));
+  } else {
+    res.sendStatus(404);
+  }
+});
 
-export const activityPubRouter = express.Router();
-activityPubRouter.use(
-  express.json({
-    type: activityPubMimeTypes,
-  })
-);
+const postInbox = asyncWrapper(async (req, res) => {
+  const artistPage = await ArtistPage.query()
+    .findOne({
+      username: req.params.username,
+    })
+    .withGraphFetched('apActor');
+  if (artistPage) {
+    debug(`postInbox for page ${req.params.username}`);
+    debug('postInbox headers', req.headers);
+    await inbox(req.body, artistPage.apActor);
 
-activityPubRouter.get(
-  '/:username',
-  asyncWrapper(async (req, res) => {
-    const artistPage = await ArtistPage.query()
-      .findOne({
-        username: req.params.username,
-      })
-      .withGraphFetched('apActor');
-    if (artistPage) {
-      const actor = createActor(
-        artistPage.username,
-        artistPage.apActor.publicKey
-      );
-      console.log(actor);
-      res.type('application/activity+json');
-      res.send(createActor(artistPage.username, artistPage.apActor.publicKey));
-    } else {
-      res.sendStatus(404);
-    }
-  })
-);
-
-activityPubRouter.post(
-  '/:username/inbox',
-  asyncWrapper(async (req, res) => {
-    console.log(`Received message for user ${req.params.username}`);
-    const artistPage = await ArtistPage.query()
-      .findOne({
-        username: req.params.username,
-      })
-      .withGraphFetched('apActor');
-    if (artistPage) {
-      console.log(`Received message for page ${req.params.username}`);
-      console.log(req.headers);
-      console.log(req.body);
-
-      switch (req.body.type) {
-        case 'Accept': {
-          if (req.body.object) {
-            await acceptFollow(
-              typeof req.body.object === 'string'
-                ? req.body.object
-                : req.body.object.id,
-              artistPage.apActor
-            );
-          }
-          break;
-        }
-        case 'Reject': {
-          if (req.body.object) {
-            await rejectFollow(
-              typeof req.body.object === 'string'
-                ? req.body.object
-                : req.body.object.id,
-              artistPage.apActor
-            );
-          }
-          break;
-        }
-        default:
-          console.log('Unsupported message');
-      }
-
-      res.sendStatus(202);
-    } else {
-      console.log(
-        `Received message for non-existant page ${req.params.username}`
-      );
-      res.sendStatus(404);
-    }
-  })
-);
+    res.sendStatus(202);
+  } else {
+    debug(`postInbox, message for non-existant page ${req.params.username}`);
+    res.sendStatus(404);
+  }
+});

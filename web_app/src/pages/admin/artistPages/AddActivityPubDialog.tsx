@@ -80,7 +80,6 @@ export default function AddActivityPubDialog({
       })
       .then((result) => {
         setProfile(result.data);
-        console.log(result.data);
       })
       .catch((e) => {
         setError(e.message);
@@ -96,7 +95,6 @@ export default function AddActivityPubDialog({
     if (!profile) {
       return;
     }
-    console.log(`Follow ${profile.id}`);
     axios
       .post(`/api/admin/artistpages/${artistId}/activitypub/follow`, {
         id: profile.id,
