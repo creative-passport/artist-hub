@@ -3,6 +3,8 @@ import { APActor } from '../models/APActor';
 import { getActor } from './actor';
 import { PartialModelObject, UniqueViolationError } from 'objection';
 import { APAttachment } from '../models/APAttachment';
+import * as APTypes from './aptypes';
+import { isNote } from './validate';
 
 const imageMimeTypes = ['image/jpeg', 'image/png', 'image/gif'];
 const videoMimeTypes = ['video/mp4'];
@@ -12,17 +14,19 @@ const supportedMimeTypes = [...imageMimeTypes, ...videoMimeTypes];
 const asArray = <T extends unknown>(value: T[] | T) =>
   Array.isArray(value) ? value : [value];
 
-export async function create(json: any, deliverActor?: APActor) {
-  if (
-    json.object &&
-    json.object.type === 'Note' &&
-    typeof json.object.id === 'string'
-  ) {
-    const actor = await getActor(json.actor);
+function getId<T extends { id?: string } | { id: string }>(
+  value: T | string
+): string | T['id'] {
+  return typeof value === 'string' ? value : value.id;
+}
+
+export async function create(json: APTypes.Activity, deliverActor?: APActor) {
+  const object = json.object;
+  if (object && isNote(object)) {
+    const actor = await getActor(getId(json.actor));
     if (!actor) {
       return;
     }
-    const object = json.object;
 
     if (deliverActor) {
       const following = await deliverActor
@@ -104,7 +108,9 @@ export async function create(json: any, deliverActor?: APActor) {
   }
 }
 
-function thumbnailUrlFromAttachment(attachment: any): any {
+function thumbnailUrlFromAttachment(
+  attachment: APTypes.Attachment
+): string | undefined {
   if (typeof attachment.icon === 'object' && attachment.icon !== null) {
     return attachment.icon.url;
   } else {
