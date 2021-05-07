@@ -7,9 +7,9 @@ const debug = Debug('artisthub:inbox');
 
 export async function inbox(
   verifiedActor: APActor,
-  json: any,
+  json: unknown,
   deliverActor?: APActor
-) {
+): Promise<void> {
   if (!isActivity(json)) {
     throw new Error('Invalid Activity JSON');
   }
@@ -31,16 +31,16 @@ export async function inbox(
           typeof object === 'string' ? object : object.id,
           deliverActor
         );
-        break;
       }
+      break;
     case 'Reject':
       if (object) {
         await rejectFollow(
           typeof object === 'string' ? object : object.id,
           deliverActor
         );
-        break;
       }
+      break;
     case 'Create':
       await create(json, deliverActor);
       break;

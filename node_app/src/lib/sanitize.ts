@@ -1,7 +1,7 @@
 import { JSDOM } from 'jsdom';
 import createDOMPurify from 'dompurify';
 
-var config = {
+const config = {
   ALLOWED_TAGS: ['p', 'span', 'br', 'a'],
 };
 
@@ -24,15 +24,15 @@ DOMPurify.addHook('afterSanitizeAttributes', function (node) {
 });
 
 // allowed URI schemes
-var allowList = ['http', 'https'];
+const allowList = ['http', 'https'];
 
 // build fitting regex
-var regex = RegExp('^(' + allowList.join('|') + '):', 'gim');
+const regex = RegExp('^(' + allowList.join('|') + '):', 'gim');
 
 // Add a hook to enforce URI scheme allow-list
 DOMPurify.addHook('afterSanitizeAttributes', function (node) {
   // build an anchor to map URLs to
-  var anchor = document.createElement('a');
+  const anchor = document.createElement('a');
 
   // check all href attributes for validity
   if (node.hasAttribute('href')) {

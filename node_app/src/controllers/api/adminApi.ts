@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, Router } from 'express';
 import { requireAuth } from '../../auth/auth';
 import { User } from '../../models/User';
 import axios from 'axios';
@@ -16,7 +16,7 @@ const debug = Debug('artisthub:adminapi');
 
 const generateKeyPair = promisify(crypto.generateKeyPair);
 
-export function getAdminApiRoutes() {
+export function getAdminApiRoutes(): Router {
   const router = express.Router();
   router.use(requireAuth);
   router.get('/ping', ping);
@@ -132,6 +132,7 @@ const deleteArtistPage = asyncWrapper(async (req, res) => {
 const contentType =
   'application/ld+json; profile="https://www.w3.org/ns/activitystreams"';
 
+// eslint-disable-next-line no-control-regex
 const webfingerRegex = /^@?(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/;
 
 const activityPubMimeTypes = [
@@ -197,7 +198,7 @@ const followActivityPub = asyncWrapper(async (req, res) => {
     .findById(req.params.artistPageId)
     .withGraphFetched('apActor');
 
-  let id: string = req.body.id;
+  const id: string = req.body.id;
   const result = await axios.get(id, {
     headers: {
       Accept: contentType,

@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router } from 'express';
 import { verifiedActorFromSignature } from '../../activitypub/verifySignature';
 import { inbox } from '../../activitypub/inbox';
 import { asyncWrapper } from '../asyncWrapper';
@@ -6,7 +6,7 @@ import { RequestWithRawBody } from '../../types';
 import Debug from 'debug';
 const debug = Debug('artisthub:sharedinbox');
 
-export function getSharedInboxRoutes() {
+export function getSharedInboxRoutes(): Router {
   const router = express.Router();
   router.post('/sharedInbox', sharedInbox);
   return router;

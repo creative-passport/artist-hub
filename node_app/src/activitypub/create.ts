@@ -20,7 +20,10 @@ function getId<T extends { id?: string } | { id: string }>(
   return typeof value === 'string' ? value : value.id;
 }
 
-export async function create(json: APTypes.Activity, deliverActor?: APActor) {
+export async function create(
+  json: APTypes.Activity,
+  deliverActor?: APActor
+): Promise<void> {
   const object = json.object;
   if (object && isNote(object)) {
     const actor = await getActor(getId(json.actor));
@@ -55,7 +58,7 @@ export async function create(json: APTypes.Activity, deliverActor?: APActor) {
         .first();
 
       if (object.attachment) {
-        let newAttachments: PartialModelObject<APAttachment>[] = [];
+        const newAttachments: PartialModelObject<APAttachment>[] = [];
         for (const a of asArray(object.attachment)) {
           if (newAttachments.length >= 4) {
             break;

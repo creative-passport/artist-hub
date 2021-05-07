@@ -1,4 +1,4 @@
-import { Model } from 'objection';
+import { Model, RelationMappings } from 'objection';
 import { APFollow } from './APFollow';
 import { APObject } from './APObject';
 import { ArtistPage } from './ArtistPage';
@@ -31,7 +31,7 @@ export class APActor extends BaseModel {
   createdAt!: Date;
   updatedAt!: Date;
 
-  static get tableName() {
+  static get tableName(): string {
     return 'apActors';
   }
 
@@ -42,11 +42,11 @@ export class APActor extends BaseModel {
     return apFollows.map((f) => f.actorFollower);
   };
 
-  $beforeUpdate() {
+  $beforeUpdate(): void {
     this.updatedAt = new Date();
   }
 
-  static relationMappings = () => ({
+  static relationMappings = (): RelationMappings => ({
     artistPage: {
       relation: Model.HasOneRelation,
       modelClass: ArtistPage,

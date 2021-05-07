@@ -13,7 +13,7 @@ for (const s of schemaDefs) {
   });
 }
 
-export function getSchema(name: string) {
+export function getSchema(name: string): ValidateFunction {
   return ajv.getSchema(
     `https://schema.creativepassport.net/${name}.json`
   ) as ValidateFunction;

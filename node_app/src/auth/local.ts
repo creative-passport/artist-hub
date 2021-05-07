@@ -1,4 +1,4 @@
-import { Router, Express, Request, Response } from 'express';
+import { Router, Express } from 'express';
 import { Strategy as LocalStrategy } from 'passport-local';
 import bcrypt from 'bcrypt';
 import passport from 'passport';

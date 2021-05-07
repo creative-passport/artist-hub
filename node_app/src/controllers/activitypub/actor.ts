@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router } from 'express';
 import config from '../../config';
 import { asyncWrapper } from '../asyncWrapper';
 import { ArtistPage } from '../../models/ArtistPage';
@@ -25,7 +25,7 @@ export interface Actor {
   sharedInbox: string;
 }
 
-export function getActorRoutes() {
+export function getActorRoutes(): Router {
   const router = express.Router({ mergeParams: true });
   router.get('/', artist);
   router.post('/inbox', postInbox);

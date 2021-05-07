@@ -5,14 +5,6 @@ import { OIDCAuthenticator } from './oidc';
 import passport from 'passport';
 import { User } from '../models/User';
 
-abstract class Authenticator {
-  static create(app: Express): Promise<Authenticator> {
-    throw new Error('Creator not defined');
-  }
-}
-
-let authenticator: Authenticator;
-
 interface SerializedUser {
   userId: string;
 }
@@ -21,7 +13,7 @@ export const requireAuth = (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): void => {
   if (req.isAuthenticated() && isUser(req.user)) {
     return next();
   }
@@ -32,7 +24,7 @@ export function isUser(user: Express.User): user is User {
   return (user as User).sub !== undefined;
 }
 
-export const setupPassport = async (app: Express) => {
+export const setupPassport = async (app: Express): Promise<void> => {
   passport.serializeUser(function (user, done) {
     if (isUser(user)) {
       done(null, { userId: user.id } as SerializedUser);
@@ -47,10 +39,10 @@ export const setupPassport = async (app: Express) => {
   });
   switch (config.authMode) {
     case 'oidc':
-      authenticator = await OIDCAuthenticator.create(app);
+      await OIDCAuthenticator.create(app);
       break;
     case 'local':
-      authenticator = await LocalAuthenticator.create(app);
+      await LocalAuthenticator.create(app);
       break;
   }
 };

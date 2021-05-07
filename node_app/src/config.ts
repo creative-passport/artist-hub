@@ -54,7 +54,7 @@ const config: Config = (() => {
     default:
       throw new Error('AUTH_MODE is invalid');
   }
-  let c: { [key: string]: string | undefined } = {};
+  const c: { [key: string]: string | undefined } = {};
   for (const [key, envDesc] of Object.entries(configMap)) {
     let env: string;
     let optional = false;

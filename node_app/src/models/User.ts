@@ -1,4 +1,4 @@
-import { Model, RelationMapping } from 'objection';
+import { Model, RelationMappings } from 'objection';
 import { ArtistPage } from './ArtistPage';
 import { TokenSet } from 'openid-client';
 import { BaseModel } from './BaseModel';
@@ -19,7 +19,7 @@ export class User extends BaseModel {
 
   static tableName = 'users';
 
-  get tokenset() {
+  get tokenset(): TokenSet | undefined {
     if (this.accessToken) {
       return new TokenSet({
         id_token: this.idToken,
@@ -33,11 +33,11 @@ export class User extends BaseModel {
     }
   }
 
-  $beforeUpdate() {
+  $beforeUpdate(): void {
     this.updatedAt = new Date();
   }
 
-  static relationMappings = () => ({
+  static relationMappings = (): RelationMappings => ({
     artistPages: {
       relation: Model.HasManyRelation,
       modelClass: ArtistPage,
