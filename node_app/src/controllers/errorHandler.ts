@@ -11,7 +11,12 @@ import {
   DataError,
 } from 'objection';
 
-// In this example `res` is an express response object.
+/**
+ * Handle errors thrown in Express requests
+ *
+ * @param err - An error
+ * @param res - An express response object
+ */
 export function errorHandler(err: Error, res: Response): void {
   if (err instanceof ValidationError) {
     switch (err.type) {

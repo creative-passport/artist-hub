@@ -3,6 +3,9 @@ import { APActor } from './APActor';
 import { APAttachment } from './APAttachment';
 import { BaseModel } from './BaseModel';
 
+/**
+ * A database model representing a delivered ActivityPub Object such as a Note
+ */
 export class APObject extends BaseModel {
   id!: string;
   uri!: string;

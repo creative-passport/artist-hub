@@ -1,0 +1,6 @@
+{
+  "name": "ArtistHub Server",
+  "entryPoints": ["./src"],
+  "out": "docs",
+  "exclude": ["./src/migrations/**"]
+}

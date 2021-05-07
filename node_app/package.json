@@ -8,7 +8,8 @@
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "knex": "ts-node -r dotenv/config $(npm bin)/knex --knexfile src/knexfile.ts",
-    "generate": "node ./generateSchema.js"
+    "generate": "node ./generateSchema.js",
+    "typedoc": "typedoc"
   },
   "license": "UNLICENSED",
   "dependencies": {
@@ -52,10 +53,12 @@
     "@typescript-eslint/eslint-plugin": "^4.22.1",
     "@typescript-eslint/parser": "^4.22.1",
     "eslint": "^7.25.0",
+    "eslint-plugin-tsdoc": "^0.2.14",
     "nodemon": "^2.0.7",
     "prettier": "2.2.1",
     "ts-json-schema-generator": "^0.91.0",
     "ts-node": "^9.1.1",
+    "typedoc": "^0.20.36",
     "typescript": "^4.2.4"
   }
 }

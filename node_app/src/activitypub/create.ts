@@ -20,6 +20,12 @@ function getId<T extends { id?: string } | { id: string }>(
   return typeof value === 'string' ? value : value.id;
 }
 
+/**
+ * Handle an ActivityPub Create activity
+ *
+ * @param json - ActivityPub Activity JSON
+ * @param deliverActor - The actor the message was delivered to (if not a shared inbox)
+ */
 export async function create(
   json: APTypes.Activity,
   deliverActor?: APActor

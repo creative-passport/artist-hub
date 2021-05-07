@@ -7,6 +7,11 @@ export const publicApiRouter = express.Router();
 
 const allowedFields: Array<keyof ArtistPage> = ['title', 'username'];
 
+/**
+ * Get the public API routes
+ *
+ * @returns An Express Router
+ */
 export function getPublicApiRoutes(): Router {
   const router = express.Router();
   router.get('/:username', getArtistPage);

@@ -57,6 +57,12 @@ DOMPurify.addHook('afterSanitizeAttributes', function (node) {
   }
 });
 
+/**
+ * Sanitise HTML from user input to ensure it is safe
+ *
+ * @param dirtyHtml - The unsanitized "dirty" HTML
+ * @returns - Sanitized HTML
+ */
 export function sanitize(dirtyHtml: string): string {
   return DOMPurify.sanitize(dirtyHtml, config);
 }

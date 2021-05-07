@@ -2,6 +2,9 @@ import { Model, RelationMappings } from 'objection';
 import { APObject } from './APObject';
 import { BaseModel } from './BaseModel';
 
+/**
+ * A database model representing an ActivityPub Attachment
+ */
 export class APAttachment extends BaseModel {
   id!: string;
   url!: string;

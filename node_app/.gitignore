@@ -4,6 +4,7 @@
 # build path
 dist/
 
+docs/
 tmp/
 temp/
 

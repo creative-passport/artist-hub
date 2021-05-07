@@ -3,6 +3,9 @@ import { APActor } from './APActor';
 import { BaseModel } from './BaseModel';
 import { User } from './User';
 
+/**
+ * A database model representing an Artist Page
+ */
 export class ArtistPage extends BaseModel {
   id!: string;
   title!: string;

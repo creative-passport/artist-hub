@@ -5,6 +5,13 @@ import Debug from 'debug';
 import { isActivity } from './validate';
 const debug = Debug('artisthub:inbox');
 
+/**
+ * Process an ActivityPub Activity delivered to an inbox
+ *
+ * @param verifiedActor - The actor that signed the request
+ * @param json - The request body as parsed JSON
+ * @param deliverActor - The inbox actor (if not a shared inbox)
+ */
 export async function inbox(
   verifiedActor: APActor,
   json: unknown,

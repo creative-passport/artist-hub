@@ -6,6 +6,11 @@ import { RequestWithRawBody } from '../../types';
 import Debug from 'debug';
 const debug = Debug('artisthub:sharedinbox');
 
+/**
+ * Get the ActivityPub shared inbox routes
+ *
+ * @returns An Express Router
+ */
 export function getSharedInboxRoutes(): Router {
   const router = express.Router();
   router.post('/sharedInbox', sharedInbox);

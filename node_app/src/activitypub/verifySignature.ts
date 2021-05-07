@@ -20,6 +20,13 @@ async function actorFromKeyId(keyId: string): Promise<APActor | undefined> {
   return actor;
 }
 
+/**
+ * Verifies the HTTP signature for an HTTP request and gets the actor that
+ * signed the request
+ *
+ * @param req - The express request with the raw HTTP body
+ * @returns The verified actor
+ */
 export async function verifiedActorFromSignature(
   req: RequestWithRawBody
 ): Promise<APActor> {

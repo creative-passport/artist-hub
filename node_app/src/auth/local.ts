@@ -6,6 +6,10 @@ import config from '../config';
 import { User } from '../models/User';
 import { csrfProtection } from '../csrf';
 
+/**
+ * An Authenticator which authenticates against a username and password
+ * hardcoded in the environment
+ */
 export class LocalAuthenticator {
   private constructor(app: Express) {
     if (

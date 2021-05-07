@@ -85,6 +85,13 @@ docker-compose down -v
 
 ## Development
 
+### Documentation
+
+The code the documented using TSDoc. You can generate documentation using [TypeDoc](https://typedoc.org/) by running:
+
+```sh
+npm run typedoc
+```
 
 ### PostgreSQL Database
 

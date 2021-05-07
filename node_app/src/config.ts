@@ -42,6 +42,9 @@ type Config = {
     }
 );
 
+/**
+ * The application configuration from the environment
+ */
 const config: Config = (() => {
   let configMap = envConfigMap;
   switch (process.env.AUTH_MODE) {

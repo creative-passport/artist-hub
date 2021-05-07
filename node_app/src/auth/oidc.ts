@@ -12,6 +12,10 @@ import config from '../config';
 import { User } from '../models/User';
 import { isUser } from './auth';
 
+/**
+ * An Authenticator which authenticates using OpenID connect
+ */
+
 export class OIDCAuthenticator {
   client: Client;
   providerName: string;

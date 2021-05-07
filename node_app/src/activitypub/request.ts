@@ -17,20 +17,39 @@ function signSha256(data: string, privateKey: string): string {
   return signer.sign(privateKey).toString('base64');
 }
 
+/** A {@link post} or {@link signedPost} request response */
 export interface RequestResponse {
   status: number;
   headers: http.IncomingHttpHeaders;
   data: string;
 }
 
+/**
+ * An `Error` object for HTTP requests
+ */
 export class RequestError extends Error {
   response?: RequestResponse;
+
+  /**
+   *
+   * @param message - The error message string
+   * @param response - The request response
+   */
   constructor(message: string, response?: RequestResponse) {
     super(message);
     this.response = response;
   }
 }
 
+/**
+ * An HTTP post request which is signed using HTTP signatures by the
+ * passed in actor
+ *
+ * @param urlString - The URL for the request
+ * @param body - The HTTP request body
+ * @param actor - The ActivityPub actor which will sign the request
+ * @returns The result of the HTTP request
+ */
 export function signedPost(
   urlString: string,
   body: string,
@@ -107,6 +126,13 @@ export function signedPost(
   });
 }
 
+/**
+ * An HTTP post request
+ *
+ * @param urlString - The URL for the request
+ * @param body - The HTTP request body
+ * @returns The result of the HTTP request
+ */
 export function post(
   urlString: string,
   body: string

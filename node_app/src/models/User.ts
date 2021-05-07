@@ -3,6 +3,9 @@ import { ArtistPage } from './ArtistPage';
 import { TokenSet } from 'openid-client';
 import { BaseModel } from './BaseModel';
 
+/**
+ * A database model representing a user
+ */
 export class User extends BaseModel {
   id!: string;
   sub!: string;
