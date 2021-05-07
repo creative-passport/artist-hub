@@ -30,7 +30,7 @@ Artist Hub is a brand new project which is very early in development and **at th
       - [x] Attachment
   - [x] Sign POST requests 
   - [x] Verify signatures 
-  - [ ] Validation
+  - [x] Validation
 - [x] Public Artist Page
   - [x] Initial Placeholder
   - [x] Show ActivityPub data
