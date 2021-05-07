@@ -4,6 +4,9 @@ import { APObject } from './APObject';
 import { ArtistPage } from './ArtistPage';
 import { BaseModel } from './BaseModel';
 
+/**
+ * A database model representing an ActivityPub Actor
+ */
 export class APActor extends BaseModel {
   id!: string;
   uri!: string;
@@ -35,6 +38,11 @@ export class APActor extends BaseModel {
     return 'apActors';
   }
 
+  /**
+   * Gets a the APActors which follow this APActor
+   *
+   * @returns A list of APActors
+   */
   acceptedFollowers = async (): Promise<APActor[]> => {
     const apFollows = await this.$relatedQuery('followers')
       .withGraphJoined('actorFollower')
@@ -112,6 +120,9 @@ export class APActor extends BaseModel {
   });
 }
 
+/**
+ * An APActor with following status
+ */
 export class APFollowActor extends APActor {
   followState!: string;
   followUri!: string;

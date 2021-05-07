@@ -8,6 +8,11 @@ const activityPubMimeTypes = [
   'application/activity+json',
 ];
 
+/**
+ * Get the ActivityPub routes
+ *
+ * @returns An Express Router
+ */
 export function getActivityPubRoutes(): Router {
   const router = express.Router();
   router.use(

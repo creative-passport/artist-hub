@@ -1,5 +1,8 @@
 import { knexSnakeCaseMappers } from 'objection';
 
+/**
+ * The Knex database configuration
+ */
 const database = {
   development: {
     client: 'pg',

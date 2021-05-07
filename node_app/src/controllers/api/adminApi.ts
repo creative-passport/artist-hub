@@ -16,6 +16,11 @@ const debug = Debug('artisthub:adminapi');
 
 const generateKeyPair = promisify(crypto.generateKeyPair);
 
+/**
+ * Get the admin API routes
+ *
+ * @returns An Express Router
+ */
 export function getAdminApiRoutes(): Router {
   const router = express.Router();
   router.use(requireAuth);

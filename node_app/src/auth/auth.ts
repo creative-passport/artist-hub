@@ -9,6 +9,14 @@ interface SerializedUser {
   userId: string;
 }
 
+/**
+ * An express middleware which enforces authentication
+ *
+ * @param req - An express request
+ * @param res - An express response
+ * @param next - A function to call the next express middleware
+ * @returns
+ */
 export const requireAuth = (
   req: Request,
   res: Response,
@@ -20,10 +28,21 @@ export const requireAuth = (
   return res.status(401).end();
 };
 
+/**
+ * A Type Guard to identify if a Passport user is a {@link User}
+ *
+ * @param user - A passport JS user
+ * @returns A boolean representing if the user is a {@link User}
+ */
 export function isUser(user: Express.User): user is User {
   return (user as User).sub !== undefined;
 }
 
+/**
+ * Setup Passport authentication for the express application
+ *
+ * @param app - An Express application
+ */
 export const setupPassport = async (app: Express): Promise<void> => {
   passport.serializeUser(function (user, done) {
     if (isUser(user)) {

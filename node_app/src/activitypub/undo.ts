@@ -6,6 +6,13 @@ import { APActor } from '../models/APActor';
 import { APFollow } from '../models/APFollow';
 import { followJson } from './follow';
 
+/**
+ * Create an ActivityPub Undo Activity
+ *
+ * @param actor - An `APActor` model representing the object Actor
+ * @param object - A model representing the object being undone
+ * @returns ActivityPub Undo JSON
+ */
 export async function createUndo(
   actor: APActor,
   object: APObject | APFollow

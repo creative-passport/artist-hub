@@ -5,6 +5,11 @@ import express, { Router } from 'express';
 import Debug from 'debug';
 const debug = Debug('artisthub:wellknown');
 
+/**
+ * Get the /.well-known routes
+ *
+ * @returns An Express Router
+ */
 export function getWellKnownRoutes(): Router {
   const router = express.Router();
   router.get(

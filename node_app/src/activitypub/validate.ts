@@ -13,6 +13,12 @@ for (const s of schemaDefs) {
   });
 }
 
+/**
+ * Gets a validator for the JSON schema definition
+ *
+ * @param name - The name of an object in the schema definition
+ * @returns A validation function
+ */
 export function getSchema(name: string): ValidateFunction {
   return ajv.getSchema(
     `https://schema.creativepassport.net/${name}.json`
@@ -20,9 +26,23 @@ export function getSchema(name: string): ValidateFunction {
 }
 
 const validateActivity = getSchema('Activity');
+
+/**
+ * A type guard for an ActivityPub Activity
+ *
+ * @param json - Object to be validated
+ * @returns If the object validates as an Activity
+ */
 export function isActivity(json: unknown): json is APTypes.Activity {
   return validateActivity(json);
 }
+
+/**
+ * A type guard for an ActivityPub Note
+ *
+ * @param json - Object to be validated
+ * @returns If the object validates as a Note
+ */
 
 const validateNote = getSchema('Note');
 export function isNote(json: unknown): json is APTypes.Note {

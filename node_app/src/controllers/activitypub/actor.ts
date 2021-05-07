@@ -8,6 +8,9 @@ import { RequestWithRawBody } from '../../types';
 import Debug from 'debug';
 const debug = Debug('artisthub:actor');
 
+/**
+ * An ActivityPub actor response
+ */
 export interface Actor {
   '@context': string[];
 
@@ -25,6 +28,11 @@ export interface Actor {
   sharedInbox: string;
 }
 
+/**
+ * Get the ActivityPub Actor routes
+ *
+ * @returns An Express Router
+ */
 export function getActorRoutes(): Router {
   const router = express.Router({ mergeParams: true });
   router.get('/', artist);
@@ -32,7 +40,7 @@ export function getActorRoutes(): Router {
   return router;
 }
 
-export function createActor(username: string, publicKey: string): Actor {
+function createActor(username: string, publicKey: string): Actor {
   return {
     '@context': [
       'https://www.w3.org/ns/activitystreams',

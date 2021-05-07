@@ -11,6 +11,12 @@ function isActorLocal(uri: string): boolean {
   return url.hostname === config.domain;
 }
 
+/**
+ * Finds an ActivityPub actor by URI
+ *
+ * @param uri - The actor URI
+ * @returns An APActor model for the URI
+ */
 export async function getActor(uri: string): Promise<APActor | undefined> {
   let actor = await APActor.query().findOne({ uri: uri });
   if (!actor && !isActorLocal(uri)) {
@@ -19,6 +25,12 @@ export async function getActor(uri: string): Promise<APActor | undefined> {
   return actor;
 }
 
+/**
+ * Polls a remote server to retrieve an ActivityPub actor
+ *
+ * @param uri - An actor ActivityPub URI
+ * @returns An APActor model for the URI
+ */
 export async function getRemoteActor(uri: string): Promise<APActor> {
   const { data } = await axios.get(uri, {
     headers: {

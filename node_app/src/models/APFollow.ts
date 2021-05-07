@@ -4,6 +4,9 @@ import { BaseModel } from './BaseModel';
 
 type FollowState = 'pending' | 'accepted';
 
+/**
+ * A database model representing an ActivityPub Follow
+ */
 export class APFollow extends BaseModel {
   id!: string;
   uri!: string;
