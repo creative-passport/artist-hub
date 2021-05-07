@@ -1,9 +1,10 @@
-import { Router, Express, Request, Response } from 'express';
+import { Router, Express } from 'express';
 import {
   Client,
   TokenSet,
   Strategy as OpenIDStrategy,
   Issuer,
+  UserinfoResponse,
 } from 'openid-client';
 import passport from 'passport';
 import { csrfProtection } from '../csrf';
@@ -61,7 +62,11 @@ const oidcSetupPassport = (
           redirect_uri: `${config.baseUrl}/auth/return`,
         },
       },
-      async function (tokenset: TokenSet, userinfo: {}, done: Function) {
+      async function (
+        tokenset: TokenSet,
+        _userinfo: UserinfoResponse,
+        done: (err: unknown, user?: User | undefined) => void
+      ) {
         if (tokenset.claims()) {
           const user = await User.query()
             .insert({

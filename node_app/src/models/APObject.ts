@@ -1,4 +1,4 @@
-import { Model } from 'objection';
+import { Model, RelationMappings } from 'objection';
 import { APActor } from './APActor';
 import { APAttachment } from './APAttachment';
 import { BaseModel } from './BaseModel';
@@ -17,15 +17,15 @@ export class APObject extends BaseModel {
   createdAt!: Date;
   updatedAt!: Date;
 
-  static get tableName() {
+  static get tableName(): string {
     return 'apObjects';
   }
 
-  $beforeUpdate() {
+  $beforeUpdate(): void {
     this.updatedAt = new Date();
   }
 
-  static relationMappings = () => ({
+  static relationMappings = (): RelationMappings => ({
     deliveredActors: {
       relation: Model.ManyToManyRelation,
       modelClass: APActor,

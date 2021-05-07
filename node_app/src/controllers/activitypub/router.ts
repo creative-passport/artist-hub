@@ -1,4 +1,4 @@
-import express, { Router, Request } from 'express';
+import express, { Router } from 'express';
 import { getActorRoutes } from './actor';
 import { getSharedInboxRoutes } from './sharedInbox';
 import { RequestWithRawBody } from '../../types';
@@ -13,7 +13,7 @@ export function getActivityPubRoutes(): Router {
   router.use(
     express.json({
       type: activityPubMimeTypes,
-      verify: (req, res, buf, encoding) => {
+      verify: (req, _res, buf, _encoding) => {
         (req as RequestWithRawBody).rawBody = buf;
       },
     })

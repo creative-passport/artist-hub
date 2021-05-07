@@ -4,7 +4,10 @@ import { APFollow } from '../models/APFollow';
 import { v4 as uuidv4 } from 'uuid';
 import { NotFoundError } from 'objection';
 
-export async function createFollow(actor: APActor, target: APActor) {
+export async function createFollow(
+  actor: APActor,
+  target: APActor
+): Promise<Record<string, unknown>> {
   const uri = `${config.baseUrl}/activity/${uuidv4()}`;
   const follow = await APFollow.query()
     .insert({
@@ -24,7 +27,9 @@ export async function createFollow(actor: APActor, target: APActor) {
   };
 }
 
-export async function followJson(follow: APFollow) {
+export async function followJson(
+  follow: APFollow
+): Promise<Record<string, unknown>> {
   const actor =
     follow.actorFollower || (await follow.$relatedQuery('actorFollower'));
   const object =
@@ -38,7 +43,10 @@ export async function followJson(follow: APFollow) {
   };
 }
 
-export async function acceptFollow(uri: string, actor?: APActor) {
+export async function acceptFollow(
+  uri: string,
+  actor?: APActor
+): Promise<void> {
   try {
     const query = actor ? actor.$relatedQuery('following') : APFollow.query();
     await query.findOne({ uri }).patch({
@@ -51,7 +59,10 @@ export async function acceptFollow(uri: string, actor?: APActor) {
   }
 }
 
-export async function rejectFollow(uri: string, actor?: APActor) {
+export async function rejectFollow(
+  uri: string,
+  actor?: APActor
+): Promise<void> {
   try {
     const query = actor ? actor.$relatedQuery('following') : APFollow.query();
     await query.findOne({ uri }).delete().where({ uri });

@@ -6,7 +6,10 @@ import { APActor } from '../models/APActor';
 import { APFollow } from '../models/APFollow';
 import { followJson } from './follow';
 
-export async function createUndo(actor: APActor, object: APObject | APFollow) {
+export async function createUndo(
+  actor: APActor,
+  object: APObject | APFollow
+): Promise<Record<string, unknown>> {
   const uri = `${config.baseUrl}/activity/${uuidv4()}`;
 
   const objectJson =

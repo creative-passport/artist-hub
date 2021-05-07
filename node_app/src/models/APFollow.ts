@@ -1,4 +1,4 @@
-import { Model } from 'objection';
+import { Model, RelationMappings } from 'objection';
 import { APActor } from './APActor';
 import { BaseModel } from './BaseModel';
 
@@ -17,15 +17,15 @@ export class APFollow extends BaseModel {
   createdAt!: Date;
   updatedAt!: Date;
 
-  static get tableName() {
+  static get tableName(): string {
     return 'apFollows';
   }
 
-  $beforeUpdate() {
+  $beforeUpdate(): void {
     this.updatedAt = new Date();
   }
 
-  static relationMappings = () => ({
+  static relationMappings = (): RelationMappings => ({
     actorFollower: {
       relation: Model.BelongsToOneRelation,
       modelClass: APActor,

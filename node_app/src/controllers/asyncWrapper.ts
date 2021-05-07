@@ -3,7 +3,7 @@ import { errorHandler } from './errorHandler';
 
 export const asyncWrapper = (
   fn: (req: Request, res: Response) => Promise<void>
-) => async (req: Request, res: Response) => {
+) => async (req: Request, res: Response): Promise<void> => {
   try {
     await fn(req, res);
   } catch (err) {

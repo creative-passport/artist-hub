@@ -1,4 +1,4 @@
-import { Model } from 'objection';
+import { Model, RelationMappings } from 'objection';
 import { APActor } from './APActor';
 import { BaseModel } from './BaseModel';
 import { User } from './User';
@@ -14,15 +14,15 @@ export class ArtistPage extends BaseModel {
   createdAt!: Date;
   updatedAt!: Date;
 
-  static get tableName() {
+  static get tableName(): string {
     return 'artistPages';
   }
 
-  $beforeUpdate() {
+  $beforeUpdate(): void {
     this.updatedAt = new Date();
   }
 
-  static relationMappings = () => ({
+  static relationMappings = (): RelationMappings => ({
     user: {
       relation: Model.BelongsToOneRelation,
       modelClass: User,

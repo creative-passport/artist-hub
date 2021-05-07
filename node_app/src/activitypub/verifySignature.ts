@@ -1,4 +1,3 @@
-import express from 'express';
 import crypto from 'crypto';
 import { splitFirst } from '../lib/splitFirst';
 import { RequestWithRawBody } from '../types';

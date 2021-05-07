@@ -4,7 +4,6 @@ import {
   ValidationError,
   NotFoundError,
   DBError,
-  ConstraintViolationError,
   UniqueViolationError,
   NotNullViolationError,
   ForeignKeyViolationError,
@@ -13,7 +12,7 @@ import {
 } from 'objection';
 
 // In this example `res` is an express response object.
-export function errorHandler(err: Error, res: Response) {
+export function errorHandler(err: Error, res: Response): void {
   if (err instanceof ValidationError) {
     switch (err.type) {
       case 'ModelValidation':

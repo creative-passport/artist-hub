@@ -1,5 +1,4 @@
-import { Model } from 'objection';
-import { APActor } from './APActor';
+import { Model, RelationMappings } from 'objection';
 import { APObject } from './APObject';
 import { BaseModel } from './BaseModel';
 
@@ -17,15 +16,15 @@ export class APAttachment extends BaseModel {
   createdAt!: Date;
   updatedAt!: Date;
 
-  static get tableName() {
+  static get tableName(): string {
     return 'apAttachments';
   }
 
-  $beforeUpdate() {
+  $beforeUpdate(): void {
     this.updatedAt = new Date();
   }
 
-  static relationMappings = () => ({
+  static relationMappings = (): RelationMappings => ({
     object: {
       relation: Model.BelongsToOneRelation,
       modelClass: APObject,
