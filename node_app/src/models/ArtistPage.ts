@@ -10,6 +10,8 @@ export class ArtistPage extends BaseModel {
   id!: string;
   title!: string;
   username!: string;
+  headline?: string;
+  description?: string;
 
   user?: User;
   apActor!: APActor;

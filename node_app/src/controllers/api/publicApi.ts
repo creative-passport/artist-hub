@@ -5,7 +5,12 @@ import { ArtistPage } from '../../models/ArtistPage';
 
 export const publicApiRouter = express.Router();
 
-const allowedFields: Array<keyof ArtistPage> = ['title', 'username'];
+const allowedFields: Array<keyof ArtistPage> = [
+  'title',
+  'username',
+  'headline',
+  'description',
+];
 
 /**
  * Get the public API routes
@@ -34,7 +39,7 @@ const getArtistPage = asyncWrapper(async (req, res) => {
       },
     })
     .modifyGraph('apActor', (builder) => {
-      builder.select(['id']);
+      builder.select(['id', 'uri', 'url']);
     })
     .modifyGraph('apActor.deliveredObjects', (builder) => {
       builder.orderBy('id', 'desc').limit(20);
@@ -50,9 +55,13 @@ const getArtistPage = asyncWrapper(async (req, res) => {
       ]);
     });
   if (artistPage) {
+    console.log(artistPage.apActor);
     res.send({
       title: artistPage.title,
       username: artistPage.username,
+      headline: artistPage.headline,
+      description: artistPage.description,
+      url: artistPage.apActor.url || artistPage.apActor.uri,
       feed:
         artistPage.apActor.deliveredObjects?.map((o) => ({
           id: o.id,

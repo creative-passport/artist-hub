@@ -1,6 +1,10 @@
 export interface ArtistPage {
   id: string;
   title: string;
+  headline?: string;
+  description?: string;
+
+  url: string;
   username: string;
 
   following: Follow[];
