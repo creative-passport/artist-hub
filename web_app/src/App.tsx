@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { CssBaseline } from '@material-ui/core';
+import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import { Home } from './pages/home';
 import { AuthProvider } from './providers/AuthProvider';
 import { Layout } from './components/Layout';
@@ -12,16 +12,19 @@ import { ArtistPageShow } from './pages/admin/artistPages/ArtistPageShow';
 import { ArtistPage } from './pages/artistPage/ArtistPage';
 import DialogProvider from './providers/DialogProvider';
 import { NotFound } from './pages/NotFound';
+import { Header } from './components/Header';
+import { appTheme } from './theme';
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
-    <>
+    <ThemeProvider theme={appTheme}>
       <CssBaseline />
       <Router>
         <QueryClientProvider client={queryClient}>
           <DialogProvider>
+            <Header />
             <Switch>
               <Route path="/p/:username">
                 <ArtistPage />
@@ -57,7 +60,7 @@ function App() {
           </DialogProvider>
         </QueryClientProvider>
       </Router>
-    </>
+    </ThemeProvider>
   );
 }
 
