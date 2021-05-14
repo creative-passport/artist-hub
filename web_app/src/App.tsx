@@ -40,9 +40,9 @@ function App() {
           <DialogProvider>
             <div className={classes.container}>
               <div className={classes.main}>
-                <Header />
                 <Switch>
                   <Route path="/p/:username">
+                    <Header />
                     <ArtistPage />
                   </Route>
                   <Route>
@@ -62,9 +62,6 @@ function App() {
                           <PrivateRoute path="/admin/artistpages">
                             <ArtistPageIndex />
                           </PrivateRoute>
-                          <Route path="/p/:username">
-                            <ArtistPage />
-                          </Route>
                           <Route>
                             <NotFound />
                           </Route>

@@ -6,4 +6,9 @@ export const appTheme = createMuiTheme({
       default: '#fff',
     },
   },
+  typography: {
+    button: {
+      textTransform: 'none',
+    },
+  },
 });

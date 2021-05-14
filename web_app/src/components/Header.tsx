@@ -5,6 +5,7 @@ import {
   Toolbar,
   Typography,
 } from '@material-ui/core';
+import { PropsWithChildren } from 'react';
 import { ReactComponent as Logo } from '../images/logo.svg';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -28,10 +29,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   toolbar: {
     minHeight: 72,
     marginLeft: 40,
+    marginRight: 40,
   },
 }));
 
-export function Header() {
+export function Header({ children }: PropsWithChildren<{}>) {
   const classes = useStyles();
 
   return (
@@ -41,6 +43,7 @@ export function Header() {
         <Typography variant="h6" component="h1" className={classes.title}>
           ArtistHub
         </Typography>
+        {children}
       </Toolbar>
     </AppBar>
   );
