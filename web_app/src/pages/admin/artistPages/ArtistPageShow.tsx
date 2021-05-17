@@ -8,9 +8,9 @@ import {
 import {
   useAdminDeleteArtistPage,
   useAdminReadArtistPage,
-} from '../../../hooks/useAdminArtistPages';
+} from 'hooks/useAdminArtistPages';
 import { Link as RouterLink, useHistory, useParams } from 'react-router-dom';
-import { useDialog } from '../../../providers/DialogProvider';
+import { useDialog } from 'providers/DialogProvider';
 import { useState } from 'react';
 import AddActivityPubDialog from './AddActivityPubDialog';
 import { FollowItem } from './FollowItem';

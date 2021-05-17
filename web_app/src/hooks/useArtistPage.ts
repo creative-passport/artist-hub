@@ -1,4 +1,4 @@
-import { ArtistPage } from '../types/api-types';
+import { ArtistPage } from 'types/api-types';
 import { useApiQuery } from './useApi';
 
 // Artist Pages (public view)

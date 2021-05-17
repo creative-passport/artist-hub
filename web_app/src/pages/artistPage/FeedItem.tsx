@@ -1,5 +1,5 @@
 import { Avatar, makeStyles } from '@material-ui/core';
-import { FeedItem as FeedItemType } from '../../types/api-types';
+import { FeedItem as FeedItemType } from 'types/api-types';
 import clsx from 'clsx';
 
 interface FeedItemProps {

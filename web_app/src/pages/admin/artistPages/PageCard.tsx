@@ -1,7 +1,7 @@
 import { Button, makeStyles, Typography } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
-import { ArtistPage } from '../../../types/api-types';
-import { CoverImage } from '../../artistPage/CoverImage';
+import { ArtistPage } from 'types/api-types';
+import { CoverImage } from 'pages/artistPage/CoverImage';
 import { ReactComponent as DeleteIcon } from 'images/delete-icon.svg';
 import { ReactComponent as ManageIcon } from 'images/manage-icon.svg';
 

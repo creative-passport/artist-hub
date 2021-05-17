@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react';
-import { useAuthState } from '../providers/AuthProvider';
+import { useAuthState } from 'providers/AuthProvider';
 import { Header } from './Header';
 import { Logout } from './Logout';
 

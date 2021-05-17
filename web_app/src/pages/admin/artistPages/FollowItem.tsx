@@ -1,8 +1,8 @@
 import { IconButton, makeStyles } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { useAdminUnfollow } from '../../../hooks/useUnfollow';
-import { useDialog } from '../../../providers/DialogProvider';
-import { Follow } from '../../../types/api-types';
+import { useAdminUnfollow } from 'hooks/useUnfollow';
+import { useDialog } from 'providers/DialogProvider';
+import { Follow } from 'types/api-types';
 
 const useStyles = makeStyles((theme) => ({
   dataSource: {

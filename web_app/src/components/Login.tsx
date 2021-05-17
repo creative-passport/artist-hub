@@ -1,5 +1,5 @@
 import { Button, makeStyles, TextField } from '@material-ui/core';
-import { useAuthState } from '../providers/AuthProvider';
+import { useAuthState } from 'providers/AuthProvider';
 
 const useStyles = makeStyles((theme) => ({
   localForm: {

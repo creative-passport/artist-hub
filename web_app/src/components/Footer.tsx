@@ -1,6 +1,6 @@
 import { Container, Grid, Link, makeStyles } from '@material-ui/core';
 import { PropsWithChildren } from 'react';
-import { ReactComponent as LogoWhite } from '../images/logo-white.svg';
+import { ReactComponent as LogoWhite } from 'images/logo-white.svg';
 
 const useStyles = makeStyles((theme) => ({
   root: {

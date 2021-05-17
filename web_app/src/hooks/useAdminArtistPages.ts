@@ -1,5 +1,5 @@
 import { useQueryClient } from 'react-query';
-import { ArtistPage } from '../types/api-types';
+import { ArtistPage } from 'types/api-types';
 import { useApiQuery, useApiPost, useApiPut, useApiDelete } from './useApi';
 
 // Admin Artist Pages

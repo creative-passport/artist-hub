@@ -1,6 +1,6 @@
 import { Button } from '@material-ui/core';
-import { useAuthState } from '../providers/AuthProvider';
-import { ReactComponent as LogoutIcon } from '../images/logout.svg';
+import { useAuthState } from 'providers/AuthProvider';
+import { ReactComponent as LogoutIcon } from 'images/logout.svg';
 
 export const Logout = () => {
   const { csrfToken } = useAuthState();

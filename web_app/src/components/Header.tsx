@@ -6,7 +6,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { PropsWithChildren } from 'react';
-import { ReactComponent as Logo } from '../images/logo.svg';
+import { ReactComponent as Logo } from 'images/logo.svg';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {

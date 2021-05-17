@@ -6,7 +6,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { useArtistPage } from '../../hooks/useArtistPage';
+import { useArtistPage } from 'hooks/useArtistPage';
 import { CoverImage } from './CoverImage';
 import { FeedItem } from './FeedItem';
 

@@ -8,12 +8,12 @@ import {
 import {
   useAdminArtistPages,
   useAdminCreateArtistPage,
-} from '../../../hooks/useAdminArtistPages';
+} from 'hooks/useAdminArtistPages';
 import { useState } from 'react';
 import NewArtistPageDialog from './NewArtistPageDialog';
 import { useHistory } from 'react-router-dom';
 import { AxiosError } from 'axios';
-import { ArtistPage } from '../../../types/api-types';
+import { ArtistPage } from 'types/api-types';
 import { CreateNew } from './CreateNew';
 import { PageCard } from './PageCard';
 

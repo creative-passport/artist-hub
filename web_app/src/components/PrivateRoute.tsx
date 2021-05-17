@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { useAuthState } from '../providers/AuthProvider';
+import { useAuthState } from 'providers/AuthProvider';
 
 interface PrivateRouteProps extends React.ComponentProps<typeof Route> {
   renderPublic?: () => React.ReactNode;

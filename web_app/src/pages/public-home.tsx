@@ -1,6 +1,6 @@
-import { Login } from '../components/Login';
+import { Login } from 'components/Login';
 import { Container, makeStyles, Paper, Typography } from '@material-ui/core';
-import { Center } from '../components/Center';
+import { Center } from 'components/Center';
 import { useEffect } from 'react';
 
 const useStyles = makeStyles((theme) => ({
