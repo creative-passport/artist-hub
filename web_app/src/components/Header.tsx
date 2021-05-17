@@ -33,11 +33,18 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export function Header({ children }: PropsWithChildren<{}>) {
+interface HeaderProps {
+  noShadow?: boolean;
+}
+
+export function Header({
+  children,
+  noShadow = false,
+}: PropsWithChildren<HeaderProps>) {
   const classes = useStyles();
 
   return (
-    <AppBar position="static" elevation={0} color="transparent">
+    <AppBar position="static" elevation={noShadow ? 0 : 1} color="transparent">
       <Toolbar className={classes.toolbar}>
         <Logo title="ArtistHub" className={classes.logo} />
         <Typography variant="h6" component="h1" className={classes.title}>

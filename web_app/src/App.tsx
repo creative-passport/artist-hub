@@ -42,7 +42,7 @@ function App() {
               <div className={classes.main}>
                 <Switch>
                   <Route path="/p/:username">
-                    <Header />
+                    <Header noShadow />
                     <ArtistPage />
                   </Route>
                   <Route>

@@ -1,4 +1,3 @@
-import { Container } from '@material-ui/core';
 import { PropsWithChildren } from 'react';
 import { useAuthState } from '../providers/AuthProvider';
 import { Header } from './Header';
@@ -14,9 +13,7 @@ export function Layout({ children }: PropsWithChildren<{}>) {
           <Logout />
         </Header>
       )}
-      <Container maxWidth="md">
-        <main>{children}</main>
-      </Container>
+      <main>{children}</main>
     </>
   );
 }

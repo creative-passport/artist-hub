@@ -1,19 +1,48 @@
-import { Button, makeStyles, Typography } from '@material-ui/core';
+import {
+  Container,
+  Divider,
+  Grid,
+  makeStyles,
+  Typography,
+} from '@material-ui/core';
 import {
   useAdminArtistPages,
   useAdminCreateArtistPage,
 } from '../../../hooks/useAdminArtistPages';
-import AddIcon from '@material-ui/icons/Add';
 import { useState } from 'react';
 import NewArtistPageDialog from './NewArtistPageDialog';
-import { Link } from '@material-ui/core';
-import { Link as RouterLink, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { ArtistPage } from '../../../types/api-types';
+import { CreateNew } from './CreateNew';
+import { PageCard } from './PageCard';
 
 const useStyles = makeStyles((theme) => ({
   button: {
     marginBottom: theme.spacing(2),
+  },
+  welcome: {
+    fontSize: 40,
+    fontWeight: 300,
+    color: '#222222',
+    marginTop: theme.spacing(4),
+    marginBottom: theme.spacing(4),
+    marginLeft: theme.spacing(8),
+  },
+  email: {
+    fontSize: 20,
+    color: '#777777',
+    marginLeft: theme.spacing(8),
+    marginBottom: theme.spacing(3.5),
+  },
+  divider: {
+    marginTop: 40,
+    marginBottom: 40,
+  },
+  yourPages: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    marginBottom: theme.spacing(5),
   },
 }));
 
@@ -42,37 +71,36 @@ export function ArtistPageIndex() {
   };
 
   return (
-    <div>
+    <Container maxWidth="lg">
       <NewArtistPageDialog
         open={newArtistOpen}
         onCancel={handleCancel}
         onSuccess={handleSuccess}
       />
-      <Typography component="h1" variant="h2">
-        Artist Pages
+      <Typography component="h1" className={classes.welcome}>
+        Welcome Music Maker
       </Typography>
-      <div>
-        <Button
-          variant="contained"
-          color="secondary"
-          className={classes.button}
-          startIcon={<AddIcon />}
-          onClick={() => setNewArtistOpen(true)}
-        >
-          Create new page
-        </Button>
-      </div>
-      {isLoading
-        ? 'Loading'
-        : data.length > 0
-        ? data?.map((p) => (
-            <div key={p.id}>
-              <Link component={RouterLink} to={`/admin/artistpages/${p.id}`}>
-                {p.title}
-              </Link>
-            </div>
-          ))
-        : 'You have no artist pages'}
-    </div>
+      <Typography className={classes.email}>name.surname@email.com</Typography>
+      <Divider className={classes.divider} />
+      <Typography component="h2" className={classes.yourPages}>
+        Your pages
+      </Typography>
+      {isLoading ? (
+        'Loading'
+      ) : (
+        <>
+          <Grid container spacing={2} alignItems="stretch">
+            {data?.map((p) => (
+              <Grid item xs={4} lg={3} key={p.id}>
+                <PageCard page={p} />
+              </Grid>
+            ))}
+            <Grid item xs={4} lg={3}>
+              <CreateNew onClick={() => setNewArtistOpen(true)} />
+            </Grid>
+          </Grid>
+        </>
+      )}
+    </Container>
   );
 }

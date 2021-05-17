@@ -11,6 +11,9 @@ const useStyles = makeStyles((theme) => ({
   button: {
     margin: theme.spacing(1),
   },
+  oidcRoot: {
+    textAlign: 'center',
+  },
 }));
 
 export const Login = () => {
@@ -22,10 +25,21 @@ export const Login = () => {
       <form action="/auth/login" method="POST" className={classes.localForm}>
         <input type="hidden" name="_csrf" value={csrfToken} />
         <div>
-          <TextField id="username" label="Username" name="username" autoComplete="username" />
+          <TextField
+            id="username"
+            label="Username"
+            name="username"
+            autoComplete="username"
+          />
         </div>
         <div>
-          <TextField id="password" label="Password" name="password" type="password" autoComplete="current-password" />
+          <TextField
+            id="password"
+            label="Password"
+            name="password"
+            type="password"
+            autoComplete="current-password"
+          />
         </div>
         <Button
           variant="contained"
@@ -38,7 +52,7 @@ export const Login = () => {
       </form>
     </div>
   ) : mode === 'oidc' ? (
-    <div>
+    <div className={classes.oidcRoot}>
       <form action="/auth/login" method="POST">
         <input type="hidden" name="_csrf" value={csrfToken} />
         <Button
