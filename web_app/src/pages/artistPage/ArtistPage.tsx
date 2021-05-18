@@ -1,14 +1,8 @@
-import {
-  Avatar,
-  Container,
-  Grid,
-  makeStyles,
-  Typography,
-} from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { useArtistPage } from 'hooks/useArtistPage';
-import { CoverImage } from './CoverImage';
 import { FeedItem } from './FeedItem';
+import { ArtistPageLayout } from 'components/ArtistPageLayout';
 
 const useStyles = makeStyles((theme) => ({
   feedItem: {
@@ -71,50 +65,41 @@ export function ArtistPage() {
   const officialLinks = []; // Not yet implemented
 
   return (
-    <div>
-      <CoverImage className={classes.coverImage}>
-        <Container maxWidth="md" className={classes.coverImageContainer}>
-          <Avatar className={classes.avatar}>RS</Avatar>
-          <Typography component="h2" className={classes.title}>
-            {data.title}
+    <ArtistPageLayout
+      title={data.title}
+      url={data.url}
+      leftColumn={
+        <>
+          <Typography
+            className={classes.headline}
+            variant="h6"
+            component="h3"
+            gutterBottom
+          >
+            {data.headline}
           </Typography>
-        </Container>
-      </CoverImage>
-      <Container maxWidth="md">
-        <Typography className={classes.url}>{data.url}</Typography>
-        <Grid container spacing={4}>
-          <Grid item xs={3}>
+          <Typography variant="body2" className={classes.description}>
+            {data.description}
+          </Typography>
+        </>
+      }
+      middleColumn={data.feed.map((f) => (
+        <FeedItem key={f.id} feedItem={f} className={classes.feedItem} />
+      ))}
+      rightColumn={
+        officialLinks.length > 0 && (
+          <>
             <Typography
-              className={classes.headline}
+              className={classes.officialLinks}
               variant="h6"
               component="h3"
               gutterBottom
             >
-              {data.headline}
+              Official Links
             </Typography>
-            <Typography variant="body2" className={classes.description}>
-              {data.description}
-            </Typography>
-          </Grid>
-          <Grid item xs={6}>
-            {data.feed.map((f) => (
-              <FeedItem key={f.id} feedItem={f} className={classes.feedItem} />
-            ))}
-          </Grid>
-          {officialLinks.length > 0 && (
-            <Grid item xs={3}>
-              <Typography
-                className={classes.officialLinks}
-                variant="h6"
-                component="h3"
-                gutterBottom
-              >
-                Official Links
-              </Typography>
-            </Grid>
-          )}
-        </Grid>
-      </Container>
-    </div>
+          </>
+        )
+      }
+    />
   );
 }

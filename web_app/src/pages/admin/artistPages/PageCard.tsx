@@ -1,9 +1,11 @@
 import { Button, makeStyles, Typography } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import { ArtistPage } from 'types/api-types';
-import { CoverImage } from 'pages/artistPage/CoverImage';
+import { CoverImage } from 'components/CoverImage';
 import { ReactComponent as DeleteIcon } from 'images/delete-icon.svg';
 import { ReactComponent as ManageIcon } from 'images/manage-icon.svg';
+import { useDialog } from 'providers/DialogProvider';
+import { useAdminDeleteArtistPage } from 'hooks/useAdminArtistPages';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,18 +46,36 @@ const useStyles = makeStyles((theme) => ({
 
 interface CreateNewProps {
   page: ArtistPage;
-  onClick?: () => void;
 }
 
-export function PageCard({ page, onClick }: CreateNewProps) {
+export function PageCard({ page }: CreateNewProps) {
   const classes = useStyles();
+  const deletePage = useAdminDeleteArtistPage();
+  const showDialog = useDialog();
+
+  const handleDelete = () => {
+    showDialog(
+      'Delete artist page',
+      'Are you sure you want to delete the artist page?',
+      {
+        onConfirm: () => deletePage.mutate(page.id),
+        confirmButton: 'Delete',
+      }
+    );
+  };
+
   return (
     <div className={classes.root}>
       <CoverImage className={classes.cover} />
       <div className={classes.container}>
         <Typography className={classes.title}>{page.title}</Typography>
         <div className={classes.actions}>
-          <Button variant="text" color="inherit" startIcon={<DeleteIcon />}>
+          <Button
+            variant="text"
+            color="inherit"
+            startIcon={<DeleteIcon />}
+            onClick={handleDelete}
+          >
             DELETE
           </Button>
           <Button

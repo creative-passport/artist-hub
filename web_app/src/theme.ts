@@ -13,6 +13,11 @@ export const appTheme = createMuiTheme({
       fontWeight: 900,
       letterSpacing: 'normal',
     },
+    h4: {
+      fontWeight: 'bold',
+      fontSize: 18,
+      color: '#444444',
+    },
     // Used by dialog titles
     h6: {
       fontSize: 20,
