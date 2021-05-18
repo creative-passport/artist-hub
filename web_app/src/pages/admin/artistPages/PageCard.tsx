@@ -55,8 +55,12 @@ export function PageCard({ page, onClick }: CreateNewProps) {
       <div className={classes.container}>
         <Typography className={classes.title}>{page.title}</Typography>
         <div className={classes.actions}>
-          <Button startIcon={<DeleteIcon />}>DELETE</Button>
+          <Button variant="text" color="inherit" startIcon={<DeleteIcon />}>
+            DELETE
+          </Button>
           <Button
+            variant="text"
+            color="inherit"
             component={RouterLink}
             startIcon={<ManageIcon />}
             to={`/admin/artistpages/${page.id}`}

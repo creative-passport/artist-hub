@@ -1,6 +1,5 @@
 import {
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
@@ -10,6 +9,7 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core';
+import { Dialog } from 'components/Dialog';
 import React, { useState } from 'react';
 import { ArtistPage } from 'types/api-types';
 
@@ -68,9 +68,7 @@ export default function NewArtistPageDialog({
         aria-labelledby="form-dialog-title"
       >
         <form onSubmit={handleSubmit}>
-          <DialogTitle id="form-dialog-title">
-            Create New Artist Page
-          </DialogTitle>
+          <DialogTitle id="form-dialog-title">Create a new page</DialogTitle>
           <DialogContent>
             <TextField
               autoFocus
@@ -109,10 +107,8 @@ export default function NewArtistPageDialog({
             )}
           </DialogContent>
           <DialogActions>
-            <Button onClick={onCancel} color="primary">
-              Cancel
-            </Button>
-            <Button type="submit" color="primary">
+            <Button onClick={onCancel}>Cancel</Button>
+            <Button type="submit" variant="contained">
               Create
             </Button>
           </DialogActions>

@@ -1,11 +1,11 @@
 import {
   Button,
-  Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
 } from '@material-ui/core';
+import { Dialog } from 'components/Dialog';
 import React, { PropsWithChildren, useCallback, useReducer } from 'react';
 
 export const DialogDispatchContext = React.createContext<
@@ -162,7 +162,12 @@ function DialogProvider({ children }: PropsWithChildren<{}>) {
               <Button onClick={handleClose} color="primary">
                 {state.active.cancelButton || 'Cancel'}
               </Button>
-              <Button onClick={handleConfirm} color="primary" autoFocus>
+              <Button
+                onClick={handleConfirm}
+                variant="contained"
+                color="primary"
+                autoFocus
+              >
                 {state.active.confirmButton || 'Confirm'}
               </Button>
             </DialogActions>

@@ -8,7 +8,12 @@ export const Logout = () => {
   return (
     <form action="/auth/logout" method="POST">
       <input type="hidden" name="_csrf" value={csrfToken} />
-      <Button color="inherit" type="submit" startIcon={<LogoutIcon />}>
+      <Button
+        color="inherit"
+        type="submit"
+        variant="text"
+        startIcon={<LogoutIcon />}
+      >
         Logout
       </Button>
     </form>
