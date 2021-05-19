@@ -36,6 +36,9 @@ export const appTheme = createMuiTheme({
         minHeight: 40,
         borderRadius: 999,
       },
+      sizeSmall: {
+        minHeight: 32,
+      },
       text: {
         padding: '6px 24px',
       },

@@ -21,12 +21,14 @@ export interface Follow {
   followUri: string;
   url: string;
   username: string;
+  name: string;
   domain: string;
 }
 
 export interface FeedItem {
   id: string;
   accountUrl: string;
+  name: string;
   username: string;
   domain: string;
   url: string;

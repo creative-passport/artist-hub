@@ -1,16 +1,27 @@
-import { Button, Typography } from '@material-ui/core';
+import { Button, makeStyles } from '@material-ui/core';
 import { useAdminReadArtistPage } from 'hooks/useAdminArtistPages';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
-import AddActivityPubDialog from './AddActivityPubDialog';
 import { FollowItem } from './FollowItem';
 import { ArtistPageLayout } from 'components/ArtistPageLayout';
 import { ColumnTitle } from './ColumnTitle';
+import AddIcon from '@material-ui/icons/Add';
+import AddActivityCard from './AddActivityCard';
+
+const useStyles = makeStyles((theme) => ({
+  button: {
+    borderRadius: 16,
+    width: '100%',
+    textTransform: 'uppercase',
+    height: 56,
+  },
+}));
 
 export function ArtistPageShow() {
   const { artistId } = useParams<{ artistId: string }>();
   const { isLoading, data } = useAdminReadArtistPage(artistId);
   const [addDataSource, setAddDataSource] = useState(false);
+  const classes = useStyles();
 
   if (isLoading || !data) return <div>Loading</div>;
 
@@ -35,16 +46,22 @@ export function ArtistPageShow() {
           {data.following.map((f) => (
             <FollowItem artistPageId={artistId} follow={f} key={f.id} />
           ))}
-          <Button variant="contained" onClick={() => setAddDataSource(true)}>
-            Add ActivityPub data source
-          </Button>
-          <Typography>e.g. Mastodon, Pixelfed, PeerTube, etc</Typography>
-          <AddActivityPubDialog
-            artistId={artistId}
-            open={addDataSource}
-            onSuccess={() => setAddDataSource(false)}
-            onCancel={() => setAddDataSource(false)}
-          />
+          {addDataSource ? (
+            <AddActivityCard
+              artistId={artistId}
+              onSuccess={() => setAddDataSource(false)}
+              onCancel={() => setAddDataSource(false)}
+            />
+          ) : (
+            <Button
+              className={classes.button}
+              variant="outlined"
+              startIcon={<AddIcon />}
+              onClick={() => setAddDataSource(true)}
+            >
+              Add a new data source
+            </Button>
+          )}
         </>
       }
       rightColumn={

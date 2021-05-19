@@ -66,6 +66,7 @@ const getArtistPage = asyncWrapper(async (req, res) => {
       id: artistPage.id,
       title: artistPage.title,
       username: artistPage.username,
+      url: artistPage.apActor.url || artistPage.apActor.uri,
       following: artistPage.apActor.followingActors?.map((a) => ({
         id: a.id,
         followState: a.followState,
@@ -73,6 +74,7 @@ const getArtistPage = asyncWrapper(async (req, res) => {
         url: a.url || a.uri,
         username: a.username,
         domain: a.domain,
+        name: a.username, // To-do store the AP name field
       })),
     });
   } else {
