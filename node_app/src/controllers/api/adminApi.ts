@@ -65,6 +65,8 @@ async function artistPageJsonFromId(user: User, id: string) {
   return {
     id: artistPage.id,
     title: artistPage.title,
+    headline: artistPage.headline,
+    description: artistPage.description,
     username: artistPage.username,
     url: artistPage.apActor.url || artistPage.apActor.uri,
     following: artistPage.apActor.followingActors?.map((a) => ({

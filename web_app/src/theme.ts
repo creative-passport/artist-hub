@@ -18,6 +18,13 @@ export const appTheme = createMuiTheme({
       fontSize: 18,
       color: '#444444',
     },
+    h5: {
+      color: '#777777',
+      textTransform: 'uppercase',
+      fontSize: 12,
+      letterSpacing: '0.1em',
+      fontWeight: 500,
+    },
     // Used by dialog titles
     h6: {
       fontSize: 20,

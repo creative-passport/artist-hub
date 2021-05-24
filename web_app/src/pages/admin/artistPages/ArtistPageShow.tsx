@@ -1,4 +1,4 @@
-import { Button, makeStyles } from '@material-ui/core';
+import { Button, makeStyles, Typography } from '@material-ui/core';
 import {
   useAdminReadArtistPage,
   useAdminUpdateArtistPage,
@@ -14,6 +14,7 @@ import EditIcon from '@material-ui/icons/EditOutlined';
 import VisibilityIcon from '@material-ui/icons/VisibilityOutlined';
 import EditArtistPageDialog from './EditArtistPageDialog';
 import { ArtistPage } from 'types/api-types';
+import { EditTextField } from 'components/EditTextField';
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -30,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+  pageInfoHeading: {
+    marginTop: theme.spacing(4),
+  },
 }));
 
 export function ArtistPageShow() {
@@ -45,6 +49,14 @@ export function ArtistPageShow() {
   const handleEditPage = (newData: Partial<ArtistPage>) => {
     updatePage.mutate({ id: data.id, ...newData });
     setEditPage(false);
+  };
+
+  const handleEditHeadline = (headline: string, done: () => void) => {
+    updatePage.mutateAsync({ id: data.id, headline }).then(done);
+  };
+
+  const handleEditDescription = (description: string, done: () => void) => {
+    updatePage.mutateAsync({ id: data.id, description }).then(done);
   };
 
   return (
@@ -78,6 +90,37 @@ export function ArtistPageShow() {
             <ColumnTitle
               title="Page info"
               subtitle="Manage the page information"
+            />
+            <Typography
+              className={classes.pageInfoHeading}
+              variant="h5"
+              component="h4"
+              gutterBottom
+            >
+              <label htmlFor="headline">Headline</label>
+            </Typography>
+            <EditTextField
+              value={data.headline}
+              onEdit={handleEditHeadline}
+              TextFieldProps={{
+                id: 'headline',
+              }}
+            />
+            <Typography
+              className={classes.pageInfoHeading}
+              variant="h5"
+              component="h4"
+              gutterBottom
+            >
+              <label htmlFor="description">Description</label>
+            </Typography>
+            <EditTextField
+              value={data.description}
+              onEdit={handleEditDescription}
+              multiline
+              TextFieldProps={{
+                id: 'description',
+              }}
             />
           </>
         }
