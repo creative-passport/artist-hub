@@ -39,13 +39,22 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: 180 + theme.spacing(4),
     color: '#444444',
     fontSize: 20,
-    marginTop: theme.spacing(3),
+    paddingTop: theme.spacing(3),
     marginBottom: theme.spacing(4),
+  },
+  buttons: {
+    float: 'right',
+    marginTop: -20,
+    display: 'flex',
+    '& > :not(:last-child)': {
+      marginRight: theme.spacing(1),
+    },
   },
 }));
 
 interface ArtistPageLayoutProps {
   isLoading?: boolean;
+  buttons?: React.ReactNode;
   leftColumn?: React.ReactNode;
   middleColumn?: React.ReactNode;
   rightColumn?: React.ReactNode;
@@ -55,6 +64,7 @@ interface ArtistPageLayoutProps {
 
 export function ArtistPageLayout({
   isLoading = false,
+  buttons,
   leftColumn,
   middleColumn,
   rightColumn,
@@ -78,6 +88,7 @@ export function ArtistPageLayout({
         </Container>
       </CoverImage>
       <Container maxWidth="md">
+        {buttons && <div className={classes.buttons}>{buttons}</div>}
         <Typography className={classes.url}>{url}</Typography>
         <Grid container spacing={4}>
           <Grid item xs={3}>

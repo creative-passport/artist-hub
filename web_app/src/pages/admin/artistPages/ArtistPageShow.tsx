@@ -1,5 +1,8 @@
 import { Button, makeStyles } from '@material-ui/core';
-import { useAdminReadArtistPage } from 'hooks/useAdminArtistPages';
+import {
+  useAdminReadArtistPage,
+  useAdminUpdateArtistPage,
+} from 'hooks/useAdminArtistPages';
 import { useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { FollowItem } from './FollowItem';
@@ -7,6 +10,10 @@ import { ArtistPageLayout } from 'components/ArtistPageLayout';
 import { ColumnTitle } from './ColumnTitle';
 import AddIcon from '@material-ui/icons/Add';
 import AddActivityCard from './AddActivityCard';
+import EditIcon from '@material-ui/icons/EditOutlined';
+import VisibilityIcon from '@material-ui/icons/VisibilityOutlined';
+import EditArtistPageDialog from './EditArtistPageDialog';
+import { ArtistPage } from 'types/api-types';
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -15,63 +22,106 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'uppercase',
     height: 56,
   },
+  editButton: {
+    backgroundColor: '#fff',
+    '&:hover': {
+      '@media (hover: none)': {
+        backgroundColor: '#fff',
+      },
+    },
+  },
 }));
 
 export function ArtistPageShow() {
   const { artistId } = useParams<{ artistId: string }>();
   const { isLoading, data } = useAdminReadArtistPage(artistId);
   const [addDataSource, setAddDataSource] = useState(false);
+  const [editPage, setEditPage] = useState(false);
+  const updatePage = useAdminUpdateArtistPage();
   const classes = useStyles();
 
   if (isLoading || !data) return <div>Loading</div>;
 
+  const handleEditPage = (newData: Partial<ArtistPage>) => {
+    updatePage.mutate({ id: data.id, ...newData });
+    setEditPage(false);
+  };
+
   return (
-    <ArtistPageLayout
-      title={data.title}
-      url={data.url}
-      leftColumn={
-        <>
-          <ColumnTitle
-            title="Page info"
-            subtitle="Manage the page information"
-          />
-        </>
-      }
-      middleColumn={
-        <>
-          <ColumnTitle
-            title="Sources"
-            subtitle="Add sources to gather your social activity from"
-          />
-          {data.following.map((f) => (
-            <FollowItem artistPageId={artistId} follow={f} key={f.id} />
-          ))}
-          {addDataSource ? (
-            <AddActivityCard
-              artistId={artistId}
-              onSuccess={() => setAddDataSource(false)}
-              onCancel={() => setAddDataSource(false)}
-            />
-          ) : (
+    <>
+      <ArtistPageLayout
+        title={data.title}
+        url={data.url}
+        buttons={
+          <>
             <Button
-              className={classes.button}
               variant="outlined"
-              startIcon={<AddIcon />}
-              onClick={() => setAddDataSource(true)}
+              className={classes.editButton}
+              startIcon={<EditIcon />}
+              onClick={() => setEditPage(true)}
             >
-              Add a new data source
+              Edit
             </Button>
-          )}
-        </>
-      }
-      rightColumn={
-        <>
-          <ColumnTitle
-            title="Links"
-            subtitle="Add personal links that you want to share"
-          />
-        </>
-      }
-    />
+            <Button
+              variant="contained"
+              startIcon={<VisibilityIcon />}
+              href={data.url}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              View public page
+            </Button>
+          </>
+        }
+        leftColumn={
+          <>
+            <ColumnTitle
+              title="Page info"
+              subtitle="Manage the page information"
+            />
+          </>
+        }
+        middleColumn={
+          <>
+            <ColumnTitle
+              title="Sources"
+              subtitle="Add sources to gather your social activity from"
+            />
+            {data.following.map((f) => (
+              <FollowItem artistPageId={artistId} follow={f} key={f.id} />
+            ))}
+            {addDataSource ? (
+              <AddActivityCard
+                artistId={artistId}
+                onSuccess={() => setAddDataSource(false)}
+                onCancel={() => setAddDataSource(false)}
+              />
+            ) : (
+              <Button
+                className={classes.button}
+                variant="outlined"
+                startIcon={<AddIcon />}
+                onClick={() => setAddDataSource(true)}
+              >
+                Add a new data source
+              </Button>
+            )}
+          </>
+        }
+        rightColumn={
+          <>
+            <ColumnTitle
+              title="Links"
+              subtitle="Add personal links that you want to share"
+            />
+          </>
+        }
+      />
+      <EditArtistPageDialog
+        onSuccess={handleEditPage}
+        onCancel={() => setEditPage(false)}
+        artistPage={editPage ? data : undefined}
+      />
+    </>
   );
 }

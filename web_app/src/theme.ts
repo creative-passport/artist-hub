@@ -64,7 +64,7 @@ export const appTheme = createMuiTheme({
         border: `1px solid ${fade('#444444', 0.5)}`,
         '&:hover': {
           border: `1px solid #444444`,
-          backgroundColor: fade('#444444', 0.04),
+          backgroundColor: '#fafafa',
           // Reset on touch devices, it doesn't add specificity
           '@media (hover: none)': {
             backgroundColor: 'transparent',

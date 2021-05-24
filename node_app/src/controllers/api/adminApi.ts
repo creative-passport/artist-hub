@@ -54,29 +54,40 @@ const getArtistPages = asyncWrapper(async (req, res) => {
   res.send(artistPages);
 });
 
+async function artistPageJsonFromId(user: User, id: string) {
+  const artistPage = await user
+    .$relatedQuery('artistPages')
+    .findById(id)
+    .withGraphFetched('apActor.followingActors');
+  if (!artistPage) {
+    return undefined;
+  }
+  return {
+    id: artistPage.id,
+    title: artistPage.title,
+    username: artistPage.username,
+    url: artistPage.apActor.url || artistPage.apActor.uri,
+    following: artistPage.apActor.followingActors?.map((a) => ({
+      id: a.id,
+      followState: a.followState,
+      followUri: a.followUri,
+      url: a.url || a.uri,
+      username: a.username,
+      domain: a.domain,
+      name: a.username, // To-do store the AP name field
+    })),
+  };
+}
+
 // Get artist page
 const getArtistPage = asyncWrapper(async (req, res) => {
   const user = req.user as User;
-  const artistPage = await user
-    .$relatedQuery('artistPages')
-    .findById(req.params.artistPageId)
-    .withGraphFetched('apActor.followingActors');
-  if (artistPage) {
-    res.send({
-      id: artistPage.id,
-      title: artistPage.title,
-      username: artistPage.username,
-      url: artistPage.apActor.url || artistPage.apActor.uri,
-      following: artistPage.apActor.followingActors?.map((a) => ({
-        id: a.id,
-        followState: a.followState,
-        followUri: a.followUri,
-        url: a.url || a.uri,
-        username: a.username,
-        domain: a.domain,
-        name: a.username, // To-do store the AP name field
-      })),
-    });
+  const artistPageJson = await artistPageJsonFromId(
+    user,
+    req.params.artistPageId
+  );
+  if (artistPageJson) {
+    res.send(artistPageJson);
   } else {
     res.sendStatus(404);
   }
@@ -114,19 +125,26 @@ const createArtistPage = asyncWrapper(async (req, res) => {
     })
     .returning('*')
     .first();
-  res.send(artistPage);
+  const artistPageJson = await artistPageJsonFromId(user, artistPage.id);
+  res.send(artistPageJson);
 });
 
 // Update artist page
 const updateArtistPage = asyncWrapper(async (req, res) => {
   const user = req.user as User;
-  const artistPage = await user
+  await user
     .$relatedQuery('artistPages')
-    .patch({ title: req.body.title })
-    .where('id', req.params.artistPageId)
-    .returning('*')
-    .first();
-  res.send(artistPage);
+    .patch({
+      title: req.body.title,
+      headline: req.body.headline,
+      description: req.body.description,
+    })
+    .where('id', req.params.artistPageId);
+  const artistPageJson = await artistPageJsonFromId(
+    user,
+    req.params.artistPageId
+  );
+  res.send(artistPageJson);
 });
 
 // Delete artist page
