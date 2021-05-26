@@ -37,14 +37,25 @@ interface IdKey {
 
 type PartialWithId<T extends IdKey> = Partial<T> & Pick<T, 'id'>;
 
-export function useApiPut<T extends IdKey>(
+export function useApiPut<T extends IdKey, U extends IdKey = PartialWithId<T>>(
   path: string,
-  options?: UseMutationOptions<T, AxiosError, PartialWithId<T>>
+  options?: UseMutationOptions<T, AxiosError, U>,
+  encodeFormData = false
 ) {
-  return useMutation<T, AxiosError, PartialWithId<T>>(async (data) => {
-    const { id, ...newData } = data;
+  return useMutation<T, AxiosError, U>(async (data) => {
+    let newData: Record<string, unknown> | FormData | undefined;
+    if (encodeFormData) {
+      let formData = new FormData();
+      for (const [key, value] of Object.entries(data)) {
+        formData.append(key, value);
+      }
+      newData = formData;
+    } else {
+      const { id: _id, ...rest } = data;
+      newData = rest;
+    }
     return await axios
-      .put(`${apiBase}${path}/${id}`, newData)
+      .put(`${apiBase}${path}/${data.id}`, newData)
       .then((res) => res.data as T);
   }, options);
 }

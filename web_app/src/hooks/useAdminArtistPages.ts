@@ -1,5 +1,5 @@
 import { useQueryClient } from 'react-query';
-import { ArtistPage } from 'types/api-types';
+import { ArtistPage, UpdateArtistPage } from 'types/api-types';
 import { useApiQuery, useApiPost, useApiPut, useApiDelete } from './useApi';
 
 // Admin Artist Pages
@@ -26,11 +26,15 @@ export function useAdminReadArtistPage(id: string) {
 
 export function useAdminUpdateArtistPage() {
   const queryClient = useQueryClient();
-  return useApiPut(`/admin/artistpages`, {
-    onSuccess: (data: ArtistPage, variables) => {
-      queryClient.setQueryData(['adminArtistPage', variables.id], data);
+  return useApiPut<ArtistPage, UpdateArtistPage>(
+    `/admin/artistpages`,
+    {
+      onSuccess: (data: ArtistPage, variables) => {
+        queryClient.setQueryData(['adminArtistPage', variables.id], data);
+      },
     },
-  });
+    true
+  );
 }
 
 export function useAdminDeleteArtistPage() {

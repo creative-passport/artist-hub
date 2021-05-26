@@ -2,6 +2,7 @@ import { Model, RelationMappings } from 'objection';
 import { APActor } from './APActor';
 import { BaseModel } from './BaseModel';
 import { User } from './User';
+import path from 'path';
 
 /**
  * A database model representing an Artist Page
@@ -12,6 +13,9 @@ export class ArtistPage extends BaseModel {
   username!: string;
   headline?: string;
   description?: string;
+
+  profileImageFilename?: string;
+  coverImageFilename?: string;
 
   user?: User;
   apActor!: APActor;
@@ -47,4 +51,20 @@ export class ArtistPage extends BaseModel {
       },
     },
   });
+
+  profileImageBasePath(): string {
+    return path.join('files/artistPage/profileImage', this.id, 'original');
+  }
+
+  profileImagePath(): string | undefined {
+    return this.profileImageFilename
+      ? path.join(this.profileImageBasePath(), this.profileImageFilename)
+      : undefined;
+  }
+
+  profileImageUrl(): string | undefined {
+    return this.profileImageFilename
+      ? path.join('/', this.profileImageBasePath(), this.profileImageFilename)
+      : undefined;
+  }
 }

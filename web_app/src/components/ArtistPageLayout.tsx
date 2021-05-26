@@ -60,10 +60,12 @@ interface ArtistPageLayoutProps {
   rightColumn?: React.ReactNode;
   title?: string;
   url?: string;
+  profileImage?: string;
 }
 
 export function ArtistPageLayout({
   isLoading = false,
+  profileImage,
   buttons,
   leftColumn,
   middleColumn,
@@ -79,7 +81,7 @@ export function ArtistPageLayout({
     <div>
       <CoverImage className={classes.coverImage}>
         <Container maxWidth="md" className={classes.coverImageContainer}>
-          <Avatar className={classes.avatar}>
+          <Avatar className={classes.avatar} src={profileImage}>
             {title && title.length >= 1 ? title[0] : ''}
           </Avatar>
           <Typography component="h2" className={classes.title}>

@@ -68,6 +68,7 @@ export function ArtistPage() {
     <ArtistPageLayout
       title={data.title}
       url={data.url}
+      profileImage={data.profileImage}
       leftColumn={
         <>
           <Typography

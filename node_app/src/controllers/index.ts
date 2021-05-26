@@ -12,6 +12,7 @@ import { getApiRoutes } from './api/apiRouter';
 export function getRoutes(): Router {
   const router = express.Router();
 
+  router.use('/files', express.static('files'));
   router.use('/api', csrfProtection, getApiRoutes());
   router.use('/', getActivityPubRoutes());
   router.use('/.well-known', getWellKnownRoutes());

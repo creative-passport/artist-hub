@@ -2,14 +2,18 @@ import express, { Router } from 'express';
 import { sanitize } from '../../lib/sanitize';
 import { asyncWrapper } from '../asyncWrapper';
 import { ArtistPage } from '../../models/ArtistPage';
+import Debug from 'debug';
+const debug = Debug('artisthub:publicapi');
 
 export const publicApiRouter = express.Router();
 
 const allowedFields: Array<keyof ArtistPage> = [
+  'id',
   'title',
   'username',
   'headline',
   'description',
+  'profileImageFilename',
 ];
 
 /**
@@ -55,12 +59,13 @@ const getArtistPage = asyncWrapper(async (req, res) => {
       ]);
     });
   if (artistPage) {
-    console.log(artistPage.apActor);
+    debug(artistPage.apActor);
     res.send({
       title: artistPage.title,
       username: artistPage.username,
       headline: artistPage.headline,
       description: artistPage.description,
+      profileImage: artistPage.profileImageUrl(),
       url: artistPage.apActor.url || artistPage.apActor.uri,
       feed:
         artistPage.apActor.deliveredObjects?.map((o) => ({

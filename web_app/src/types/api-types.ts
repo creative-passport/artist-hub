@@ -3,6 +3,7 @@ export interface ArtistPage {
   title: string;
   headline?: string;
   description?: string;
+  profileImage?: string;
 
   url: string;
   username: string;
@@ -13,6 +14,14 @@ export interface ArtistPage {
 
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface UpdateArtistPage {
+  id: string;
+  title?: string;
+  headline?: string;
+  description?: string;
+  profileImage?: File;
 }
 
 export interface Follow {

@@ -13,7 +13,7 @@ import AddActivityCard from './AddActivityCard';
 import EditIcon from '@material-ui/icons/EditOutlined';
 import VisibilityIcon from '@material-ui/icons/VisibilityOutlined';
 import EditArtistPageDialog from './EditArtistPageDialog';
-import { ArtistPage } from 'types/api-types';
+import { UpdateArtistPage } from 'types/api-types';
 import { EditTextField } from 'components/EditTextField';
 
 const useStyles = makeStyles((theme) => ({
@@ -46,8 +46,8 @@ export function ArtistPageShow() {
 
   if (isLoading || !data) return <div>Loading</div>;
 
-  const handleEditPage = (newData: Partial<ArtistPage>) => {
-    updatePage.mutate({ id: data.id, ...newData });
+  const handleEditPage = (newData: UpdateArtistPage) => {
+    updatePage.mutate(newData);
     setEditPage(false);
   };
 
@@ -64,6 +64,7 @@ export function ArtistPageShow() {
       <ArtistPageLayout
         title={data.title}
         url={data.url}
+        profileImage={data.profileImage}
         buttons={
           <>
             <Button

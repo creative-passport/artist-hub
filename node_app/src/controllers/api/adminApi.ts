@@ -1,4 +1,4 @@
-import express, { Request, Response, Router } from 'express';
+import express, { Request, Response, Router, Express } from 'express';
 import { requireAuth } from '../../auth/auth';
 import { User } from '../../models/User';
 import axios from 'axios';
@@ -11,10 +11,25 @@ import { getActor } from '../../activitypub/actor';
 import { createUndo } from '../../activitypub/undo';
 import { APFollow } from '../../models/APFollow';
 import { signedPost } from '../../activitypub/request';
+import multer from 'multer';
+import sharp from 'sharp';
 import Debug from 'debug';
+import path from 'path';
+import { promises as fs } from 'fs';
+import { PartialModelObject } from 'objection';
+import { ArtistPage } from '../../models/ArtistPage';
 const debug = Debug('artisthub:adminapi');
 
 const generateKeyPair = promisify(crypto.generateKeyPair);
+const randomBytes = promisify(crypto.randomBytes);
+
+const storage = multer.diskStorage({
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now());
+  },
+});
+
+const upload = multer({ storage });
 
 /**
  * Get the admin API routes
@@ -28,7 +43,11 @@ export function getAdminApiRoutes(): Router {
   router.get('/artistpages', getArtistPages);
   router.get('/artistpages/:artistPageId', getArtistPage);
   router.post('/artistpages', createArtistPage);
-  router.put('/artistpages/:artistPageId', updateArtistPage);
+  router.put(
+    '/artistpages/:artistPageId',
+    upload.fields([{ name: 'profileImage', maxCount: 1 }]),
+    updateArtistPage
+  );
   router.delete('/artistpages/:artistPageId', deleteArtistPage);
   router.post('/activitypub/lookup', lookupActivityPub);
   router.post(
@@ -69,6 +88,7 @@ async function artistPageJsonFromId(user: User, id: string) {
     description: artistPage.description,
     username: artistPage.username,
     url: artistPage.apActor.url || artistPage.apActor.uri,
+    profileImage: artistPage.profileImageUrl(),
     following: artistPage.apActor.followingActors?.map((a) => ({
       id: a.id,
       followState: a.followState,
@@ -131,21 +151,97 @@ const createArtistPage = asyncWrapper(async (req, res) => {
   res.send(artistPageJson);
 });
 
+const formats: { [format: string]: string } = {
+  jpeg: 'jpg',
+  png: 'png',
+  gif: 'gif',
+};
+
+async function randomFilename(format: string): Promise<string> {
+  const extension = formats[format];
+  if (!extension) {
+    throw new Error('Unsupported file format');
+  }
+  const buffer = await randomBytes(8);
+  return buffer.toString('hex') + '.' + extension;
+}
+
+type MulterFiles =
+  | {
+      [fieldName: string]: Express.Multer.File[];
+    }
+  | Express.Multer.File[];
+
+async function deleteFiles(fileNames: string[]) {
+  for (const file of fileNames) {
+    try {
+      await fs.unlink(file);
+    } catch (e) {
+      debug(`Error deleting ${file}`, e);
+    }
+  }
+}
+
+async function deleteMulterFiles(files: MulterFiles) {
+  await deleteFiles(
+    (Array.isArray(files) ? files : Object.values(files).flat()).map(
+      (f) => f.path
+    )
+  );
+}
+
 // Update artist page
 const updateArtistPage = asyncWrapper(async (req, res) => {
   const user = req.user as User;
-  await user
+  const files = req.files as { profileImage?: Express.Multer.File[] };
+  const update: PartialModelObject<ArtistPage> = {
+    title: req.body.title,
+    headline: req.body.headline,
+    description: req.body.description,
+  };
+  const artistPage = await user
     .$relatedQuery('artistPages')
-    .patch({
-      title: req.body.title,
-      headline: req.body.headline,
-      description: req.body.description,
-    })
-    .where('id', req.params.artistPageId);
-  const artistPageJson = await artistPageJsonFromId(
-    user,
-    req.params.artistPageId
-  );
+    .findById(req.params.artistPageId);
+  const replacedFiles: string[] = [];
+  const newFiles: string[] = [];
+
+  try {
+    if (files.profileImage && files.profileImage.length > 0) {
+      const file = files.profileImage[0];
+      const image = sharp(file.path);
+      const metaData = await image.metadata();
+      if (metaData.width && metaData.height && metaData.format) {
+        const minDimension = Math.min(metaData.width, metaData.height, 400);
+        const basePath = artistPage.profileImageBasePath();
+        const filename = await randomFilename(metaData.format);
+        const destPath = path.join(basePath, filename);
+        await fs.mkdir(basePath, { recursive: true });
+        await image.resize(minDimension, minDimension).toFile(destPath);
+        const oldImage = artistPage.profileImagePath();
+        if (oldImage) {
+          replacedFiles.push(oldImage);
+        }
+        newFiles.push(destPath);
+        update.profileImageFilename = filename;
+        debug('Uploaded file', destPath);
+      }
+    }
+  } finally {
+    await deleteMulterFiles(files);
+  }
+
+  let artistPageJson;
+  try {
+    await user
+      .$relatedQuery('artistPages')
+      .patch(update)
+      .where('id', req.params.artistPageId);
+    artistPageJson = await artistPageJsonFromId(user, req.params.artistPageId);
+    await deleteFiles(replacedFiles);
+  } catch (e) {
+    await deleteFiles(newFiles);
+  }
+
   res.send(artistPageJson);
 });
 

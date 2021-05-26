@@ -4,13 +4,15 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  InputLabel,
   makeStyles,
   TextField,
   Typography,
 } from '@material-ui/core';
 import { Dialog } from 'components/Dialog';
+import { ImageInput } from 'components/ImageInput';
 import React, { useEffect, useState } from 'react';
-import { ArtistPage } from 'types/api-types';
+import { ArtistPage, UpdateArtistPage } from 'types/api-types';
 
 const useStyles = makeStyles((theme) => ({
   error: {
@@ -23,11 +25,15 @@ const useStyles = makeStyles((theme) => ({
       marginRight: 2,
     },
   },
+  imageInputContainer: {
+    marginTop: 16,
+    marginBottom: 8,
+  },
 }));
 
 interface EditArtistDialogProps {
   onSuccess: (
-    data: Partial<ArtistPage>,
+    data: UpdateArtistPage,
     setError: (message: string) => void
   ) => void;
   onCancel: () => void;
@@ -40,14 +46,17 @@ export default function EditArtistPageDialog({
   artistPage,
 }: EditArtistDialogProps) {
   const classes = useStyles();
-  const [data, setData] = useState<Partial<ArtistPage>>();
+  const [data, setData] = useState<UpdateArtistPage>();
+  const [oldProfileImage, setOldProfileImage] = useState<string | undefined>();
   const [open, setOpen] = useState(false);
 
   const [error, setError] = useState<string | undefined>();
 
   useEffect(() => {
     if (artistPage) {
-      setData((data) => (data ? undefined : artistPage));
+      const { profileImage, ...rest } = artistPage;
+      setData((data) => (data ? undefined : rest));
+      setOldProfileImage(profileImage);
       setOpen(true);
     } else {
       setOpen(false);
@@ -60,7 +69,11 @@ export default function EditArtistPageDialog({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setData((a) => ({ ...a, [name]: value }));
+    setData((a) => (a ? { ...a, [name]: value } : undefined));
+  };
+
+  const handleProfileImage = (file: File) => {
+    setData((a) => (a ? { ...a, profileImage: file } : undefined));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -96,6 +109,16 @@ export default function EditArtistPageDialog({
                 fullWidth
                 required
               />
+              <div className={classes.imageInputContainer}>
+                <InputLabel htmlFor="avatar-upload">Profile Image</InputLabel>
+                <ImageInput
+                  id="avatar-upload"
+                  onFileChange={handleProfileImage}
+                  currentImage={oldProfileImage}
+                  newImage={data.profileImage}
+                  buttonText="Select image"
+                />
+              </div>
               <Typography variant="body2">
                 * indicates a required field
               </Typography>
