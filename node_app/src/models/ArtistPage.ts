@@ -67,4 +67,20 @@ export class ArtistPage extends BaseModel {
       ? path.join('/', this.profileImageBasePath(), this.profileImageFilename)
       : undefined;
   }
+
+  coverImageBasePath(): string {
+    return path.join('files/artistPage/coverImage', this.id, 'original');
+  }
+
+  coverImagePath(): string | undefined {
+    return this.coverImageFilename
+      ? path.join(this.coverImageBasePath(), this.coverImageFilename)
+      : undefined;
+  }
+
+  coverImageUrl(): string | undefined {
+    return this.coverImageFilename
+      ? path.join('/', this.coverImageBasePath(), this.coverImageFilename)
+      : undefined;
+  }
 }

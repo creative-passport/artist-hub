@@ -65,6 +65,7 @@ export function ArtistPageShow() {
         title={data.title}
         url={data.url}
         profileImage={data.profileImage}
+        coverImage={data.coverImage}
         buttons={
           <>
             <Button

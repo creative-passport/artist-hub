@@ -8,39 +8,6 @@ const useStyles = makeStyles((theme) => ({
   feedItem: {
     marginBottom: theme.spacing(2),
   },
-  title: {
-    textShadow: '0px 0px 24px rgba(0, 0, 0, 0.5)',
-    color: 'black',
-    fontSize: 40,
-    fontWeight: 700,
-    marginLeft: theme.spacing(4),
-    marginTop: 0,
-    marginBottom: theme.spacing(3),
-  },
-  coverImage: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    flexDirection: 'column',
-  },
-  avatar: {
-    width: 180,
-    height: 180,
-    border: '4px solid white',
-    marginBottom: -75,
-  },
-  coverImageContainer: {
-    display: 'flex',
-    alignItems: 'flex-end',
-  },
-  url: {
-    paddingLeft: 180 + theme.spacing(4),
-    color: '#444440',
-    fontSize: 20,
-    fontWeight: 300,
-    fontStyle: 'italic',
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(4),
-  },
   headline: {
     fontWeight: 700,
     fontSize: 20,
@@ -69,6 +36,7 @@ export function ArtistPage() {
       title={data.title}
       url={data.url}
       profileImage={data.profileImage}
+      coverImage={data.coverImage}
       leftColumn={
         <>
           <Typography

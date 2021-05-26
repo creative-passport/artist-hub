@@ -48,15 +48,17 @@ export default function EditArtistPageDialog({
   const classes = useStyles();
   const [data, setData] = useState<UpdateArtistPage>();
   const [oldProfileImage, setOldProfileImage] = useState<string | undefined>();
+  const [oldCoverImage, setOldCoverImage] = useState<string | undefined>();
   const [open, setOpen] = useState(false);
 
   const [error, setError] = useState<string | undefined>();
 
   useEffect(() => {
     if (artistPage) {
-      const { profileImage, ...rest } = artistPage;
+      const { profileImage, coverImage, ...rest } = artistPage;
       setData((data) => (data ? undefined : rest));
       setOldProfileImage(profileImage);
+      setOldCoverImage(coverImage);
       setOpen(true);
     } else {
       setOpen(false);
@@ -69,11 +71,17 @@ export default function EditArtistPageDialog({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    console.log('handleChange', name, value);
     setData((a) => (a ? { ...a, [name]: value } : undefined));
   };
 
   const handleProfileImage = (file: File) => {
+    console.log('handleProfileImage');
     setData((a) => (a ? { ...a, profileImage: file } : undefined));
+  };
+  const handleCoverImage = (file: File) => {
+    console.log('handleCoverImage');
+    setData((a) => (a ? { ...a, coverImage: file } : undefined));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -116,6 +124,16 @@ export default function EditArtistPageDialog({
                   onFileChange={handleProfileImage}
                   currentImage={oldProfileImage}
                   newImage={data.profileImage}
+                  buttonText="Select image"
+                />
+              </div>
+              <div className={classes.imageInputContainer}>
+                <InputLabel htmlFor="cover-upload">Cover Image</InputLabel>
+                <ImageInput
+                  id="cover-upload"
+                  onFileChange={handleCoverImage}
+                  currentImage={oldCoverImage}
+                  newImage={data.coverImage}
                   buttonText="Select image"
                 />
               </div>

@@ -14,6 +14,7 @@ const allowedFields: Array<keyof ArtistPage> = [
   'headline',
   'description',
   'profileImageFilename',
+  'coverImageFilename',
 ];
 
 /**
@@ -66,6 +67,7 @@ const getArtistPage = asyncWrapper(async (req, res) => {
       headline: artistPage.headline,
       description: artistPage.description,
       profileImage: artistPage.profileImageUrl(),
+      coverImage: artistPage.coverImageUrl(),
       url: artistPage.apActor.url || artistPage.apActor.uri,
       feed:
         artistPage.apActor.deliveredObjects?.map((o) => ({

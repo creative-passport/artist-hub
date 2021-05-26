@@ -16,7 +16,7 @@ import sharp from 'sharp';
 import Debug from 'debug';
 import path from 'path';
 import { promises as fs } from 'fs';
-import { PartialModelObject } from 'objection';
+import { ModelObject, PartialModelObject } from 'objection';
 import { ArtistPage } from '../../models/ArtistPage';
 const debug = Debug('artisthub:adminapi');
 
@@ -45,7 +45,10 @@ export function getAdminApiRoutes(): Router {
   router.post('/artistpages', createArtistPage);
   router.put(
     '/artistpages/:artistPageId',
-    upload.fields([{ name: 'profileImage', maxCount: 1 }]),
+    upload.fields([
+      { name: 'profileImage', maxCount: 1 },
+      { name: 'coverImage', maxCount: 1 },
+    ]),
     updateArtistPage
   );
   router.delete('/artistpages/:artistPageId', deleteArtistPage);
@@ -89,6 +92,7 @@ async function artistPageJsonFromId(user: User, id: string) {
     username: artistPage.username,
     url: artistPage.apActor.url || artistPage.apActor.uri,
     profileImage: artistPage.profileImageUrl(),
+    coverImage: artistPage.coverImageUrl(),
     following: artistPage.apActor.followingActors?.map((a) => ({
       id: a.id,
       followState: a.followState,
@@ -190,10 +194,21 @@ async function deleteMulterFiles(files: MulterFiles) {
   );
 }
 
+interface Attachment {
+  files: Express.Multer.File[] | undefined;
+  basePath: string;
+  dimensions: (metadata: sharp.Metadata) => [number, number];
+  oldImage?: string;
+  updateKey: NonNullable<keyof ModelObject<ArtistPage>>;
+}
+
 // Update artist page
 const updateArtistPage = asyncWrapper(async (req, res) => {
   const user = req.user as User;
-  const files = req.files as { profileImage?: Express.Multer.File[] };
+  const files = req.files as {
+    profileImage?: Express.Multer.File[];
+    coverImage?: Express.Multer.File[];
+  };
   const update: PartialModelObject<ArtistPage> = {
     title: req.body.title,
     headline: req.body.headline,
@@ -205,25 +220,62 @@ const updateArtistPage = asyncWrapper(async (req, res) => {
   const replacedFiles: string[] = [];
   const newFiles: string[] = [];
 
-  try {
-    if (files.profileImage && files.profileImage.length > 0) {
-      const file = files.profileImage[0];
-      const image = sharp(file.path);
-      const metaData = await image.metadata();
-      if (metaData.width && metaData.height && metaData.format) {
-        const minDimension = Math.min(metaData.width, metaData.height, 400);
-        const basePath = artistPage.profileImageBasePath();
-        const filename = await randomFilename(metaData.format);
-        const destPath = path.join(basePath, filename);
-        await fs.mkdir(basePath, { recursive: true });
-        await image.resize(minDimension, minDimension).toFile(destPath);
-        const oldImage = artistPage.profileImagePath();
-        if (oldImage) {
-          replacedFiles.push(oldImage);
+  const attachments: Attachment[] = [
+    {
+      files: files.profileImage,
+      basePath: artistPage.profileImageBasePath(),
+      dimensions: (metadata: sharp.Metadata) => {
+        if (!metadata.width || !metadata.height) {
+          throw new Error('Image dimensions not found');
         }
-        newFiles.push(destPath);
-        update.profileImageFilename = filename;
-        debug('Uploaded file', destPath);
+        const minDimension = Math.min(metadata.width, metadata.height, 400);
+        return [minDimension, minDimension];
+      },
+      oldImage: artistPage.profileImagePath(),
+      updateKey: 'profileImageFilename',
+    },
+    {
+      files: files.coverImage,
+      basePath: artistPage.coverImageBasePath(),
+      dimensions: (metadata: sharp.Metadata) => {
+        const expectedRatio = 1440 / 240;
+        if (!metadata.width || !metadata.height) {
+          throw new Error('Image dimensions not found');
+        }
+        let width, height;
+        if (metadata.width / metadata.height > expectedRatio) {
+          width = Math.min(metadata.width, 1440);
+          height = width / expectedRatio;
+        } else {
+          height = Math.min(metadata.height, 240);
+          width = height * expectedRatio;
+        }
+        return [width, height];
+      },
+      oldImage: artistPage.coverImagePath(),
+      updateKey: 'coverImageFilename',
+    },
+  ];
+
+  try {
+    for (const attachment of attachments) {
+      if (attachment.files && attachment.files.length > 0) {
+        const file = attachment.files[0];
+        const image = sharp(file.path);
+        const metaData = await image.metadata();
+        if (metaData.width && metaData.height && metaData.format) {
+          const dimensions = attachment.dimensions(metaData);
+          const filename = await randomFilename(metaData.format);
+          const destPath = path.join(attachment.basePath, filename);
+          await fs.mkdir(attachment.basePath, { recursive: true });
+          await image.resize(dimensions[0], dimensions[1]).toFile(destPath);
+          if (attachment.oldImage) {
+            replacedFiles.push(attachment.oldImage);
+          }
+          newFiles.push(destPath);
+          update[attachment.updateKey] = filename;
+          debug('Uploaded file', destPath);
+        }
       }
     }
   } finally {

@@ -53,9 +53,9 @@ export function ImageInput({
         fr.onload = null;
       };
     } else {
-      setPreview(undefined);
+      setPreview(currentImage);
     }
-  }, [newImage]);
+  }, [newImage, currentImage]);
 
   return (
     <div className={classes.root}>

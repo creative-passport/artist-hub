@@ -102,11 +102,11 @@ export function EditTextField({
         value={editing || ''}
       />
       <div>
-        <IconButton size="small">
-          <CloseIcon onClick={handleCancel} />
+        <IconButton size="small" onClick={handleCancel}>
+          <CloseIcon />
         </IconButton>
-        <IconButton size="small">
-          <DoneIcon onClick={handleDone} />
+        <IconButton size="small" onClick={handleDone}>
+          <DoneIcon />
         </IconButton>
       </div>
     </form>
@@ -120,8 +120,8 @@ export function EditTextField({
       >
         {value}
       </Typography>
-      <IconButton size="small">
-        <EditIcon onClick={handleStartEditing} />
+      <IconButton size="small" onClick={handleStartEditing}>
+        <EditIcon />
       </IconButton>
     </div>
   );

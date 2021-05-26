@@ -61,11 +61,13 @@ interface ArtistPageLayoutProps {
   title?: string;
   url?: string;
   profileImage?: string;
+  coverImage?: string;
 }
 
 export function ArtistPageLayout({
   isLoading = false,
   profileImage,
+  coverImage,
   buttons,
   leftColumn,
   middleColumn,
@@ -79,7 +81,7 @@ export function ArtistPageLayout({
 
   return (
     <div>
-      <CoverImage className={classes.coverImage}>
+      <CoverImage className={classes.coverImage} src={coverImage}>
         <Container maxWidth="md" className={classes.coverImageContainer}>
           <Avatar className={classes.avatar} src={profileImage}>
             {title && title.length >= 1 ? title[0] : ''}

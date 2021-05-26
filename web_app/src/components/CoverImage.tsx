@@ -1,23 +1,27 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Theme } from '@material-ui/core';
 import clsx from 'clsx';
 import { PropsWithChildren } from 'react';
 
-const useStyles = makeStyles((theme) => ({
+interface CoverImageProps {
+  className?: string;
+  src?: string;
+}
+
+const useStyles = makeStyles<Theme, CoverImageProps>((theme) => ({
   root: {
     width: '100%',
     height: 240,
-    background: '#eee',
+    background: (props) =>
+      props.src ? `url("${props.src}") no-repeat center` : '#eee',
+    backgroundSize: (props) => (props.src ? 'cover' : undefined),
   },
 }));
-
-interface CoverImageProps {
-  className?: string;
-}
 
 export function CoverImage({
   className,
   children,
+  src,
 }: PropsWithChildren<CoverImageProps>) {
-  const classes = useStyles();
+  const classes = useStyles({ src });
   return <div className={clsx(classes.root, className)}>{children}</div>;
 }

@@ -4,6 +4,7 @@ export interface ArtistPage {
   headline?: string;
   description?: string;
   profileImage?: string;
+  coverImage?: string;
 
   url: string;
   username: string;
@@ -22,6 +23,7 @@ export interface UpdateArtistPage {
   headline?: string;
   description?: string;
   profileImage?: File;
+  coverImage?: File;
 }
 
 export interface Follow {
