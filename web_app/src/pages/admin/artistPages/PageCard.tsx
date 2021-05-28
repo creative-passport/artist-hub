@@ -1,4 +1,4 @@
-import { Button, makeStyles, Typography } from '@material-ui/core';
+import { Avatar, Button, makeStyles, Typography } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import { ArtistPage } from 'types/api-types';
 import { CoverImage } from 'components/CoverImage';
@@ -21,6 +21,10 @@ const useStyles = makeStyles((theme) => ({
     height: 120,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
   },
   container: {
     display: 'flex',
@@ -41,6 +45,12 @@ const useStyles = makeStyles((theme) => ({
     '& > *': {
       flexGrow: 1,
     },
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    border: '3px solid white',
+    marginBottom: -30,
   },
 }));
 
@@ -66,7 +76,9 @@ export function PageCard({ page }: CreateNewProps) {
 
   return (
     <div className={classes.root}>
-      <CoverImage className={classes.cover} />
+      <CoverImage className={classes.cover} src={page.coverImage}>
+        <Avatar className={classes.avatar} src={page.profileImage} />
+      </CoverImage>
       <div className={classes.container}>
         <Typography className={classes.title}>{page.title}</Typography>
         <div className={classes.actions}>

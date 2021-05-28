@@ -72,15 +72,14 @@ function ping(req: Request, res: Response) {
 // Get artist pages
 const getArtistPages = asyncWrapper(async (req, res) => {
   const user = req.user as User;
-  const artistPages = await user.$relatedQuery('artistPages').orderBy('title');
-  res.send(artistPages);
+  const artistPages = await user
+    .$relatedQuery('artistPages')
+    .orderBy('title')
+    .withGraphFetched('apActor');
+  res.send(artistPages.map((p) => artistPageJsonFromModel(p)));
 });
 
-async function artistPageJsonFromId(user: User, id: string) {
-  const artistPage = await user
-    .$relatedQuery('artistPages')
-    .findById(id)
-    .withGraphFetched('apActor.followingActors');
+function artistPageJsonFromModel(artistPage?: ArtistPage) {
   if (!artistPage) {
     return undefined;
   }
@@ -103,6 +102,14 @@ async function artistPageJsonFromId(user: User, id: string) {
       name: a.username, // To-do store the AP name field
     })),
   };
+}
+
+async function artistPageJsonFromId(user: User, id: string) {
+  const artistPage = await user
+    .$relatedQuery('artistPages')
+    .findById(id)
+    .withGraphFetched('apActor.followingActors');
+  return artistPageJsonFromModel(artistPage);
 }
 
 // Get artist page
