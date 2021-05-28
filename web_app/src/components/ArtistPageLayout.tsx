@@ -51,6 +51,10 @@ const useStyles = makeStyles((theme) => ({
       marginRight: theme.spacing(1),
     },
   },
+  topLinks: {
+    display: 'block',
+    flexGrow: 1,
+  },
 }));
 
 interface ArtistPageLayoutProps {
@@ -63,6 +67,7 @@ interface ArtistPageLayoutProps {
   url?: string;
   profileImage?: string;
   coverImage?: string;
+  topLinks?: React.ReactNode;
 }
 
 export function ArtistPageLayout({
@@ -75,6 +80,7 @@ export function ArtistPageLayout({
   rightColumn,
   title,
   url,
+  topLinks,
 }: ArtistPageLayoutProps) {
   const classes = useStyles();
 
@@ -83,6 +89,11 @@ export function ArtistPageLayout({
   return (
     <div>
       <CoverImage className={classes.coverImage} src={coverImage}>
+        {topLinks && (
+          <Container maxWidth="md" className={classes.topLinks}>
+            {topLinks}
+          </Container>
+        )}
         <Container maxWidth="md" className={classes.coverImageContainer}>
           <Avatar className={classes.avatar} src={profileImage}>
             {title && title.length >= 1 ? title[0] : ''}

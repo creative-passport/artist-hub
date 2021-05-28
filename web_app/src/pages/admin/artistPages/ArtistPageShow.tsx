@@ -3,7 +3,7 @@ import {
   useAdminReadArtistPage,
   useAdminUpdateArtistPage,
 } from 'hooks/useAdminArtistPages';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useState } from 'react';
 import { FollowItem } from './FollowItem';
 import { ArtistPageLayout } from 'components/ArtistPageLayout';
@@ -15,6 +15,7 @@ import VisibilityIcon from '@material-ui/icons/VisibilityOutlined';
 import EditArtistPageDialog from './EditArtistPageDialog';
 import { UpdateArtistPage } from 'types/api-types';
 import { EditTextField } from 'components/EditTextField';
+import BackIcon from '@material-ui/icons/ArrowBackIos';
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -33,6 +34,16 @@ const useStyles = makeStyles((theme) => ({
   },
   pageInfoHeading: {
     marginTop: theme.spacing(4),
+  },
+  backToDashboard: {
+    background: '#222222',
+    color: '#fff',
+    padding: '4px 6px',
+    marginTop: theme.spacing(4),
+    display: 'inline-flex',
+    textTransform: 'uppercase',
+    alignItems: 'center',
+    textDecoration: 'none',
   },
 }));
 
@@ -66,6 +77,14 @@ export function ArtistPageShow() {
         url={data.url}
         profileImage={data.profileImage}
         coverImage={data.coverImage}
+        topLinks={
+          <>
+            <Link to="/admin/artistpages" className={classes.backToDashboard}>
+              <BackIcon fontSize="small" />
+              <Typography variant="body2">Back to your dashboard</Typography>
+            </Link>
+          </>
+        }
         buttons={
           <>
             <Button
