@@ -7,7 +7,10 @@ module.exports = {
   plugins: ['@typescript-eslint', 'eslint-plugin-tsdoc'],
   extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
   rules: {
-    '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+    ],
     'tsdoc/syntax': 'warn',
   },
   overrides: [

@@ -3,10 +3,23 @@ import { knexSnakeCaseMappers } from 'objection';
 /**
  * The Knex database configuration
  */
-const database = {
-  development: {
+
+const database = process.env.PGDATABASE || 'artisthub';
+const host = process.env.PGHOST || 'localhost';
+const port = process.env.PGPORT ? parseInt(process.env.PGPORT) : 5432;
+const user = process.env.PGUSER || 'artisthub';
+const password = process.env.PGPASSWORD;
+
+export default {
+  production: {
     client: 'pg',
-    connection: process.env.PG_CONNECTION_STRING,
+    connection: {
+      database,
+      host,
+      port,
+      user,
+      password,
+    },
     pool: {
       min: 2,
       max: 10,
@@ -14,9 +27,15 @@ const database = {
     ...knexSnakeCaseMappers(),
   },
 
-  production: {
+  testing: {
     client: 'pg',
-    connection: process.env.PG_CONNECTION_STRING,
+    connection: {
+      database: process.env.TEST_PGDATABASE || 'artisthub_test_database',
+      host,
+      port,
+      user,
+      password,
+    },
     pool: {
       min: 2,
       max: 10,
@@ -25,4 +44,6 @@ const database = {
   },
 };
 
-export default database;
+// console.log(database);
+
+// export default database;

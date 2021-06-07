@@ -1,16 +1,13 @@
 import 'dotenv/config';
-import { setupPassport } from './auth/auth';
 import Knex from 'knex';
 import knexConfig from './knexfile';
 import { Model } from 'objection';
-import { getRoutes } from './controllers';
-// Import the app
-import {app} from './app'
+import { getApp } from './app';
 
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 // Initialize knex.
-const knex = Knex(knexConfig.development);
+const knex = Knex(knexConfig.production);
 Model.knex(knex);
 
 (async () => {
@@ -26,6 +23,7 @@ Model.knex(knex);
     throw new Error('Migrations pending');
   }
 
+  const app = await getApp();
   const port = 4000;
 
   app.listen(port, () => {
