@@ -62,12 +62,12 @@ export function EditTextField({
     if (textRef.current) {
       setMinHeight(textRef.current.offsetHeight);
     }
-    setEditing(value);
+    setEditing(value || '');
   };
 
   const handleCancel = () => setEditing(undefined);
   const handleDone = () => {
-    if (onEdit && editing) {
+    if (onEdit && editing != null) {
       onEdit(editing, handleCancel);
     }
   };
