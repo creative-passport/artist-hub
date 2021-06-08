@@ -1,14 +1,15 @@
 import {
   IconButton,
   makeStyles,
-  TextField,
   TextFieldProps,
   Typography,
 } from '@material-ui/core';
 import { useRef, useState } from 'react';
 import EditIcon from '@material-ui/icons/EditOutlined';
-import CloseIcon from '@material-ui/icons/Close';
-import DoneIcon from '@material-ui/icons/Done';
+import { ReactComponent as DeleteIcon } from 'images/delete-icon.svg';
+
+import clsx from 'clsx';
+import { EditActions, TextFieldForm } from './TextFieldForm';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -19,41 +20,34 @@ const useStyles = makeStyles(() => ({
   text: {
     lineHeight: 'normal',
     padding: '6px 0 6px',
-  },
-  multiline: {
-    padding: '6px 0 6px',
-    minHeight: 380,
-  },
-  textField: {
-    alignItems: 'flex-start',
+    width: '100%',
   },
 }));
 
 interface EditTextFieldProps {
   onEdit?: (data: string, done: () => void) => void;
+  onDelete?: (done: () => void) => void;
   value?: string;
+  singleLine?: boolean;
   multiline?: boolean;
   TextFieldProps?: Omit<TextFieldProps, 'value' | 'onChange'>;
-}
-
-function keyIsEnter(e: React.KeyboardEvent<HTMLTextAreaElement>): boolean {
-  if (e.key !== undefined) {
-    return e.key === 'Enter';
-  }
-  if (e.keyCode !== undefined) {
-    return e.key === 13;
-  }
-  return false;
+  textClassName?: string;
+  validate?: (data: string) => string | undefined;
 }
 
 export function EditTextField({
   onEdit,
+  onDelete,
   value = '',
   TextFieldProps,
+  singleLine,
   multiline = false,
+  textClassName,
+  validate,
 }: EditTextFieldProps) {
-  const [editing, setEditing] = useState<string | undefined>();
   const classes = useStyles();
+  const [editing, setEditing] = useState(false);
+  // const [submitting, setSubmitting] = useState(false);
   const textRef = useRef<HTMLParagraphElement>(null);
   const [minHeight, setMinHeight] = useState<number | undefined>();
 
@@ -62,67 +56,61 @@ export function EditTextField({
     if (textRef.current) {
       setMinHeight(textRef.current.offsetHeight);
     }
-    setEditing(value || '');
+    setEditing(true);
   };
 
-  const handleCancel = () => setEditing(undefined);
-  const handleDone = () => {
-    if (onEdit && editing != null) {
-      onEdit(editing, handleCancel);
+  const handleCancel = () => setEditing(false);
+  const handleEdit = (value: string, actions: EditActions) => {
+    if (onEdit && editing) {
+      onEdit(value, () => {
+        actions.setSubmitting(false);
+        setEditing(false);
+      });
+    } else {
+      actions.setSubmitting(false);
     }
   };
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    handleDone();
-  };
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (!multiline && keyIsEnter(e)) {
-      e.preventDefault();
+  const handleDelete = () => {
+    if (onDelete) {
+      onDelete(handleCancel);
     }
   };
 
-  return editing != null ? (
-    <form className={classes.root} onSubmit={handleSubmit}>
-      <TextField
-        fullWidth
-        autoFocus
-        multiline
-        {...TextFieldProps}
-        InputProps={{
-          onKeyDown: handleKeyDown,
-          className: classes.text,
-          classes: { multiline: classes.multiline, root: classes.textField },
+  return editing ? (
+    <TextFieldForm
+      onEdit={handleEdit}
+      onCancel={handleCancel}
+      initialValue={value}
+      TextFieldProps={{
+        ...TextFieldProps,
+        InputProps: {
           style: { minHeight },
-        }}
-        onChange={(v) =>
-          setEditing(
-            multiline ? v.target.value : v.target.value.replaceAll('\n', '')
-          )
-        }
-        value={editing || ''}
-      />
-      <div>
-        <IconButton size="small" onClick={handleCancel}>
-          <CloseIcon />
-        </IconButton>
-        <IconButton size="small" onClick={handleDone}>
-          <DoneIcon />
-        </IconButton>
-      </div>
-    </form>
+        },
+      }}
+      multiline={multiline}
+      singleLine={singleLine}
+      validate={validate}
+    />
   ) : (
     <div className={classes.root}>
       <Typography
         onClick={handleStartEditing}
-        className={classes.text}
+        className={clsx(textClassName, classes.text)}
         component="p"
         ref={textRef}
       >
         {value}
       </Typography>
-      <IconButton size="small" onClick={handleStartEditing}>
-        <EditIcon />
-      </IconButton>
+      <div>
+        <IconButton size="small" onClick={handleStartEditing}>
+          <EditIcon />
+        </IconButton>
+        {onDelete && (
+          <IconButton size="small" onClick={handleDelete}>
+            <DeleteIcon />
+          </IconButton>
+        )}
+      </div>
     </div>
   );
 }

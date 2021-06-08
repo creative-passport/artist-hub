@@ -12,6 +12,7 @@ export interface ArtistPage {
   following: Follow[];
 
   feed: FeedItem[];
+  links: Link[];
 
   createdAt: Date;
   updatedAt: Date;
@@ -45,6 +46,17 @@ export interface FeedItem {
   url: string;
   content: string;
   attachments: Attachment[];
+}
+
+export interface Link {
+  id: string;
+  sort: number;
+  url: string;
+}
+
+export interface UpdateLink {
+  id: string;
+  url: string;
 }
 
 export interface Attachment {

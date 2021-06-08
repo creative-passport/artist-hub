@@ -3,6 +3,7 @@ import { APActor } from './APActor';
 import { BaseModel } from './BaseModel';
 import { User } from './User';
 import path from 'path';
+import { Link } from './Link';
 
 /**
  * A database model representing an Artist Page
@@ -19,6 +20,7 @@ export class ArtistPage extends BaseModel {
 
   user?: User;
   apActor!: APActor;
+  links?: Link[];
 
   createdAt!: Date;
   updatedAt!: Date;
@@ -48,6 +50,15 @@ export class ArtistPage extends BaseModel {
       join: {
         from: 'artistPages.apActorId',
         to: 'apActors.id',
+      },
+    },
+    links: {
+      relation: Model.HasManyRelation,
+      modelClass: Link,
+
+      join: {
+        from: 'artistPages.id',
+        to: 'links.artistPageId',
       },
     },
   });

@@ -6,6 +6,9 @@ interface ColumnTitleProps {
 }
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    marginBottom: theme.spacing(2),
+  },
   columnTitle: {
     marginTop: theme.spacing(2),
   },
@@ -21,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 export function ColumnTitle({ title, subtitle }: ColumnTitleProps) {
   const classes = useStyles();
   return (
-    <>
+    <div className={classes.root}>
       <Typography
         component="h3"
         variant="h4"
@@ -36,6 +39,6 @@ export function ColumnTitle({ title, subtitle }: ColumnTitleProps) {
         </Typography>
       </div>
       <Divider />
-    </>
+    </div>
   );
 }

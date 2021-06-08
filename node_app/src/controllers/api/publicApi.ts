@@ -42,9 +42,13 @@ const getArtistPage = asyncWrapper(async (req, res) => {
           attachments: true,
         },
       },
+      links: true,
     })
     .modifyGraph('apActor', (builder) => {
       builder.select(['id', 'uri', 'url']);
+    })
+    .modifyGraph('links', (builder) => {
+      builder.select(['id', 'sort', 'url']).orderBy('sort');
     })
     .modifyGraph('apActor.deliveredObjects', (builder) => {
       builder.orderBy('id', 'desc').limit(20);
@@ -80,6 +84,11 @@ const getArtistPage = asyncWrapper(async (req, res) => {
           content: o.content && sanitize(o.content),
           attachments: o.attachments,
         })) || [],
+      links: artistPage.links?.map((l) => ({
+        id: l.id,
+        sort: l.sort,
+        url: l.url,
+      })),
     });
   } else {
     res.sendStatus(404);

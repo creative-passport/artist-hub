@@ -16,6 +16,7 @@ import EditArtistPageDialog from './EditArtistPageDialog';
 import { UpdateArtistPage } from 'types/api-types';
 import { EditTextField } from 'components/EditTextField';
 import BackIcon from '@material-ui/icons/ArrowBackIos';
+import { Links } from './Links';
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -172,14 +173,7 @@ export function ArtistPageShow() {
             )}
           </>
         }
-        rightColumn={
-          <>
-            <ColumnTitle
-              title="Links"
-              subtitle="Add personal links that you want to share"
-            />
-          </>
-        }
+        rightColumn={<Links artistPageId={data.id} links={data.links} />}
       />
       <EditArtistPageDialog
         onSuccess={handleEditPage}

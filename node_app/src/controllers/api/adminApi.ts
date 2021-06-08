@@ -18,6 +18,7 @@ import path from 'path';
 import { promises as fs } from 'fs';
 import { ModelObject, PartialModelObject } from 'objection';
 import { ArtistPage } from '../../models/ArtistPage';
+import { Link } from '../../models/Link';
 const debug = Debug('artisthub:adminapi');
 
 const generateKeyPair = promisify(crypto.generateKeyPair);
@@ -42,6 +43,9 @@ export function getAdminApiRoutes(): Router {
   router.get('/ping', ping);
   router.get('/artistpages', getArtistPages);
   router.get('/artistpages/:artistPageId', getArtistPage);
+  router.post('/artistpages/:artistPageId/links', createLink);
+  router.put('/artistpages/:artistPageId/links/:linkId', updateLink);
+  router.delete('/artistpages/:artistPageId/links/:linkId', deleteLink);
   router.post('/artistpages', createArtistPage);
   router.put(
     '/artistpages/:artistPageId',
@@ -75,9 +79,20 @@ const getArtistPages = asyncWrapper(async (req, res) => {
   const artistPages = await user
     .$relatedQuery('artistPages')
     .orderBy('title')
-    .withGraphFetched('apActor');
+    .withGraphFetched('[apActor, links]')
+    .modifyGraph('links', (builder) => {
+      builder.orderBy('sort');
+    });
   res.send(artistPages.map((p) => artistPageJsonFromModel(p)));
 });
+
+function linkJson(link: Link) {
+  return {
+    id: link.id,
+    url: link.url,
+    sort: link.sort,
+  };
+}
 
 function artistPageJsonFromModel(artistPage?: ArtistPage) {
   if (!artistPage) {
@@ -101,6 +116,7 @@ function artistPageJsonFromModel(artistPage?: ArtistPage) {
       domain: a.domain,
       name: a.username, // To-do store the AP name field
     })),
+    links: artistPage.links?.map((link) => linkJson(link)),
   };
 }
 
@@ -108,7 +124,7 @@ async function artistPageJsonFromId(user: User, id: string) {
   const artistPage = await user
     .$relatedQuery('artistPages')
     .findById(id)
-    .withGraphFetched('apActor.followingActors');
+    .withGraphFetched('[apActor.followingActors, links]');
   return artistPageJsonFromModel(artistPage);
 }
 
@@ -160,6 +176,48 @@ const createArtistPage = asyncWrapper(async (req, res) => {
     .first();
   const artistPageJson = await artistPageJsonFromId(user, artistPage.id);
   res.send(artistPageJson);
+});
+
+const createLink = asyncWrapper(async (req, res) => {
+  const user = req.user as User;
+  const artistPage = await user
+    .$relatedQuery('artistPages')
+    .findById(req.params.artistPageId)
+    .withGraphFetched('links')
+    .modifyGraph('links', (builder) => {
+      builder.orderBy('sort');
+    });
+  let sort = 1;
+  if (artistPage.links && artistPage.links.length > 0) {
+    sort = artistPage.links[artistPage.links.length - 1].sort + 1;
+  }
+  const newLink = await artistPage
+    .$relatedQuery('links')
+    .insert({ url: req.body.url, sort })
+    .returning('*');
+  res.send(linkJson(newLink));
+});
+
+const updateLink = asyncWrapper(async (req, res) => {
+  const user = req.user as User;
+  const artistPage = await user
+    .$relatedQuery('artistPages')
+    .findById(req.params.artistPageId);
+  const link = await artistPage
+    .$relatedQuery('links')
+    .patch({ url: req.body.url })
+    .findById(req.params.linkId)
+    .returning('*');
+  res.send(linkJson(link));
+});
+
+const deleteLink = asyncWrapper(async (req, res) => {
+  const user = req.user as User;
+  const artistPage = await user
+    .$relatedQuery('artistPages')
+    .findById(req.params.artistPageId);
+  await artistPage.$relatedQuery('links').deleteById(req.params.linkId);
+  res.sendStatus(204);
 });
 
 const formats: { [format: string]: string } = {

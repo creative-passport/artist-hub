@@ -1,4 +1,4 @@
-import { makeStyles, Typography } from '@material-ui/core';
+import { Link, makeStyles, Typography } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
 import { useArtistPage } from 'hooks/useArtistPage';
 import { FeedItem } from './FeedItem';
@@ -19,6 +19,11 @@ const useStyles = makeStyles((theme) => ({
     color: '#444440',
     textTransform: 'uppercase',
   },
+  link: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    marginTop: theme.spacing(1),
+  },
   description: {},
 }));
 
@@ -29,7 +34,7 @@ export function ArtistPage() {
 
   if (isLoading || !data) return <div>Loading</div>;
 
-  const officialLinks = []; // Not yet implemented
+  const officialLinks = data.links;
 
   return (
     <ArtistPageLayout
@@ -66,6 +71,20 @@ export function ArtistPage() {
             >
               Official Links
             </Typography>
+            <div>
+              {officialLinks.map((link) => (
+                <div key={link.id} className={classes.link}>
+                  <Link
+                    color="inherit"
+                    href={link.url}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    {link.url}
+                  </Link>
+                </div>
+              ))}
+            </div>
           </>
         )
       }

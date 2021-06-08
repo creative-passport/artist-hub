@@ -1,5 +1,10 @@
 import { useQueryClient } from 'react-query';
-import { ArtistPage, UpdateArtistPage } from 'types/api-types';
+import {
+  ArtistPage,
+  Link,
+  UpdateLink,
+  UpdateArtistPage,
+} from 'types/api-types';
 import { useApiQuery, useApiPost, useApiPut, useApiDelete } from './useApi';
 
 // Admin Artist Pages
@@ -42,6 +47,33 @@ export function useAdminDeleteArtistPage() {
   return useApiDelete('/admin/artistpages', {
     onSuccess: () => {
       queryClient.invalidateQueries('adminArtistPages');
+    },
+  });
+}
+
+export function useAdminCreateLink(artistPageId: string) {
+  const queryClient = useQueryClient();
+  return useApiPost<Partial<Link>>(`/admin/artistpages/${artistPageId}/links`, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['adminArtistPage', artistPageId]);
+    },
+  });
+}
+
+export function useAdminUpdateLink(artistPageId: string) {
+  const queryClient = useQueryClient();
+  return useApiPut<UpdateLink>(`/admin/artistpages/${artistPageId}/links`, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['adminArtistPage', artistPageId]);
+    },
+  });
+}
+
+export function useAdminDeleteLink(artistPageId: string) {
+  const queryClient = useQueryClient();
+  return useApiDelete<Link>(`/admin/artistpages/${artistPageId}/links`, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['adminArtistPage', artistPageId]);
     },
   });
 }
