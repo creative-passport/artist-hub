@@ -25,6 +25,7 @@ const allowedFields: Array<keyof ArtistPage> = [
 export function getPublicApiRoutes(): Router {
   const router = express.Router();
   router.get('/:username', getArtistPage);
+  router.get('/:username/feed', getArtistFeed);
   return router;
 }
 
@@ -36,12 +37,7 @@ const getArtistPage = asyncWrapper(async (req, res) => {
     })
     .select(allowedFields)
     .withGraphFetched({
-      apActor: {
-        deliveredObjects: {
-          actor: true,
-          attachments: true,
-        },
-      },
+      apActor: true,
       links: true,
     })
     .modifyGraph('apActor', (builder) => {
@@ -49,9 +45,53 @@ const getArtistPage = asyncWrapper(async (req, res) => {
     })
     .modifyGraph('links', (builder) => {
       builder.select(['id', 'sort', 'url']).orderBy('sort');
+    });
+  if (artistPage) {
+    debug(artistPage.apActor);
+    res.send({
+      title: artistPage.title,
+      username: artistPage.username,
+      headline: artistPage.headline,
+      description: artistPage.description,
+      profileImage: artistPage.profileImageUrl(),
+      coverImage: artistPage.coverImageUrl(),
+      url: artistPage.apActor.url || artistPage.apActor.uri,
+      links: artistPage.links?.map((l) => ({
+        id: l.id,
+        sort: l.sort,
+        url: l.url,
+      })),
+    });
+  } else {
+    res.sendStatus(404);
+  }
+});
+
+// Get artist page
+const getArtistFeed = asyncWrapper(async (req, res) => {
+  const pageSize = 20;
+  const cursor = req.query.cursor;
+  const artistPage = await ArtistPage.query()
+    .findOne({
+      username: req.params.username,
+    })
+    .select('id')
+    .withGraphFetched({
+      apActor: {
+        deliveredObjects: {
+          actor: true,
+          attachments: true,
+        },
+      },
+    })
+    .modifyGraph('apActor', (builder) => {
+      builder.select(['id']);
     })
     .modifyGraph('apActor.deliveredObjects', (builder) => {
-      builder.orderBy('id', 'desc').limit(20);
+      if (cursor) {
+        builder.where('id', '<=', cursor);
+      }
+      builder.orderBy('id', 'desc').limit(pageSize + 1);
     })
     .modifyGraph('apActor.deliveredObjects.attachments', (builder) => {
       builder.select([
@@ -64,17 +104,17 @@ const getArtistPage = asyncWrapper(async (req, res) => {
       ]);
     });
   if (artistPage) {
-    debug(artistPage.apActor);
+    debug(artistPage.apActor.deliveredObjects);
+    const hasNext =
+      artistPage.apActor.deliveredObjects != null &&
+      artistPage.apActor.deliveredObjects.length > pageSize;
+    const nextCursor = hasNext
+      ? artistPage.apActor.deliveredObjects?.[pageSize].id
+      : undefined;
     res.send({
-      title: artistPage.title,
-      username: artistPage.username,
-      headline: artistPage.headline,
-      description: artistPage.description,
-      profileImage: artistPage.profileImageUrl(),
-      coverImage: artistPage.coverImageUrl(),
-      url: artistPage.apActor.url || artistPage.apActor.uri,
-      feed:
-        artistPage.apActor.deliveredObjects?.map((o) => ({
+      nextCursor: nextCursor,
+      data:
+        artistPage.apActor.deliveredObjects?.slice(0, pageSize).map((o) => ({
           id: o.id,
           accountUrl: o.actor && (o.actor.url || o.actor.uri),
           username: o.actor?.username,
@@ -84,11 +124,6 @@ const getArtistPage = asyncWrapper(async (req, res) => {
           content: o.content && sanitize(o.content),
           attachments: o.attachments,
         })) || [],
-      links: artistPage.links?.map((l) => ({
-        id: l.id,
-        sort: l.sort,
-        url: l.url,
-      })),
     });
   } else {
     res.sendStatus(404);
