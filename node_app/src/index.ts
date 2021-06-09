@@ -20,6 +20,15 @@ Model.knex(knex);
   if (isDevelopment) {
     await import('mac-ca');
   }
+  const [, pending] = await knex.migrate.list({
+    directory: './src/migrations',
+  });
+  if (pending.length > 0) {
+    console.error(`Pending migrations`);
+    console.error(pending.join('\n'));
+    throw new Error('Migrations pending');
+  }
+
   const app = express();
   const port = 4000;
 

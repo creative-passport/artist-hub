@@ -35,4 +35,5 @@ module.exports = function (app) {
   app.use('/.well-known/webfinger', proxyMiddleware);
   app.use('/api', proxyMiddleware);
   app.use('/auth', proxyMiddleware);
+  app.use('/files', proxyMiddleware);
 };
