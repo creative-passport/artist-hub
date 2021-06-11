@@ -90,11 +90,9 @@ export function ArtistPageLayout({
     <div>
       <CoverImage className={classes.coverImage} src={coverImage}>
         {topLinks && (
-          <Container maxWidth="md" className={classes.topLinks}>
-            {topLinks}
-          </Container>
+          <Container className={classes.topLinks}>{topLinks}</Container>
         )}
-        <Container maxWidth="md" className={classes.coverImageContainer}>
+        <Container className={classes.coverImageContainer}>
           <Avatar className={classes.avatar} src={profileImage}>
             {title && title.length >= 1 ? title[0] : ''}
           </Avatar>
@@ -103,7 +101,7 @@ export function ArtistPageLayout({
           </Typography>
         </Container>
       </CoverImage>
-      <Container maxWidth="md">
+      <Container>
         {buttons && <div className={classes.buttons}>{buttons}</div>}
         <Typography className={classes.url}>{url}</Typography>
         <Grid container spacing={4}>

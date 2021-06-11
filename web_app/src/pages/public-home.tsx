@@ -30,7 +30,7 @@ export function PublicHome() {
 
   return (
     <div>
-      <Container maxWidth="lg">
+      <Container>
         <Center>
           <div className={classes.title}>
             <Typography variant="h1">ARTIST HUB</Typography>

@@ -53,7 +53,7 @@ export function Footer() {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <Container maxWidth="md">
+      <Container>
         <footer className={classes.footer}>
           <div className={classes.logoAbout}>
             <LogoWhite className={classes.logo} />
