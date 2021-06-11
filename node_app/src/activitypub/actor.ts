@@ -2,6 +2,7 @@ import axios from 'axios';
 import config from '../config';
 import { URL } from 'url';
 import { APActor } from '../models/APActor';
+import { isActor } from './validate';
 
 const contentType =
   'application/ld+json; profile="https://www.w3.org/ns/activitystreams"';
@@ -43,6 +44,9 @@ export async function getRemoteActor(uri: string): Promise<APActor> {
   });
 
   const url = new URL(uri);
+  if (!isActor(data)) {
+    throw new Error('Invalid actor');
+  }
 
   return await APActor.query()
     .insert({
@@ -51,7 +55,13 @@ export async function getRemoteActor(uri: string): Promise<APActor> {
       domain: url.hostname,
       username: data.preferredUsername,
       name: data.name,
-      iconUrl: data.icon?.type === 'Image' ? data.icon.url : undefined,
+      iconUrl: data.icon
+        ? typeof data.icon === 'string'
+          ? data.icon
+          : data.icon.type === 'Image'
+          ? data.icon.url
+          : undefined
+        : undefined,
       actorType: data.type,
       publicKey: data.publicKey.publicKeyPem,
       inboxUrl: data.inbox,
