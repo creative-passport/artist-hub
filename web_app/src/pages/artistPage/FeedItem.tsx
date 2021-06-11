@@ -43,7 +43,9 @@ export function FeedItem({ className, feedItem }: FeedItemProps) {
   const classes = useStyles();
   return (
     <div className={clsx(classes.root, className)}>
-      <Avatar>{feedItem.username[0]?.toUpperCase()}</Avatar>
+      <Avatar src={feedItem.iconUrl}>
+        {feedItem.username[0]?.toUpperCase()}
+      </Avatar>
       <div className={classes.container}>
         <div className={classes.account}>
           <a

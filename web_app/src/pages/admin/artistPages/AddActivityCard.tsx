@@ -78,6 +78,7 @@ interface Profile {
   name?: string;
   preferredUsername?: string;
   url?: string;
+  iconUrl?: string;
 }
 
 export default function AddActivityCard({

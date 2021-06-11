@@ -114,7 +114,8 @@ function artistPageJsonFromModel(artistPage?: ArtistPage) {
       url: a.url || a.uri,
       username: a.username,
       domain: a.domain,
-      name: a.username, // To-do store the AP name field
+      name: a.name || a.username,
+      iconUrl: a.iconUrl,
     })),
     links: artistPage.links?.map((link) => linkJson(link)),
   };
@@ -417,12 +418,17 @@ const lookupActivityPub = asyncWrapper(async (req, res) => {
       }
     }
   }
-  const result = await axios.get(url, {
-    headers: {
-      Accept: contentType,
-    },
+  const actor = await getActor(url, true);
+  if (!actor) {
+    throw new Error('Page not found');
+  }
+  res.send({
+    id: actor.uri,
+    name: actor.name,
+    preferredUsername: actor.username,
+    url: actor.url,
+    iconUrl: actor.iconUrl,
   });
-  res.send(result.data);
 });
 
 const followActivityPub = asyncWrapper(async (req, res) => {
@@ -445,7 +451,7 @@ const followActivityPub = asyncWrapper(async (req, res) => {
     },
   });
 
-  const target = await getActor(id);
+  const target = await getActor(id, true);
   if (!target) {
     return;
   }

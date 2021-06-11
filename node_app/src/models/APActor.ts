@@ -12,6 +12,8 @@ export class APActor extends BaseModel {
   uri!: string;
   url?: string;
   username!: string;
+  name?: string;
+  iconUrl?: string;
   domain?: string;
   actorType!: string;
   publicKey!: string;

@@ -60,7 +60,7 @@ export function FollowItem({ artistPageId, follow }: FollowItemProps) {
 
   return (
     <div key={follow.id} className={classes.root}>
-      <Avatar className={classes.avatar} />
+      <Avatar className={classes.avatar} src={follow.iconUrl} />
       <Box flexGrow={1}>
         <Typography className={classes.name}>{follow.name}</Typography>
         <Link
