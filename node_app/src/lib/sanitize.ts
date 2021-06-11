@@ -5,12 +5,17 @@ const config = {
   ALLOWED_TAGS: ['p', 'span', 'br', 'a'],
 };
 
+interface MyElement extends Element {
+  target: unknown;
+}
+
 const { window } = new JSDOM('');
 const { document } = window;
+// @ts-expect-error Known bug https://github.com/cure53/DOMPurify/issues/437
 const DOMPurify = createDOMPurify(window);
 DOMPurify.addHook('afterSanitizeAttributes', function (node) {
   // set all elements owning target to target=_blank
-  if ('target' in node) {
+  if ('target' in (node as MyElement)) {
     node.setAttribute('target', '_blank');
     node.setAttribute('rel', 'noopener noreferrer');
   }
@@ -36,21 +41,21 @@ DOMPurify.addHook('afterSanitizeAttributes', function (node) {
 
   // check all href attributes for validity
   if (node.hasAttribute('href')) {
-    anchor.href = node.getAttribute('href');
+    anchor.href = node.getAttribute('href') || '';
     if (anchor.protocol && !anchor.protocol.match(regex)) {
       node.removeAttribute('href');
     }
   }
   // check all action attributes for validity
   if (node.hasAttribute('action')) {
-    anchor.href = node.getAttribute('action');
+    anchor.href = node.getAttribute('action') || '';
     if (anchor.protocol && !anchor.protocol.match(regex)) {
       node.removeAttribute('action');
     }
   }
   // check all xlink:href attributes for validity
   if (node.hasAttribute('xlink:href')) {
-    anchor.href = node.getAttribute('xlink:href');
+    anchor.href = node.getAttribute('xlink:href') || '';
     if (anchor.protocol && !anchor.protocol.match(regex)) {
       node.removeAttribute('xlink:href');
     }
