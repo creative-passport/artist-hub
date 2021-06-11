@@ -42,6 +42,8 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 20,
     paddingTop: theme.spacing(3),
     marginBottom: theme.spacing(4),
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
   buttons: {
     float: 'right',

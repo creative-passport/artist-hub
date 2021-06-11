@@ -17,11 +17,19 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     marginLeft: theme.spacing(2),
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
+  account: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
   content: {
     '& p': {
       margin: 0,
     },
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
   },
   attachments: {
     display: 'flex',
@@ -37,7 +45,7 @@ export function FeedItem({ className, feedItem }: FeedItemProps) {
     <div className={clsx(classes.root, className)}>
       <Avatar>{feedItem.username[0]?.toUpperCase()}</Avatar>
       <div className={classes.container}>
-        <div>
+        <div className={classes.account}>
           <a
             href={feedItem.accountUrl}
             target="_blank"
