@@ -1,4 +1,4 @@
-import { Model, RelationMappings } from 'objection';
+import { JSONSchema, Model, RelationMappings } from 'objection';
 import { ArtistPage } from './ArtistPage';
 import { BaseModel } from './BaseModel';
 
@@ -12,15 +12,15 @@ export class Link extends BaseModel {
 
   artistPage?: ArtistPage;
 
-  createdAt!: Date;
-  updatedAt!: Date;
+  createdAt!: string;
+  updatedAt!: string;
 
   static get tableName(): string {
     return 'links';
   }
 
   $beforeUpdate(): void {
-    this.updatedAt = new Date();
+    this.updatedAt = new Date().toISOString();
   }
 
   static relationMappings = (): RelationMappings => ({
@@ -34,4 +34,23 @@ export class Link extends BaseModel {
       },
     },
   });
+
+  static get jsonSchema(): JSONSchema {
+    return {
+      type: 'object',
+      required: ['sort', 'url'],
+      properties: {
+        id: { type: 'string' },
+        sort: { type: 'integer' },
+        url: {
+          type: 'string',
+          minLength: 1,
+          maxLength: 255,
+          format: 'url',
+        },
+        createdAt: { type: 'string', format: 'date-time' },
+        updatedAt: { type: 'string', format: 'date-time' },
+      },
+    };
+  }
 }

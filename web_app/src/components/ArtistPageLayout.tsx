@@ -95,9 +95,7 @@ export function ArtistPageLayout({
           <Container className={classes.topLinks}>{topLinks}</Container>
         )}
         <Container className={classes.coverImageContainer}>
-          <Avatar className={classes.avatar} src={profileImage}>
-            {title && title.length >= 1 ? title[0] : ''}
-          </Avatar>
+          <Avatar className={classes.avatar} src={profileImage} />
           <Typography component="h2" className={classes.title}>
             {title}
           </Typography>
