@@ -47,7 +47,84 @@
       ]
     },
     "Actor": {
-      "$ref": "#/definitions/ObjectWithId"
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        },
+        "preferredUsername": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "icon": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "type",
+                "url"
+              ]
+            }
+          ]
+        },
+        "publicKey": {
+          "type": "object",
+          "properties": {
+            "publicKeyPem": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "publicKeyPem"
+          ]
+        },
+        "inbox": {
+          "type": "string"
+        },
+        "outbox": {
+          "type": "string"
+        },
+        "endpoints": {
+          "type": "object",
+          "properties": {
+            "sharedInbox": {
+              "type": "string"
+            }
+          }
+        },
+        "followers": {
+          "type": "string"
+        },
+        "following": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "inbox",
+        "outbox",
+        "publicKey",
+        "type"
+      ]
     },
     "Attachment": {
       "type": "object",

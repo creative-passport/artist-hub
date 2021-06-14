@@ -12,7 +12,23 @@ export interface Link {
   href: string;
 }
 
-export type Actor = ObjectWithId;
+export interface Actor extends ObjectWithId {
+  url?: string;
+  type: string;
+  preferredUsername?: string;
+  name?: string;
+  icon?: string | { type: string; url: string };
+  publicKey: {
+    publicKeyPem: string;
+  };
+  inbox: string;
+  outbox: string;
+  endpoints?: {
+    sharedInbox?: string;
+  };
+  followers?: string;
+  following?: string;
+}
 
 export interface Attachment extends Object {
   url: string;

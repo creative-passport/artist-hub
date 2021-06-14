@@ -4,7 +4,7 @@ import * as APTypes from './aptypes';
 
 export const ajv = new Ajv({ schemas: [jsonSchema] });
 
-const schemaDefs = ['Activity', 'Note'];
+const schemaDefs = ['Activity', 'Note', 'Actor'];
 
 for (const s of schemaDefs) {
   ajv.addSchema({
@@ -47,4 +47,16 @@ export function isActivity(json: unknown): json is APTypes.Activity {
 const validateNote = getSchema('Note');
 export function isNote(json: unknown): json is APTypes.Note {
   return validateNote(json);
+}
+
+/**
+ * A type guard for an ActivityPub Actor
+ *
+ * @param json - Object to be validated
+ * @returns If the object validates as a Actor
+ */
+
+const validateActor = getSchema('Actor');
+export function isActor(json: unknown): json is APTypes.Actor {
+  return validateActor(json);
 }

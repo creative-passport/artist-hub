@@ -1,4 +1,4 @@
-import { Model, RelationMappings } from 'objection';
+import { Model, RelationMappings, JSONSchema } from 'objection';
 import { ArtistPage } from './ArtistPage';
 import { TokenSet } from 'openid-client';
 import { BaseModel } from './BaseModel';
@@ -17,8 +17,8 @@ export class User extends BaseModel {
 
   artistPages?: ArtistPage[];
 
-  createdAt!: Date;
-  updatedAt!: Date;
+  createdAt!: string;
+  updatedAt!: string;
 
   static tableName = 'users';
 
@@ -37,7 +37,7 @@ export class User extends BaseModel {
   }
 
   $beforeUpdate(): void {
-    this.updatedAt = new Date();
+    this.updatedAt = new Date().toISOString();
   }
 
   static relationMappings = (): RelationMappings => ({
@@ -50,4 +50,22 @@ export class User extends BaseModel {
       },
     },
   });
+
+  static get jsonSchema(): JSONSchema {
+    return {
+      type: 'object',
+      required: ['sub', 'idToken'],
+      properties: {
+        id: { type: 'string' },
+        sub: { type: 'string', minLength: 1, maxLength: 255 },
+        idToken: { type: 'string', minLength: 1, maxLength: 8192 },
+        accessToken: { type: 'string', minLength: 1, maxLength: 255 },
+        refreshToken: { type: 'string', minLength: 1, maxLength: 255 },
+        tokenType: { type: 'string', minLength: 1, maxLength: 255 },
+        expiresAt: { type: 'integer' },
+        createdAt: { type: 'string', format: 'date-time' },
+        updatedAt: { type: 'string', format: 'date-time' },
+      },
+    };
+  }
 }

@@ -1,4 +1,4 @@
-import { Model, RelationMappings } from 'objection';
+import { JSONSchema, Model, RelationMappings } from 'objection';
 import { APActor } from './APActor';
 import { BaseModel } from './BaseModel';
 import { User } from './User';
@@ -93,5 +93,23 @@ export class ArtistPage extends BaseModel {
     return this.coverImageFilename
       ? path.join('/', this.coverImageBasePath(), this.coverImageFilename)
       : undefined;
+  }
+
+  static get jsonSchema(): JSONSchema {
+    return {
+      type: 'object',
+      required: ['title', 'username'],
+      properties: {
+        id: { type: 'string' },
+        title: { type: 'string', minLength: 1, maxLength: 255 },
+        username: { type: 'string', minLength: 1, maxLength: 255 },
+        headline: { type: 'string', minLength: 1, maxLength: 255 },
+        description: { type: 'string', minLength: 1, maxLength: 8000 },
+        profileImageFilename: { type: 'string', minLength: 1, maxLength: 255 },
+        coverImageFilename: { type: 'string', minLength: 1, maxLength: 255 },
+        createdAt: { type: 'string', format: 'date-time' },
+        updatedAt: { type: 'string', format: 'date-time' },
+      },
+    };
   }
 }

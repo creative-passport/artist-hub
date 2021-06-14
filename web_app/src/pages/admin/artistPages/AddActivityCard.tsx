@@ -13,6 +13,7 @@ import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import AddIcon from '@material-ui/icons/Add';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
+import { useAdminFollow } from 'hooks/useFollow';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -78,6 +79,7 @@ interface Profile {
   name?: string;
   preferredUsername?: string;
   url?: string;
+  iconUrl?: string;
 }
 
 export default function AddActivityCard({
@@ -90,6 +92,7 @@ export default function AddActivityCard({
   const [error, setError] = useState<string | undefined>();
   const [profile, setProfile] = useState<Profile | undefined>();
   const rootEl = useRef<HTMLDivElement>(null);
+  const follow = useAdminFollow(artistId);
 
   // Scroll into view on initial display
   useEffect(() => {
@@ -138,8 +141,8 @@ export default function AddActivityCard({
     if (!profile) {
       return;
     }
-    axios
-      .post(`/api/admin/artistpages/${artistId}/activitypub/follow`, {
+    follow
+      .mutateAsync({
         id: profile.id,
       })
       .then(() => {

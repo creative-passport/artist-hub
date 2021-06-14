@@ -78,8 +78,9 @@ const getArtistPage = asyncWrapper(async (req, res) => {
           id: o.id,
           accountUrl: o.actor && (o.actor.url || o.actor.uri),
           username: o.actor?.username,
-          name: o.actor?.username, // To-do store the AP name field
+          name: o.actor?.name || o.actor?.username, // To-do store the AP name field
           domain: o.actor?.domain,
+          iconUrl: o.actor?.iconUrl,
           url: o.url || o.uri,
           content: o.content && sanitize(o.content),
           attachments: o.attachments,

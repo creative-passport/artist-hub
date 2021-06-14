@@ -35,6 +35,7 @@ export interface Follow {
   username: string;
   name: string;
   domain: string;
+  iconUrl?: string;
 }
 
 export interface FeedItem {
@@ -43,6 +44,7 @@ export interface FeedItem {
   name: string;
   username: string;
   domain: string;
+  iconUrl?: string;
   url: string;
   content: string;
   attachments: Attachment[];

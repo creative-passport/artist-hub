@@ -71,7 +71,7 @@ export function ArtistPageIndex() {
   };
 
   return (
-    <Container maxWidth="lg">
+    <Container>
       <NewArtistPageDialog
         open={newArtistOpen}
         onCancel={handleCancel}

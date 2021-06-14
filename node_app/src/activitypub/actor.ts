@@ -2,6 +2,7 @@ import axios from 'axios';
 import config from '../config';
 import { URL } from 'url';
 import { APActor } from '../models/APActor';
+import { isActor } from './validate';
 
 const contentType =
   'application/ld+json; profile="https://www.w3.org/ns/activitystreams"';
@@ -15,11 +16,15 @@ function isActorLocal(uri: string): boolean {
  * Finds an ActivityPub actor by URI
  *
  * @param uri - The actor URI
+ * @param refresh - Always refetch the actor from a remote URL
  * @returns An APActor model for the URI
  */
-export async function getActor(uri: string): Promise<APActor | undefined> {
+export async function getActor(
+  uri: string,
+  refresh = true
+): Promise<APActor | undefined> {
   let actor = await APActor.query().findOne({ uri: uri });
-  if (!actor && !isActorLocal(uri)) {
+  if ((refresh || !actor) && !isActorLocal(uri)) {
     actor = await getRemoteActor(uri);
   }
   return actor;
@@ -39,6 +44,9 @@ export async function getRemoteActor(uri: string): Promise<APActor> {
   });
 
   const url = new URL(uri);
+  if (!isActor(data)) {
+    throw new Error('Invalid actor');
+  }
 
   return await APActor.query()
     .insert({
@@ -46,6 +54,14 @@ export async function getRemoteActor(uri: string): Promise<APActor> {
       url: data.url,
       domain: url.hostname,
       username: data.preferredUsername,
+      name: data.name,
+      iconUrl: data.icon
+        ? typeof data.icon === 'string'
+          ? data.icon
+          : data.icon.type === 'Image'
+          ? data.icon.url
+          : undefined
+        : undefined,
       actorType: data.type,
       publicKey: data.publicKey.publicKeyPem,
       inboxUrl: data.inbox,
@@ -54,6 +70,8 @@ export async function getRemoteActor(uri: string): Promise<APActor> {
       followersUrl: data.followers,
       followingUrl: data.following,
     })
+    .onConflict('uri')
+    .merge()
     .returning('*')
     .first();
 }

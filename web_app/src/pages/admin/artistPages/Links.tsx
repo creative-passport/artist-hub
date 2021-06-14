@@ -59,10 +59,15 @@ export function Links({ artistPageId, links }: LinksProps) {
     if (createLink.isLoading) {
       return;
     }
-    createLink.mutateAsync({ url }).then(() => {
-      actions.setSubmitting(false);
-      setNewLink(undefined);
-    });
+    createLink
+      .mutateAsync({ url })
+      .then(() => {
+        actions.setSubmitting(false);
+        setNewLink(undefined);
+      })
+      .catch((e) => {
+        actions.setSubmitting(false);
+      });
   };
 
   const handleUpdate = (id: string, url: string, done: () => void) => {
