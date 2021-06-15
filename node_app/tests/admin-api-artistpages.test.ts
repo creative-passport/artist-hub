@@ -92,4 +92,58 @@ describe('Artist page admin', () => {
       await agent.get('/api/admin/artistpages/2').expect(404);
     });
   });
+
+  describe('POST /admin/api/artistpages/1/links', () => {
+    it('should create link', async () => {
+      let res = await agent
+        .post('/api/admin/artistpages/1/links')
+        .send({
+          url: 'https://creativepassport.net',
+        })
+        .expect(200);
+      expect(res.body).toMatchObject({
+        url: 'https://creativepassport.net',
+      });
+
+      res = await agent.get('/api/admin/artistpages/1').expect(200);
+      expect(res.body.links).toMatchObject([
+        {
+          url: 'https://creativepassport.net',
+        },
+      ]);
+    });
+  });
+
+  describe('POST /admin/api/artistpages/1/links', () => {
+    it('should fail to add invalid link', () => {
+      return agent
+        .post('/api/admin/artistpages/1/links')
+        .send({
+          url: 'not a link',
+        })
+        .expect(400);
+    });
+  });
+
+  describe('PUT /admin/api/artistpages/1/links/1', () => {
+    it('should update link', async () => {
+      const res = await agent
+        .put('/api/admin/artistpages/1/links/1')
+        .send({
+          url: 'https://example.com',
+        })
+        .expect(200);
+      expect(res.body).toMatchObject({
+        url: 'https://example.com',
+      });
+    });
+  });
+
+  describe('DELETE /admin/api/artistpages/1/links/1', () => {
+    it('should delete link', async () => {
+      await agent.delete('/api/admin/artistpages/1/links/1').expect(204);
+      const res = await agent.get('/api/admin/artistpages/1').expect(200);
+      expect(res.body.links).toEqual([]);
+    });
+  });
 });
