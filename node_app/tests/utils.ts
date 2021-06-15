@@ -72,35 +72,72 @@ export async function setupDb(): Promise<() => Promise<void>> {
   };
 }
 
-// Add seed data to the database
-export async function seedData(): Promise<void> {
-  const now = new Date().toISOString();
+export interface SeedData {
+  users: User[];
+}
 
-  await User.query().insertGraph([
+// Add seed data to the database
+export async function seedData(): Promise<SeedData> {
+  const users = await User.query().insertGraphAndFetch([
     {
       sub: 'admin',
-      createdAt: now,
-      updatedAt: now,
       artistPages: [
         {
           title: 'Test Page',
           username: 'test',
-          createdAt: now,
-          updatedAt: now,
           apActor: {
-            uri: '123556',
+            uri: 'http://0.0.0.0:4000/p/test',
             username: 'test',
-            actorType: 'test',
+            actorType: 'Person',
             publicKey: 'test',
             privateKey: 'test',
-            inboxUrl: 'test',
-            createdAt: now,
-            updatedAt: now,
+            inboxUrl: 'http://0.0.0.0:4000/p/test/inbox',
           },
+        },
+        {
+          title: 'Test Page 2',
+          username: 'test2',
+          headline: 'Page headline',
+          description: 'Page description',
+          apActor: {
+            uri: 'http://0.0.0.0:4000/p/test2',
+            username: 'test2',
+            actorType: 'Person',
+            publicKey: 'test',
+            privateKey: 'test',
+            inboxUrl: 'http://0.0.0.0:4000/p/test2/inbox',
+            followingActors: [
+              {
+                uri: 'https://example.com/user/jane',
+                domain: 'example.com',
+                name: 'Jane Bloggs',
+                username: 'jane',
+                actorType: 'Person',
+                publicKey: 'test',
+                privateKey: 'test',
+                inboxUrl: 'https://example.com/user/jane/inbox',
+                followState: 'accepted',
+                followUri: 'http://0.0.0.0:4000/activity/123456',
+              },
+            ],
+          },
+          links: [
+            {
+              sort: 1,
+              url: 'https://example.com/1',
+            },
+            {
+              sort: 2,
+              url: 'https://example.com/2',
+            },
+          ],
         },
       ],
     },
   ]);
+  return {
+    users,
+  };
 }
 
 // Login a user
