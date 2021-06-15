@@ -1,8 +1,11 @@
-import { Link, makeStyles, Typography } from '@material-ui/core';
+import { Button, Link, makeStyles, Typography } from '@material-ui/core';
 import { useParams } from 'react-router-dom';
-import { useArtistPage } from 'hooks/useArtistPage';
+import { useArtistPage, useArtistPageFeed } from 'hooks/useArtistPage';
 import { FeedItem } from './FeedItem';
 import { ArtistPageLayout } from 'components/ArtistPageLayout';
+import { NoMoreContent } from './NoMoreContent';
+import React from 'react';
+import useIntersectionObserver from 'hooks/useIntersectionObserver';
 
 const useStyles = makeStyles((theme) => ({
   feedItem: {
@@ -30,9 +33,15 @@ const useStyles = makeStyles((theme) => ({
 export function ArtistPage() {
   const { username } = useParams<{ username: string }>();
   const { isLoading, data } = useArtistPage(username);
+  const {
+    data: feedData,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useArtistPageFeed(username);
   const classes = useStyles();
 
-  if (isLoading || !data) return <div>Loading</div>;
+  if (isLoading || !data || !feedData) return <div>Loading</div>;
 
   const officialLinks = data.links;
 
@@ -57,9 +66,34 @@ export function ArtistPage() {
           </Typography>
         </>
       }
-      middleColumn={data.feed.map((f) => (
-        <FeedItem key={f.id} feedItem={f} className={classes.feedItem} />
-      ))}
+      middleColumn={
+        <>
+          {feedData.pages.map((feedResult, i) => (
+            <React.Fragment key={i}>
+              {feedResult.data.map((f) => (
+                <FeedItem
+                  key={f.id}
+                  feedItem={f}
+                  className={classes.feedItem}
+                />
+              ))}
+            </React.Fragment>
+          ))}
+          {hasNextPage ? (
+            <div>
+              <LoadMoreButton
+                fetchNextPage={fetchNextPage}
+                isFetchingNextPage={isFetchingNextPage}
+                hasNextPage={hasNextPage}
+              />
+            </div>
+          ) : (
+            <div>
+              <NoMoreContent />
+            </div>
+          )}
+        </>
+      }
       rightColumn={
         officialLinks.length > 0 && (
           <>
@@ -89,5 +123,35 @@ export function ArtistPage() {
         )
       }
     />
+  );
+}
+
+interface LoadMoreButtonProps {
+  fetchNextPage: () => void;
+  hasNextPage: boolean;
+  isFetchingNextPage: boolean;
+}
+
+function LoadMoreButton({
+  fetchNextPage,
+  hasNextPage,
+  isFetchingNextPage,
+}: LoadMoreButtonProps) {
+  const loadMoreButtonRef = React.useRef<HTMLButtonElement>(null);
+  useIntersectionObserver({
+    target: loadMoreButtonRef,
+    onIntersect: fetchNextPage,
+    enabled: hasNextPage,
+  });
+
+  return (
+    <Button
+      onClick={() => fetchNextPage()}
+      disabled={isFetchingNextPage}
+      ref={loadMoreButtonRef}
+      fullWidth
+    >
+      Load more
+    </Button>
   );
 }

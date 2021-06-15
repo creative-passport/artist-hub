@@ -10,8 +10,6 @@ export interface ArtistPage {
   username: string;
 
   following: Follow[];
-
-  feed: FeedItem[];
   links: Link[];
 
   createdAt: Date;

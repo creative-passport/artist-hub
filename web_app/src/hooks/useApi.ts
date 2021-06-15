@@ -7,7 +7,7 @@ import {
 } from 'react-query';
 import axios, { AxiosError } from 'axios';
 
-const apiBase = '/api';
+export const apiBase = '/api';
 
 export function useApiQuery<T = unknown>(
   queryKey: QueryKey,
