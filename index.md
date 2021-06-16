@@ -127,7 +127,6 @@ We will use ActivityPub to showcase updates and subscriptions from the above pla
 |             |                        | artistPage → ArtistPage     |
 |             |                        | createdAt → Date            |
 |             |                        | updatedAt → Date            |
-| ----------- | ---------------------- | --------------------------- |
 
 
 ## API
@@ -136,7 +135,6 @@ We will use ActivityPub to showcase updates and subscriptions from the above pla
 
 ### API Endpoints
 
-| ---------------------------------------------------- | -------------------------------------------------------------- |
 | Endpoint                                             | Description                                                    |
 | ---------------------------------------------------- | -------------------------------------------------------------- |
 | '/admin/artistpages'                                 | GET → See a list of artist pages for an (authenticated) artist |
