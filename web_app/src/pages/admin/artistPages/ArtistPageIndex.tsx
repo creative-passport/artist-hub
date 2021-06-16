@@ -80,7 +80,7 @@ export function ArtistPageIndex() {
       <Typography component="h1" className={classes.welcome}>
         Welcome Music Maker
       </Typography>
-      <Typography className={classes.email}>name.surname@email.com</Typography>
+      {/* <Typography className={classes.email}>name.surname@email.com</Typography> */}
       <Divider className={classes.divider} />
       <Typography component="h2" className={classes.yourPages}>
         Your pages
