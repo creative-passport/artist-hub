@@ -2,7 +2,7 @@
 
 ## Important notice
 
-Artist Hub is a brand new project which is very early in development and **at the current stage is not ready to be used**. You can watch this repository to see the development process but if you try to use it now you will find most of the functionality is not available.
+Artist Hub is a brand new project which is very early in development and is ready for basic testing. You can watch this repository to see the development process and you can try to use it but their are likely to be bugs and missing functionality.
 
 ## Current Progress
 
@@ -18,7 +18,7 @@ Artist Hub is a brand new project which is very early in development and **at th
   - [x] Generate public/private keys
   - [x] Webfinger
   - [x] Actor JSON-LD
-    - [ ] Avatars
+    - [x] Avatars
     - [x] URL
     - [ ] Refresh actor data
   - [x] Send Follow request
@@ -34,10 +34,10 @@ Artist Hub is a brand new project which is very early in development and **at th
 - [x] Public Artist Page
   - [x] Initial Placeholder
   - [x] Show ActivityPub data
-- [ ] Improve UI/UX
-  - [ ] Admin
-  - [ ] Homepage
-  - [ ] Artist Public page
+- [x] Improve UI/UX
+  - [x] Admin
+  - [x] Homepage
+  - [x] Artist Public page
 
 ## Configuration
 
