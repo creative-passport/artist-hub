@@ -22,15 +22,15 @@ export class ArtistPage extends BaseModel {
   apActor!: APActor;
   links?: Link[];
 
-  createdAt!: Date;
-  updatedAt!: Date;
+  createdAt!: string;
+  updatedAt!: string;
 
   static get tableName(): string {
     return 'artistPages';
   }
 
   $beforeUpdate(): void {
-    this.updatedAt = new Date();
+    this.updatedAt = new Date().toISOString();
   }
 
   static relationMappings = (): RelationMappings => ({

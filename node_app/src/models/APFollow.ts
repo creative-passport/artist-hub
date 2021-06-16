@@ -17,15 +17,15 @@ export class APFollow extends BaseModel {
   actorFollower!: APActor;
   actorFollowing!: APActor;
 
-  createdAt!: Date;
-  updatedAt!: Date;
+  createdAt!: string;
+  updatedAt!: string;
 
   static get tableName(): string {
     return 'apFollows';
   }
 
   $beforeUpdate(): void {
-    this.updatedAt = new Date();
+    this.updatedAt = new Date().toISOString();
   }
 
   static relationMappings = (): RelationMappings => ({
