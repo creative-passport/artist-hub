@@ -110,9 +110,16 @@ CREATE DATABASE artisthub WITH OWNER artisthub;
 
 To run the node app in development mode you should install the latest LTS version of [Node.js](https://nodejs.org/en/).
 
-You should then configure the `.env` file as described in the configuration section above. Make sure you configure the `PG_CONNECTION_STRING` with the database settings:
+You should then configure the `.env` file as described in the configuration section above. Make sure you configure the `PGDATABASE`, `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD` variables with the database settings:
 
-e.g. `PG_CONNECTION_STRING=postgresql://artisthub:password@localhost:5432/artisthub`
+e.g. 
+```
+PGDATABASE=artisthub
+PGHOST=localhost
+PGPORT=5432
+PGUSER=artisthub
+PGPASSWORD=password
+```
 
 Then run the following commands:
 
@@ -123,6 +130,8 @@ Then run the following commands:
 5. `npm start`
 
 The node app uses [debug](https://github.com/visionmedia/debug) for debug logging. To enable all debug logging start the node app with `DEBUG=artisthub:* npm start`.
+
+To run the tests for the node app run `npm test`.
 
 ### Web app
 
