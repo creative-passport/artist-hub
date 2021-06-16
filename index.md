@@ -89,7 +89,6 @@ We will use ActivityPub to showcase updates and subscriptions from the above pla
 |             |                        |  artistPages → ArtistPage[] |
 |             |                        |  createdAt →  Date          |
 |             |                        |  updatedAt →  Date          |
-| ----------- | ---------------------- | --------------------------- |
 | Page        | ArtistPage             | id →  string                |
 |             |                        | title →  string             |
 |             |                        | username → string           |
@@ -97,7 +96,6 @@ We will use ActivityPub to showcase updates and subscriptions from the above pla
 |             |                        | apActor → APActor           |
 |             |                        | createdAt →  Date           |
 |             |                        | updatedAt →  Date           |
-| ----------- | ---------------------- | --------------------------- |
 | APActor     |                        | id → string                 |
 |             |                        | uri → string                |
 |             |                        | username → string           |
@@ -113,14 +111,12 @@ We will use ActivityPub to showcase updates and subscriptions from the above pla
 |             |                        | artistPage → ArtistPage     |
 |             |                        | createdAt → Date            |
 |             |                        | updatedAt → Date            |
-| ----------- | ---------------------- | --------------------------- |
 | APFollow    | FollowState:pending,   | id → string                 |
-|             |  FollowState:accepted  | state → FollowState         |
+|             | FollowState:accepted   | state → FollowState         |
 |             |                        | actorFollower → APActor     |
 |             |                        | actorFollowing → APActor    |
 |             |                        | createdAt → Date            |
 |             |                        | updatedAt → Date            |
-| ----------- | ---------------------- | --------------------------- |
 | Link        |                        | id → string                 |
 |             |                        | sort → number               |
 |             |                        | url → string                |
@@ -139,15 +135,12 @@ We will use ActivityPub to showcase updates and subscriptions from the above pla
 | ---------------------------------------------------- | -------------------------------------------------------------- |
 | '/admin/artistpages'                                 | GET → See a list of artist pages for an (authenticated) artist |
 |                                                      | POST → Create a new artist page                                |
-| ---------------------------------------------------- | -------------------------------------------------------------- |
 | '/admin/artistpages/:artistPageId'                   | GET → Get an artist page by id                                 |
 |                                                      | PUT → Update an artist page                                    |
 |                                                      | DELETE → Delete an artist page                                 |
-| ---------------------------------------------------- | -------------------------------------------------------------- |
 | '/admin/activitypub/lookup'                          | POST → find an ActivityPub source                              |
 | '/admin/activitypub/follow'                          | POST → follow an ActivityPub source                            |
 | '/admin/artistpages/:artistPageId/activitypub/follow |                                                                |
-| ---------------------------------------------------- | -------------------------------------------------------------- |
 | '/artistpages/:username'                             | GET → See an artist's public profile (not authenticated)       |
 | '/artistpages/:username/feed'                        | GET → See an artist's latest activity (not authenticated)      |
 
