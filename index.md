@@ -87,15 +87,15 @@ We will use ActivityPub to showcase updates and subscriptions from the above pla
 |             |                        |  tokenType → string         |
 |             |                        |  expiresAt →  number        |
 |             |                        |  artistPages → ArtistPage[] |
-|             |                        |  createdAt →  Date          |
-|             |                        |  updatedAt →  Date          |
+|             |                        |  createdAt →  string        |
+|             |                        |  updatedAt →  string        |
 | Page        | ArtistPage             | id →  string                |
 |             |                        | title →  string             |
 |             |                        | username → string           |
 |             |                        | user → User                 |
 |             |                        | apActor → APActor           |
-|             |                        | createdAt →  Date           |
-|             |                        | updatedAt →  Date           |
+|             |                        | createdAt →  string         |
+|             |                        | updatedAt →  string         |
 | APActor     |                        | id → string                 |
 |             |                        | uri → string                |
 |             |                        | username → string           |
@@ -109,20 +109,20 @@ We will use ActivityPub to showcase updates and subscriptions from the above pla
 |             |                        | followersUrl → string       |
 |             |                        | followingUrl → string       |
 |             |                        | artistPage → ArtistPage     |
-|             |                        | createdAt → Date            |
-|             |                        | updatedAt → Date            |
+|             |                        | createdAt → string          |
+|             |                        | updatedAt → string          |
 | APFollow    | FollowState:pending,   | id → string                 |
 |             | FollowState:accepted   | state → FollowState         |
 |             |                        | actorFollower → APActor     |
 |             |                        | actorFollowing → APActor    |
-|             |                        | createdAt → Date            |
-|             |                        | updatedAt → Date            |
+|             |                        | createdAt → string          |
+|             |                        | updatedAt → string          |
 | Link        |                        | id → string                 |
 |             |                        | sort → number               |
 |             |                        | url → string                |
 |             |                        | artistPage → ArtistPage     |
-|             |                        | createdAt → Date            |
-|             |                        | updatedAt → Date            |
+|             |                        | createdAt → string          |
+|             |                        | updatedAt → string          |
 
 
 ## API
