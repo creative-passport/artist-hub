@@ -16,7 +16,11 @@ import sharp from 'sharp';
 import Debug from 'debug';
 import path from 'path';
 import { promises as fs } from 'fs';
-import { ModelObject, PartialModelObject } from 'objection';
+import {
+  ModelObject,
+  PartialModelObject,
+  UniqueViolationError,
+} from 'objection';
 import { ArtistPage } from '../../models/ArtistPage';
 import { Link } from '../../models/Link';
 const debug = Debug('artisthub:adminapi');
@@ -158,23 +162,38 @@ const createArtistPage = asyncWrapper(async (req, res) => {
     },
   });
   const uri = `${config.baseUrl}/p/${req.body.username}`;
-  const artistPage = await user
-    .$relatedQuery('artistPages')
-    .insertGraph({
-      title: req.body.title,
-      username: req.body.username,
-      apActor: {
-        uri,
+  let artistPage: ArtistPage | undefined = undefined;
+  const trx = await User.startTransaction();
+  try {
+    artistPage = await user
+      .$relatedQuery('artistPages', trx)
+      .insertGraph({
+        title: req.body.title,
         username: req.body.username,
-        actorType: 'Person',
-        publicKey,
-        privateKey,
-        inboxUrl: `${uri}/inbox`,
-        sharedInboxUrl: `${config.baseUrl}/sharedInbox`,
-      },
-    })
-    .returning('*')
-    .first();
+        apActor: {
+          uri,
+          username: req.body.username,
+          actorType: 'Person',
+          publicKey,
+          privateKey,
+          inboxUrl: `${uri}/inbox`,
+          sharedInboxUrl: `${config.baseUrl}/sharedInbox`,
+        },
+      })
+      .returning('*')
+      .first();
+    trx.commit();
+  } catch (err) {
+    trx.rollback();
+    if (err instanceof UniqueViolationError) {
+      res.status(400).send({
+        message: 'username already taken',
+      });
+    } else {
+      throw err;
+    }
+    throw err;
+  }
   const artistPageJson = await artistPageJsonFromId(user, artistPage.id);
   res.send(artistPageJson);
 });

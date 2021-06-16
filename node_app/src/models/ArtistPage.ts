@@ -1,9 +1,10 @@
-import { JSONSchema, Model, RelationMappings } from 'objection';
+import { Model, RelationMappings } from 'objection';
 import { APActor } from './APActor';
 import { BaseModel } from './BaseModel';
 import { User } from './User';
 import path from 'path';
 import { Link } from './Link';
+import { JSONSchema } from '../lib/jsonSchema';
 
 /**
  * A database model representing an Artist Page
@@ -102,13 +103,24 @@ export class ArtistPage extends BaseModel {
       properties: {
         id: { type: 'string' },
         title: { type: 'string', minLength: 1, maxLength: 255 },
-        username: { type: 'string', minLength: 1, maxLength: 255 },
+        username: {
+          type: 'string',
+          minLength: 1,
+          maxLength: 255,
+          pattern: '^[a-z0-9]+$',
+        },
         headline: { type: 'string', minLength: 1, maxLength: 255 },
         description: { type: 'string', minLength: 1, maxLength: 8000 },
         profileImageFilename: { type: 'string', minLength: 1, maxLength: 255 },
         coverImageFilename: { type: 'string', minLength: 1, maxLength: 255 },
         createdAt: { type: 'string', format: 'date-time' },
         updatedAt: { type: 'string', format: 'date-time' },
+      },
+      errorMessage: {
+        properties: {
+          username:
+            'should be lowercase (a-z) and numerals (0-9) only (no spaces)',
+        },
       },
     };
   }
