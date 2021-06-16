@@ -4,9 +4,9 @@
 
 ## Summary
 
-- Music Makers have a number of ways to interact with their fans digitally however these are mostly through different social media platforms where they have to compete with millions of others for attention. It also means those platforms decide what content will show in various feeds instead of the musicians themselves
-- The Creative Passport Artist Hub is an open space that allows music makers (or other creatives if they wish to self-host) to create a custom page for their fans highlighting their best work, giving them control of what their fans see with links to both open-source and conventional platforms.
-- Fans will be able to subscribe to music maker accounts via the open-source platforms and share their experience back with the music maker (Using ActivityPub’s federation functions). This reduces the amount of work music makers need to do every time they introduce new content, while creating an overview of who they are as professionals and giving their subscribers freedom to consume the content on their platform of choice.
+- Music Makers have a number of methods of interacting with their fans digitally. These methods exist mostly through different social media platforms and streaming services. With the abundance of content on such platforms, music makers have to compete with millions of others for the listeners' attention. The platforms are also designed in a way of maxmimsing engagement with themselves and as a result, they decide what content will be shown in various feeds and pages instead of the musicians who created the content.
+- The Creative Passport Artist Hub is an open source platform that allows music makers (or any creatives if they wish to self-host) to create a custom page for their fans highlighting their best work, giving them control of what their fans see with links to both open-source and conventional platforms.
+- Fans will be able to subscribe to the music maker's accounts via the open-source platforms and share their experience back with the artist (Using ActivityPub’s federation functions). This reduces the amount of work music makers need to do every time they introduce new content, while creating an overview of who they are as professionals and giving their subscribers freedom to consume the content on their platform of choice without needing to search various social media or streaming feeds.
 
 ## Terminology
 
@@ -39,7 +39,7 @@ This project was created from the need for musicians to have more direct tools a
 ## Assumptions
 
 - Music Makers want more control of their digital presence
-- Superfans would prefer to follow a musician directly instead of losing the latest updates amongst the noise on streaming and social media sites
+- Superfans would prefer to follow a musician directly instead of searching for the latest updates amongst the noise on streaming and social media sites
 
 # Solution Design
 
@@ -121,6 +121,14 @@ We will use ActivityPub to showcase updates and subscriptions from the above pla
 |             |                        | createdAt → Date            |
 |             |                        | updatedAt → Date            |
 | ----------- | ---------------------- | --------------------------- |
+| Link        |                        | id → string                 |
+|             |                        | sort → number               |
+|             |                        | url → string                |
+|             |                        | artistPage → ArtistPage     |
+|             |                        | createdAt → Date            |
+|             |                        | updatedAt → Date            |
+| ----------- | ---------------------- | --------------------------- |
+
 
 ## API
 
@@ -128,22 +136,22 @@ We will use ActivityPub to showcase updates and subscriptions from the above pla
 
 ### API Endpoints
 
-| ---------------------------------------------- | -------------------------------------------------------------- |
-| Endpoint                                       | Description                                                    |
-| ---------------------------------------------- | -------------------------------------------------------------- |
-| '/artistpages'                                 | GET → See a list of artist pages for an (authenticated) artist |
-|                                                | POST → Create a new artist page                                |
-| ---------------------------------------------- | -------------------------------------------------------------- |
-| '/artistpages/:artistPageId'                   | GET → Get an artist page by id                                 |
-|                                                | PUT → Update an artist page                                    |
-|                                                | DELETE → Delete an artist page                                 |
-| ---------------------------------------------- | -------------------------------------------------------------- |
-| '/activitypub/lookup'                          | POST → find an ActivityPub source                              |
-| '/activitypub/follow'                          | POST → follow an ActivityPub source                            |
-| '/artistpages/:artistPageId/activitypub/follow |                                                                |
-| ---------------------------------------------- | -------------------------------------------------------------- |
-| '/artistpages/:username'                       | GET → Get an artist page by its name                           |
-
+| ---------------------------------------------------- | -------------------------------------------------------------- |
+| Endpoint                                             | Description                                                    |
+| ---------------------------------------------------- | -------------------------------------------------------------- |
+| '/admin/artistpages'                                 | GET → See a list of artist pages for an (authenticated) artist |
+|                                                      | POST → Create a new artist page                                |
+| ---------------------------------------------------- | -------------------------------------------------------------- |
+| '/admin/artistpages/:artistPageId'                   | GET → Get an artist page by id                                 |
+|                                                      | PUT → Update an artist page                                    |
+|                                                      | DELETE → Delete an artist page                                 |
+| ---------------------------------------------------- | -------------------------------------------------------------- |
+| '/admin/activitypub/lookup'                          | POST → find an ActivityPub source                              |
+| '/admin/activitypub/follow'                          | POST → follow an ActivityPub source                            |
+| '/admin/artistpages/:artistPageId/activitypub/follow |                                                                |
+| ---------------------------------------------------- | -------------------------------------------------------------- |
+| '/artistpages/:username'                             | GET → See an artist's public profile (not authenticated)       |
+| '/artistpages/:username/feed'                        | GET → See an artist's latest activity (not authenticated)      |
 
 ## User Interface:
 
@@ -200,7 +208,7 @@ The services below will be available for integration as sources however Artist H
 
 Routing, and API errors are handled through ExpressJS, taking care of redirects and showing the appropriate error codes
 
-Database errors are handled by the Objection.js ORM (
+Database errors are handled by the Objection.js ORM
 
 FrontEnd user errors are handled within the React Framework
 
@@ -216,7 +224,7 @@ You should have received a copy of the GNU Affero General Public License along w
 
 ## Testing
 
-- Both the Frontend and the Backend will be covered via unit tests as well as Integrations tests,
+- Both the Frontend and the Backend will be covered via integrations tests, including database calls as well as the API
 
 ## Deployment
 
@@ -225,9 +233,8 @@ You should have received a copy of the GNU Affero General Public License along w
 
 # Alternate Solutions / Designs
 
-- Short summary
-- Pros and cons for each alternative
-- Reasons why each solution couldn’t work
+- There are existing direct artist-to-fan services that propose to increase an artist's fan-base and engagement. 
+- These services still act as middlemen and do not give control of data to the user and are less transparent about the methods they use to improve engagement. The open-source nature of artist-hub creates full transparency by allowing creatives to even set up their own server if they wish to do so. 
 
 # Success Evaluation
 
@@ -240,8 +247,8 @@ You should have received a copy of the GNU Affero General Public License along w
 
 ## Metrics
 
-- Total signups
-- Total standalone servers
+- Number of monthly signups
+- Number of standalone servers
 - Active monthly users (within Creative Passport Community)
 - Rate of usage of the open source platforms
 
