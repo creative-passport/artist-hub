@@ -80,7 +80,7 @@ const oidcSetupPassport = (
               refreshToken: tokenset.refresh_token,
               tokenType: tokenset.token_type,
               expiresAt: tokenset.expires_at,
-              updatedAt: new Date(),
+              updatedAt: new Date().toISOString(),
             })
             .onConflict('sub')
             .merge()

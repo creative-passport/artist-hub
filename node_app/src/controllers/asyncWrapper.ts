@@ -13,7 +13,6 @@ export const asyncWrapper = (
   try {
     await fn(req, res);
   } catch (err) {
-    console.error(err);
     return errorHandler(err, res);
   }
 };

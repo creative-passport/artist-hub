@@ -33,8 +33,8 @@ export class APActor extends BaseModel {
 
   followingActors?: APFollowActor[];
 
-  createdAt!: Date;
-  updatedAt!: Date;
+  createdAt!: string;
+  updatedAt!: string;
 
   static get tableName(): string {
     return 'apActors';
@@ -53,7 +53,7 @@ export class APActor extends BaseModel {
   };
 
   $beforeUpdate(): void {
-    this.updatedAt = new Date();
+    this.updatedAt = new Date().toISOString();
   }
 
   static relationMappings = (): RelationMappings => ({

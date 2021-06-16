@@ -6,7 +6,11 @@ services:
     restart: always
     env_file: ./node_app/.env
     environment:
-      PG_CONNECTION_STRING: postgresql://artisthub:password@db:5432/artisthub
+      PGDATABASE: artisthub
+      PGHOST: db
+      PGPORT: 5432
+      PGUSER: artisthub
+      PGPASSWORD: password
     ports:
       - "4000:4000"
     depends_on:

@@ -54,7 +54,7 @@ export class User extends BaseModel {
   static get jsonSchema(): JSONSchema {
     return {
       type: 'object',
-      required: ['sub', 'idToken'],
+      required: ['sub'],
       properties: {
         id: { type: 'string' },
         sub: { type: 'string', minLength: 1, maxLength: 255 },

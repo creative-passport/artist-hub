@@ -18,4 +18,4 @@ RUN npm run build
 
 EXPOSE 4000
 USER node
-CMD ["/tini", "node", "dist/index.js"]
+CMD ["/tini", "node", "dist/src/index.js"]

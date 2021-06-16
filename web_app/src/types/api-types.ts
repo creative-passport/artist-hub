@@ -12,8 +12,8 @@ export interface ArtistPage {
   following: Follow[];
   links: Link[];
 
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface UpdateArtistPage {

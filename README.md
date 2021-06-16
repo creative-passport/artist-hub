@@ -2,7 +2,7 @@
 
 ## Important notice
 
-Artist Hub is a brand new project which is very early in development and **at the current stage is not ready to be used**. You can watch this repository to see the development process but if you try to use it now you will find most of the functionality is not available.
+Artist Hub is a brand new project which is very early in development and is ready for basic testing. You can watch this repository to see the development process and you can try to use it but their are likely to be bugs and missing functionality.
 
 ## Current Progress
 
@@ -18,7 +18,7 @@ Artist Hub is a brand new project which is very early in development and **at th
   - [x] Generate public/private keys
   - [x] Webfinger
   - [x] Actor JSON-LD
-    - [ ] Avatars
+    - [x] Avatars
     - [x] URL
     - [ ] Refresh actor data
   - [x] Send Follow request
@@ -34,10 +34,10 @@ Artist Hub is a brand new project which is very early in development and **at th
 - [x] Public Artist Page
   - [x] Initial Placeholder
   - [x] Show ActivityPub data
-- [ ] Improve UI/UX
-  - [ ] Admin
-  - [ ] Homepage
-  - [ ] Artist Public page
+- [x] Improve UI/UX
+  - [x] Admin
+  - [x] Homepage
+  - [x] Artist Public page
 
 ## Configuration
 
@@ -110,9 +110,16 @@ CREATE DATABASE artisthub WITH OWNER artisthub;
 
 To run the node app in development mode you should install the latest LTS version of [Node.js](https://nodejs.org/en/).
 
-You should then configure the `.env` file as described in the configuration section above. Make sure you configure the `PG_CONNECTION_STRING` with the database settings:
+You should then configure the `.env` file as described in the configuration section above. Make sure you configure the `PGDATABASE`, `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD` variables with the database settings:
 
-e.g. `PG_CONNECTION_STRING=postgresql://artisthub:password@localhost:5432/artisthub`
+e.g. 
+```
+PGDATABASE=artisthub
+PGHOST=localhost
+PGPORT=5432
+PGUSER=artisthub
+PGPASSWORD=password
+```
 
 Then run the following commands:
 
@@ -123,6 +130,8 @@ Then run the following commands:
 5. `npm start`
 
 The node app uses [debug](https://github.com/visionmedia/debug) for debug logging. To enable all debug logging start the node app with `DEBUG=artisthub:* npm start`.
+
+To run the tests for the node app run `npm test`.
 
 ### Web app
 

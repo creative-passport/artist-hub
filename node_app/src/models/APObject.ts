@@ -17,15 +17,15 @@ export class APObject extends BaseModel {
   actor?: APActor;
   attachments?: APAttachment[];
 
-  createdAt!: Date;
-  updatedAt!: Date;
+  createdAt!: string;
+  updatedAt!: string;
 
   static get tableName(): string {
     return 'apObjects';
   }
 
   $beforeUpdate(): void {
-    this.updatedAt = new Date();
+    this.updatedAt = new Date().toISOString();
   }
 
   static relationMappings = (): RelationMappings => ({
