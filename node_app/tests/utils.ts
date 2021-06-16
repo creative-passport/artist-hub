@@ -78,63 +78,90 @@ export interface SeedData {
 
 // Add seed data to the database
 export async function seedData(): Promise<SeedData> {
-  const users = await User.query().insertGraphAndFetch([
-    {
-      sub: 'admin',
-      artistPages: [
-        {
-          title: 'Test Page',
-          username: 'test',
-          apActor: {
-            uri: 'http://0.0.0.0:4000/p/test',
+  const users = await User.query().insertGraphAndFetch(
+    [
+      {
+        sub: 'admin',
+        artistPages: [
+          {
+            title: 'Test Page',
             username: 'test',
-            actorType: 'Person',
-            publicKey: 'test',
-            privateKey: 'test',
-            inboxUrl: 'http://0.0.0.0:4000/p/test/inbox',
+            apActor: {
+              uri: 'http://0.0.0.0:4000/p/test',
+              username: 'test',
+              actorType: 'Person',
+              publicKey: 'test',
+              privateKey: 'test',
+              inboxUrl: 'http://0.0.0.0:4000/p/test/inbox',
+            },
           },
-        },
-        {
-          title: 'Test Page 2',
-          username: 'test2',
-          headline: 'Page headline',
-          description: 'Page description',
-          apActor: {
-            uri: 'http://0.0.0.0:4000/p/test2',
+          {
+            title: 'Test Page 2',
             username: 'test2',
-            actorType: 'Person',
-            publicKey: 'test',
-            privateKey: 'test',
-            inboxUrl: 'http://0.0.0.0:4000/p/test2/inbox',
-            followingActors: [
+            headline: 'Page headline',
+            description: 'Page description',
+            apActor: {
+              uri: 'http://0.0.0.0:4000/p/test2',
+              username: 'test2',
+              actorType: 'Person',
+              publicKey: 'test',
+              privateKey: 'test',
+              inboxUrl: 'http://0.0.0.0:4000/p/test2/inbox',
+              followingActors: [
+                {
+                  '#id': 'jane',
+                  uri: 'https://example.com/user/jane',
+                  domain: 'example.com',
+                  name: 'Jane Bloggs',
+                  username: 'jane',
+                  actorType: 'Person',
+                  publicKey: 'test',
+                  privateKey: 'test',
+                  inboxUrl: 'https://example.com/user/jane/inbox',
+                  followState: 'accepted',
+                  followUri: 'http://0.0.0.0:4000/activity/123456',
+                },
+              ],
+              deliveredObjects: [
+                {
+                  actor: { '#ref': 'jane' },
+                  uri: 'https://example.com/user/jane/1',
+                  objectType: 'Note',
+                  content: 'Test note',
+                },
+                {
+                  actor: { '#ref': 'jane' },
+                  uri: 'https://example.com/user/jane/2',
+                  objectType: 'Note 2',
+                  content: 'Another test note',
+                  attachments: [
+                    {
+                      url: 'https://example.com/assets/image.png',
+                      mediaType: 'image/png',
+                      type: 'Document',
+                      blurhash: 'LEHV6nWB2yk8pyo0adR*.7kCMdnj',
+                      description: 'Alt text',
+                    },
+                  ],
+                },
+              ],
+            },
+            links: [
               {
-                uri: 'https://example.com/user/jane',
-                domain: 'example.com',
-                name: 'Jane Bloggs',
-                username: 'jane',
-                actorType: 'Person',
-                publicKey: 'test',
-                privateKey: 'test',
-                inboxUrl: 'https://example.com/user/jane/inbox',
-                followState: 'accepted',
-                followUri: 'http://0.0.0.0:4000/activity/123456',
+                sort: 1,
+                url: 'https://example.com/1',
+              },
+              {
+                sort: 2,
+                url: 'https://example.com/2',
               },
             ],
           },
-          links: [
-            {
-              sort: 1,
-              url: 'https://example.com/1',
-            },
-            {
-              sort: 2,
-              url: 'https://example.com/2',
-            },
-          ],
-        },
-      ],
-    },
-  ]);
+        ],
+      },
+    ],
+    { allowRefs: true }
+  );
   return {
     users,
   };
