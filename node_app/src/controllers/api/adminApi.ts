@@ -182,9 +182,9 @@ const createArtistPage = asyncWrapper(async (req, res) => {
       })
       .returning('*')
       .first();
-    trx.commit();
+    await trx.commit();
   } catch (err) {
-    trx.rollback();
+    await trx.rollback();
     if (err instanceof UniqueViolationError) {
       res.status(400).send({
         message: 'username already taken',
