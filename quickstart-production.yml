@@ -1,0 +1,17 @@
+version: '3'
+services:
+  node:
+    build: ./node_app
+    environment:
+      BASE_URL: https://${DOMAIN:?Domain unset}
+  web:
+    build: ./web_app
+    image: creativepassport/artist-hub-web
+    restart: always
+    environment:
+      DOMAIN: ${DOMAIN?Domain unset}
+    ports:
+      - "127.0.0.1:80:80"
+      - "127.0.0.1:443:443"
+    depends_on:
+      - node

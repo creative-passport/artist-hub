@@ -1,35 +1,25 @@
 version: '3'
 services:
   node:
-    build: ./node_app
-    image: creativepassport/artist-hub-node
-    restart: always
-    env_file: ./node_app/.env
     environment:
       PGDATABASE: artisthub
       PGHOST: db
       PGPORT: 5432
       PGUSER: artisthub
       PGPASSWORD: password
-    ports:
-      - "4000:4000"
     depends_on:
-      - db
-  web:
-    build: ./web_app
-    image: creativepassport/artist-hub-web
-    restart: always
-    environment:
-      API_HOST: node:4000
-    ports:
-      - "127.0.0.1:3000:80"
-    depends_on:
-      - node
+      db:
+        condition: service_healthy
   db:
     image: postgres:12.6
     restart: always
     volumes:
       - artisthub-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U artisthub"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_USER: artisthub
