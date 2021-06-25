@@ -27,9 +27,7 @@ async function createTestDatabase(database: string) {
 
 // Migrate the database
 async function migrateTestDatabase() {
-  await Model.knex().migrate.latest({
-    directory: './src/migrations',
-  });
+  await Model.knex().migrate.latest();
 }
 
 // Drop the test database

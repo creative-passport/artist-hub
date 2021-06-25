@@ -7,7 +7,7 @@
     "start": "nodemon -e ts -x ts-node src/index.ts",
     "build": "tsc",
     "test": "jest",
-    "knex": "ts-node -r dotenv/config $(npm bin)/knex --knexfile src/knexfile.ts",
+    "knex": "node -r dotenv/config $(npm bin)/knex --cwd src",
     "generate": "node ./generateSchema.js",
     "typedoc": "typedoc"
   },
@@ -53,6 +53,7 @@
     "@types/dompurify": "^2.2.1",
     "@types/jest": "^26.0.23",
     "@types/jsdom": "^16.2.10",
+    "@types/lodash": "^4.14.170",
     "@types/luxon": "^1.26.5",
     "@types/morgan": "^1.9.2",
     "@types/multer": "^1.4.5",

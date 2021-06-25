@@ -1,4 +1,7 @@
 import { knexSnakeCaseMappers } from 'objection';
+import { Knex } from 'knex';
+import { CustomFsMigrations } from './knex/customFsMigrations';
+import path from 'path';
 
 /**
  * The Knex database configuration
@@ -9,6 +12,10 @@ const host = process.env.PGHOST || 'localhost';
 const port = process.env.PGPORT ? parseInt(process.env.PGPORT) : 5432;
 const user = process.env.PGUSER;
 const password = process.env.PGPASSWORD;
+
+const migratorConfig: Knex.MigratorConfig = {
+  migrationSource: new CustomFsMigrations(path.join(__dirname, 'migrations')),
+};
 
 const devProdConfig = {
   client: 'pg',
@@ -23,6 +30,7 @@ const devProdConfig = {
     min: 2,
     max: 10,
   },
+  migrations: migratorConfig,
   ...knexSnakeCaseMappers(),
 };
 
@@ -43,6 +51,7 @@ export default {
       min: 2,
       max: 10,
     },
+    migrations: migratorConfig,
     ...knexSnakeCaseMappers(),
   },
 };
