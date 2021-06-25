@@ -1,0 +1,30 @@
+version: '3'
+services:
+  node:
+    build: ./node_app
+    image: creativepassport/artist-hub-node
+    restart: always
+    volumes:
+      - artisthub-uploads:/home/node/app/files
+    env_file: ./node_app/.env
+    environment:
+      BASE_URL: http://${DOMAIN:-localhost}
+    ports:
+      - "4000:4000"
+  web:
+    build: ./web_app
+    image: creativepassport/artist-hub-web
+    restart: always
+    volumes:
+      - artisthub-caddy_data:/data
+    environment:
+      DOMAIN: http://${DOMAIN:-localhost}
+      API_HOST: node:4000
+    ports:
+      - "127.0.0.1:80:80"
+    depends_on:
+      - node
+
+volumes:
+  artisthub-caddy_data:
+  artisthub-uploads:

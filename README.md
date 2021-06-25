@@ -54,33 +54,66 @@ Supported authentication methods are currently `oidc` (OpenID Connect) and `loca
 
 If you want to use OpenID Connect you can either use a hosted service such (e.g [Auth0](https://auth0.com/)) or run your own server (e.g. [Ory Hydra](https://www.ory.sh/hydra/)).
 
-## Start server (using Docker)
+## Quick-start server (using Docker)
 
-The easiest way to get started is to use [Docker](https://docs.docker.com/get-docker/).
+The easiest way to get started is to use [Docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/).
+
+We provide 3 compose files which can be used to get up and running quickly.
+
+##### quickstart.yml
+Base compose file. Will start a dev server on HTTP and uses an existing PostgreSQL server which you should configure in your `.env` file.
+
+##### quickstart-postgres.yml
+This compose file will create and run the required PostgreSQL server in a Docker container so you don't need to provide an existing PostgreSQL server. This file requires you to also include `quickstart.yml`.
+
+##### quickstart-production.yml
+This compose file will also serve the site using HTTPs and should be used with a real domain. It will use [Let's Encrypt](https://letsencrypt.org/) to acquire a TLS certificate.
+
+These instructions below assume you are using the Docker provided PostgreSQL server.
 
 On the first run or when updating run:
 ```sh
-docker-compose build
-docker-compose run --rm node npm run knex -- migrate:latest
+docker-compose -f quickstart.yml build
+docker-compose -f quickstart.yml -f quickstart-postgres.yml run --rm node npm run knex -- migrate:latest
 ```
 
-The start the server with:
+Then start the server with:
 ```sh
-docker-compose up
+DOMAIN=localhost docker-compose -f quickstart.yml -f quickstart-postgres.yml up -d
+```
+
+This will start the server running on port 80.
+
+You can access this by visiting http://localhost in your browser.
+
+You may want to use these compose files as a basis to create your own compose file for deployment.
+
+#### Production
+
+For a production deployment you should change the `DOMAIN` to the domain name you are using and also include the `quickstart-production.yml` which uses [Caddy](https://caddyserver.com/) and [Let's Encrypt](https://letsencrypt.org/) to automatically enable HTTPS.
+
+For example when using the provided PostgresSQL docker container:
+```sh
+DOMAIN=example.com docker-compose -f quickstart.yml -f quickstart-postgres.yml -f quickstart-production.yml up -d
+```
+
+Or if you used your own PostgresSQL server:
+```sh
+DOMAIN=example.com docker-compose -f quickstart.yml -f quickstart-production.yml up -d
 ```
 
 
+### Stopping the server
 
-This will start the server running on port 3000.
-
-You can access this by visiting http://localhost:3000 in your browser.
-
+```sh
+docker-compose -f quickstart.yml -f quickstart-postgres.yml down
+```
 ### Clean up
 
-`docker-compose` will create a volume to store the Artist Hub database. If you no longer need the data and want to delete it then run:
+`docker-compose` will create volumes to store the Artist Hub database and any uploaded images. If you no longer need the data and want to delete it then run:
 
 ```sh
-docker-compose down -v
+docker-compose -f quickstart.yml -f quickstart-postgres.yml down -v
 ```
 
 ## Development

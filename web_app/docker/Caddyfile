@@ -1,0 +1,24 @@
+{$DOMAIN:localhost}
+
+route {
+  @activitypub_get {
+    method GET
+    header_regexp Accept "(.*, *)?(application/ld\+json; profile=\"https://www.w3.org/ns/activitystreams\"|application/activity\+json)( *,.*)?"
+  }
+  @activitypub_post {
+    method POST
+    header_regexp Content-Type "(.*, *)?(application/ld\+json; profile=\"https://www.w3.org/ns/activitystreams\"|application/activity\+json)( *,.*)?"
+  }
+
+  reverse_proxy /files/* {$API_HOST:127.0.0.1:4000}
+  reverse_proxy /auth/* {$API_HOST:127.0.0.1:4000}
+  reverse_proxy /auth {$API_HOST:127.0.0.1:4000}
+  reverse_proxy /api/* {$API_HOST:127.0.0.1:4000}
+  reverse_proxy /.well-known/* {$API_HOST:127.0.0.1:4000}
+  reverse_proxy @activitypub_get {$API_HOST:127.0.0.1:4000}
+  reverse_proxy @activitypub_post {$API_HOST:127.0.0.1:4000}
+
+  try_files {path} /index.html
+  file_server
+}
+log

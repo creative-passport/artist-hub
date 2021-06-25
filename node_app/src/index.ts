@@ -16,9 +16,7 @@ Model.knex(knex);
   if (isDevelopment) {
     await import('mac-ca');
   }
-  const [, pending] = await knex.migrate.list({
-    directory: './src/migrations',
-  });
+  const [, pending] = await knex.migrate.list();
   if (pending.length > 0) {
     console.error(`Pending migrations`);
     console.error(pending.join('\n'));
