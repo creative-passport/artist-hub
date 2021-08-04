@@ -1,3 +1,9 @@
+/*
+* SPDX-FileCopyrightText: 2021 Mahtab Ghamsari <mahtab@creativepassport.net>
+*
+* SPDX-License-Identifier: AGPL-3.0-only
+*/
+
 import jsonSchema from './aptypes-schema.json';
 import Ajv, { ValidateFunction } from 'ajv';
 import * as APTypes from './aptypes';

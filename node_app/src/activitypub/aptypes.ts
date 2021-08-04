@@ -1,3 +1,10 @@
+/*
+* SPDX-FileCopyrightText: 2021 Mahtab Ghamsari <mahtab@creativepassport.net>
+*
+* SPDX-License-Identifier: AGPL-3.0-only
+*/
+
+
 export interface Object {
   id?: string;
   type: string;
