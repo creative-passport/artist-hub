@@ -3,6 +3,7 @@ import createDOMPurify from 'dompurify';
 
 const config = {
   ALLOWED_TAGS: ['p', 'span', 'br', 'a'],
+  ALLOWED_ATTR: [],
 };
 
 interface MyElement extends Element {
