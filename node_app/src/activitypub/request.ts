@@ -1,3 +1,9 @@
+/*
+* SPDX-FileCopyrightText: 2021 Mahtab Ghamsari <mahtab@creativepassport.net>
+*
+* SPDX-License-Identifier: AGPL-3.0-only
+*/
+
 import http from 'http';
 import https from 'https';
 import { URL } from 'url';

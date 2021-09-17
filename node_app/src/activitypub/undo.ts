@@ -1,3 +1,9 @@
+/*
+* SPDX-FileCopyrightText: 2021 Mahtab Ghamsari <mahtab@creativepassport.net>
+*
+* SPDX-License-Identifier: AGPL-3.0-only
+*/
+
 import { APObject } from '../models/APObject';
 import config from '../config';
 import { v4 as uuidv4 } from 'uuid';
